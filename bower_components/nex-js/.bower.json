@@ -1,0 +1,37 @@
+{
+  "name": "nex-js",
+  "version": "0.1.7",
+  "homepage": "https://github.com/erikringsmuth/nex-js",
+  "authors": [
+    "Erik Ringsmuth <erik.ringsmuth@gmail.com>"
+  ],
+  "description": "Powerful, modular, AMD compatible views.",
+  "main": "nex.js",
+  "keywords": [
+    "mv*",
+    "views"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "requirejs": "",
+    "jasmine": ""
+  },
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "license.md",
+    "readme.md"
+  ],
+  "_release": "0.1.7",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.1.7",
+    "commit": "a81e9788da82ed05a920707d5c0bab480868b2d7"
+  },
+  "_source": "git://github.com/erikringsmuth/nex-js.git",
+  "_target": "~0.1.7",
+  "_originalSource": "nex-js"
+}

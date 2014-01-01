@@ -1,0 +1,15 @@
+/* The fixed header takes up 40px */
+body {
+  padding-top: 60px;
+}
+
+/* consistency between code and preformatted text */
+code, pre {
+  color: #2d6987;
+  background-color: #f7f7f7;
+}
+
+/* Make pre-formatted code use 4 space tabs instead of 8 */
+pre {
+  tab-size: 4;
+}

@@ -1,0 +1,73 @@
+<h2>Full site example</h2>
+
+<p>This site is built on <a href="http://requirejs.org/">RequireJS</a>, <a href="https://github.com/erikringsmuth/nex-js">nex-js</a>, and the <a href="https://github.com/erikringsmuth/requirejs-router">RequireJS Router</a>. The site's source is available in the <a href="https://github.com/erikringsmuth/nex-js/tree/gh-pages">gh-pages branch</a> of nex-js. This is a great example of a full site setup. Dependencies are installed using <a href="http://bower.io/">Bower</a>.</p>
+
+<h2>Simple single page app example</h2>
+
+<p>/index.html</p>
+
+<pre>&lt;!doctype html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;nex-js&lt;/title&gt;
+    &lt;script data-main="js/main" src="js/lib/require/require.js"&gt;&lt;/script&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;!-- main.js bootstraps the javascript app and inserts it here --&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</pre>
+
+<p>/js/main.js</p>
+
+<pre>(function() {
+  'use strict';
+
+  require.config({
+    paths: {
+      'nex': 'lib/nex-js/nex',
+      'text': 'lib/require/text',
+      'handlebars': 'lib/handlebars/handlebars'
+    },
+    shim: {
+      handlebars: {
+        exports: 'Handlebars'
+      }
+    }
+  });
+
+  require(['example/exampleView'], function(ExampleView) {
+    document.querySelector('body').appendChild(new ExampleView().render().outerEl);
+  });
+})();</pre>
+
+<p>/js/example/exampleView.js</p>
+
+<pre>define([
+  'nex',
+  'handlebars',
+  'text!./exampleTemplate.html'
+], function(Nex, Handlebars, exampleTemplate) {
+  'use strict';
+
+  return Nex.View.extend({
+    template: Handlebars.compile(exampleTemplate),
+
+    model: {name: 'Erik Ringsmuth'},
+
+    events: {
+      'keyup input': 'inputChangeHandler'
+    },
+    
+    inputChangeHandler: function(event) {
+      this.model.name = event.target.value;
+      this.render();
+    }
+  });
+});</pre>
+
+<p>/js/example/exampleTemplate.html</p>
+
+<pre>&lt;div&gt;
+  &lt;div&gt;nex-js - Hello \{{model.name}}&lt;/div&gt;
+  &lt;div&gt;&lt;input type="text" value="{{model.name}}" /&gt;&lt;/div&gt;
+&lt;/div&gt;</pre>

@@ -132,12 +132,12 @@ define([
     var testView = new TestView().render();
 
     // Create and trigger a simulated event (this doesn't actually work)
-    var event = new MouseEvent('click', {
-      'view': window,
-      'bubbles': true,
-      'cancelable': true
-    });
-    testView.el.querySelector('#button1').dispatchEvent(event);
+    // var event = new MouseEvent('click', {
+    //   'view': window,
+    //   'bubbles': true,
+    //   'cancelable': true
+    // });
+    // testView.el.querySelector('#button1').dispatchEvent(event);
 
     jasmine.xit('should attach delegate events to view.el and call the event handlers when the events are intercepted', function() {
       jasmine.expect(testView.buttonEventHandler).toHaveBeenCalled();

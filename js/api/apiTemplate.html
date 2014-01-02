@@ -1,15 +1,30 @@
-<h2>APIs</h2>
+<h2>API</h2>
 
-<p>Nex views have the same general layout as Backbone.js views but have a few additional properties. Extend the base view by calling <code>var MyView = Nex.View.extend({})</code> where the model you pass in is your view's properties. To create an instance of your view call <code>var view = new MyView()</code>. The <code>view</code> will have these properties.</p>
+<h4 id="extend">Nex.View.extend()</h4>
+
+<p>Create a view by extending the base view.</p>
+
+<pre>var MyView = Nex.View.extend({
+  template: Handlebars.compile('&lt;div&gt;Hello \{{model.name}}!&lt;/div&gt;'),
+  model: {name: 'Erik Ringsmuth'}
+});</pre>
+
+<p>Create an instance of your view, render it, and attach it to the document.</p>
+
+<pre>document.querySelector('body').appendChild(new MyView().render().outerEl);</pre>
+
+<h4 id="properties">View Properties</h4>
+
+<p>The view will have these properties.</p>
 
 <ul>
   <li><code>view.render()</code> - renders the view which populates <code>view.el</code></li>
   <li><code>view.el</code> - the view's DOM element</li>
   <li><code>view.model</code> - the model that gets passed to the template</li>
   <li><code>view.template()</code> - generates the view's HTML</li>
-  <li><code>view.events</code> - delegate events that are bound once to the root object so subsequent calls to <code>view.render()</code> don't need to re-bind events.</li>
+  <li><code>view.events</code> - delegate events that are bound once to the root object so subsequent calls to <code>view.render()</code> don't need to re-bind events</li>
   <li><code>view.layoutView</code> - the layout view contains your site's layout (header, footer, etc.)</li>
-  <li><code>view.outerEl</code> - the view's or <code>layoutView</code>'s outer most DOM element</li>
+  <li><code>view.outerEl</code> - the <code>view</code>'s or <code>layoutView</code>'s outer most DOM element</li>
   <li><code>view.contentPlaceholderId</code> - the ID of a layout view's content placeholder element</li>
   <li><code>view.remove()</code> - remove the view from the DOM</li>
   <li><code>view.initialize()</code> - a hook to add additional logic when creating an instance of the view</li>
@@ -20,18 +35,16 @@
 
 <h4 id="render">render()</h4>
 
-<p>If you don't override <code>view.render()</code> it will call <code>view.template({model: view.model})</code> and set the result to <code>view.el.innerHTML</code>. You can override this to add your own functionality. It will also handle rendering the <code>layoutView</code> if it has one. Overriding <code>view.render()</code> will still render the <code>layoutView</code> but will let you change how the current view is rendered. In it's simplest form <code>view.render()</code> will look like this.</p>
+<p>If you don't override <code>view.render()</code> it will call <code>view.template({model: view.model})</code> and set the result to <code>view.el.innerHTML</code>. You can override this to add your own functionality. <code>render()</code> will also handle rendering the <code>layoutView</code> if it has one. Overriding <code>view.render()</code> will still render the <code>layoutView</code> but will let you change how the current view is rendered. The default implementation of <code>view.render()</code> is close to this.</p>
 
-<pre>var MyView = Nex.View.extend({
-  render: function render() {
-    this.el.innerHTML = this.template({model: this.model});
-    return this;
-  }
-});</pre>
+<pre>function render() {
+  this.el.innerHTML = this.template({model: this.model});
+  return this;
+}</pre>
 
 <h4 id="el">el</h4>
 
-<p>The view's DOM element. It exists as soon as you create the view before it's ever attached to the document. To access DOM elements within the view you should scope your selectors using <code>view.el.querySelector()</code> and <code>view.el.querySelectorAll()</code>. This allows you to access the view's elements before attaching the view to the document. This makes unit testing much easier. It also keeps the selectors scoped to your view so you don't accidentally select an element outside of your view.</p>
+<p>The view's DOM element. It exists as soon as you create an instance of the view before it's ever attached to the document. To access DOM elements within the view you should scope your selectors using <code>view.el.querySelector()</code> and <code>view.el.querySelectorAll()</code>. This allows you to access the view's elements before attaching the view to the document. This makes unit testing much easier. It also keeps the selectors scoped to your view so you don't accidentally select an element outside of your view.</p>
 
 <h4 id="model">model</h4>
 
@@ -67,11 +80,11 @@
 
 <h4 id="layoutView">layoutView</h4>
 
-<p>The view's <code>layoutView</code> contains your site's general layout like the header, footer, etc. It's like a .NET master page. This makes it easy to use a javascript router to load your views. The <code>layoutView</code>'s HTML needs to have a content placeholder for the child view (this view) to attach to. Calling <code>render()</code> on this view will automatically call render() on the layout view and attach the this view to the <code>layoutView</code> using the <code>layoutView.contentPlaceholderId</code> to get the content placeholder element. The <code>layoutView</code>'s render method will be called even if you override the child view's render method. Here's an example view and layout view.</p>
+<p>The view's <code>layoutView</code> contains your site's general layout like the header, footer, etc. It's like a .NET master page. This makes it easy to use a javascript router to load your views rendering your view will also render the layout. Calling <code>render()</code> on your view will automatically call render() on the layout view and attach the your view to the <code>layoutView</code> using the <code>layoutView.contentPlaceholderId</code> to get the content placeholder element. The <code>layoutView</code>'s render method will be called even if you override the child view's render method. Here's an example view and layout view.</p>
 
 <pre>var LayoutView = Nex.View.extend({
   template: Handlebars.compile('&lt;header&gt;Header&lt;/header&gt;&lt;div id="content"&gt;&lt;/div&gt;'),
-  contentPlaceholderId: 'content-placeholder'
+  contentPlaceholderId: 'content'
 });
 
 var MyView = Nex.View.extend({
@@ -79,9 +92,7 @@ var MyView = Nex.View.extend({
   layoutView: new LayoutView()
 });
 
-var myView = new MyView();
-myView.render();
-document.querySelector('body').appendChild(myView.outerEl);
+document.querySelector('body').appendChild(new MyView().render().outerEl);
 
 // The body's innerHTML will be:
 // &lt;header&gt;Header&lt;/header&gt;&lt;div id="content"&gt;&lt;div&gt;MyView HTML&lt;/div&gt;&lt;/div&gt;</pre>
@@ -92,7 +103,7 @@ document.querySelector('body').appendChild(myView.outerEl);
 
 <h4 id="contentPlaceholderId">contentPlaceholderId</h4>
 
-<p>If a view is going to be used as a <code>layoutView</code> it needs to have a content-placeholder element in its HTML and specify a <code>contentPlaceholderId</code> property on the <code>layoutView</code>. This is the ID of the content-placeholder element in the HTML. When you call <code>render()</code> on the child view it will automatically call <code>render()</code> on the layout view and use the <code>layoutView.contentPlaceholderId</code> to attach the child view to the layout view.</p>
+<p>If a view is going to be used as a <code>layoutView</code> it needs to have a content-placeholder element in its HTML and set <code>view.contentPlaceholderId</code>. This is the ID of the content-placeholder element in the HTML. When you call <code>render()</code> on the child view it will automatically call <code>render()</code> on the layout view and use the <code>layoutView.contentPlaceholderId</code> to attach the child view to the layout view.</p>
 
 <h4 id="remove">remove()</h4>
 
@@ -109,7 +120,8 @@ document.querySelector('body').appendChild(myView.outerEl);
   template: Handlebars.compile('&lt;div&gt;Hello \{{model.name}}!&lt;/div&gt;'),
   model: {name: ''},
   render: function render() {
-    this.el.innerHTML = this.template({model: this.model});
+    this.el.innerHTML = this.template({model: this.model});.
+    return this;
   }
 });
 var myView = new MyView("Erik Ringsmuth");

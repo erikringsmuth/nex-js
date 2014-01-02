@@ -2,72 +2,85 @@
 
 <p>This site is built on <a href="http://requirejs.org/">RequireJS</a>, <a href="https://github.com/erikringsmuth/nex-js">nex-js</a>, and the <a href="https://github.com/erikringsmuth/requirejs-router">RequireJS Router</a>. The site's source is available in the <a href="https://github.com/erikringsmuth/nex-js/tree/gh-pages">gh-pages branch</a> of nex-js. This is a great example of a full site setup. Dependencies are installed using <a href="http://bower.io/">Bower</a>.</p>
 
-<h2>Simple single page app example</h2>
+<h2>Simplified example</h2>
 
-<p>/index.html</p>
+<p><strong><code>/index.html</code></strong> starts require.js and runs <code>main.js</code></p>
 
 <pre>&lt;!doctype html&gt;
 &lt;html&gt;
   &lt;head&gt;
     &lt;title&gt;nex-js&lt;/title&gt;
-    &lt;script data-main="js/main" src="js/lib/require/require.js"&gt;&lt;/script&gt;
+    &lt;script data-main="main" src="js/lib/require/require.js"&gt;&lt;/script&gt;
   &lt;/head&gt;
-  &lt;body&gt;
-    &lt;!-- main.js bootstraps the javascript app and inserts it here --&gt;
-  &lt;/body&gt;
+  &lt;body&gt;&lt;/body&gt;
 &lt;/html&gt;</pre>
 
-<p>/js/main.js</p>
+<p><strong><code>/main.js</code></strong> configures the router and loads the current route</p>
 
 <pre>(function() {
   'use strict';
+  require.config({...});
 
-  require.config({
-    paths: {
-      'nex': 'lib/nex-js/nex',
-      'text': 'lib/require/text',
-      'handlebars': 'lib/handlebars/handlebars'
-    },
-    shim: {
-      handlebars: {
-        exports: 'Handlebars'
+  require(['router'], function(router) {
+    router.config({
+      routes: {
+        root: {path: '/', module: 'info/infoView'},
+        example: {path: '/example', module: 'example/exampleView'},
+        notFound: {path: '*', module: 'notFound/NotFoundView'}
+      },
+      routeLoadedCallback: function routeLoadedCallback(View) {
+        var body = document.querySelector('body');
+        body.innerHTML = '';
+        body.appendChild(new View().render().outerEl);
       }
-    }
-  });
-
-  require(['example/exampleView'], function(ExampleView) {
-    document.querySelector('body').appendChild(new ExampleView().render().outerEl);
+    }).loadCurrentRoute();
   });
 })();</pre>
 
-<p>/js/example/exampleView.js</p>
+<p><strong><code>/layout/layoutView.js</code></strong> defines your site's layout</p>
 
 <pre>define([
   'nex',
   'handlebars',
-  'text!./exampleTemplate.html'
-], function(Nex, Handlebars, exampleTemplate) {
+  'text!./layoutTemplate.html',
+  'router'
+], function(Nex, Handlebars, layoutTemplate, router) {
   'use strict';
 
   return Nex.View.extend({
-    template: Handlebars.compile(exampleTemplate),
-
-    model: {name: 'Erik Ringsmuth'},
-
-    events: {
-      'keyup input': 'inputChangeHandler'
-    },
-    
-    inputChangeHandler: function(event) {
-      this.model.name = event.target.value;
-      this.render();
-    }
+    template: Handlebars.compile(layoutTemplate),
+    model: {routes: router.routes}
+    contentPlaceholderId: 'content'
   });
 });</pre>
 
-<p>/js/example/exampleTemplate.html</p>
+<p><strong><code>/layout/layoutTemplate.html</code></strong> defines your site layout's HTML</p>
 
-<pre>&lt;div&gt;
-  &lt;div&gt;nex-js - Hello \{{model.name}}&lt;/div&gt;
-  &lt;div&gt;&lt;input type="text" value="{{model.name}}" /&gt;&lt;/div&gt;
-&lt;/div&gt;</pre>
+<pre>&lt;header&gt;
+  &lt;ul class="navbar"&gt;
+    &lt;li \{{#if model.routes.root.matchesUrl}}class="active"\{{/if}}&gt;&lt;a href="#/"&gt;nex-js&lt;/a&gt;&lt;/li&gt;
+    &lt;li \{{#if model.routes.example.matchesUrl}}class="active"\{{/if}}&gt;&lt;a href="#/example"&gt;Examples&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/header&gt;
+&lt;main id="content"&gt;
+&lt;/main&gt;</pre>
+
+<p><strong><code>/info/infoView.js</code></strong> is the AMD module that's loaded for the root route <code>'/'</code></p>
+
+<pre>define([
+  'nex',
+  'handlebars',
+  'text!./infoTemplate.html',
+  'layout/layoutView'
+], function(Nex, Handlebars, infoTemplate, LayoutView) {
+  'use strict';
+
+  return Nex.View.extend({
+    template: Handlebars.compile(infoTemplate),
+    layoutView: new LayoutView()
+  });
+});</pre>
+
+<p><strong><code>/info/infoTemplate.html</code></strong> is the HTML that's loaded for the root route <code>'/'</code></p>
+
+<pre>&lt;h1&gt;Powerful, modular, AMD compatible views.&lt;/h1&gt;</pre>

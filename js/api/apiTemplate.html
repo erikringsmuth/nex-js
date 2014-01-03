@@ -13,7 +13,7 @@
 
 <pre>document.querySelector('body').appendChild(new MyView().render().outerEl);</pre>
 
-<h4 id="properties">View Properties</h4>
+<h4 id="properties" class="spacer">View Properties</h4>
 
 <p>The view will have these properties.</p>
 
@@ -33,7 +33,7 @@
   <li><code>view.className</code> - the class name(s) of the view's DOM element</li>
 </ul>
 
-<h4 id="render">render()</h4>
+<h4 id="render" class="spacer">render()</h4>
 
 <p>If you don't override <code>view.render()</code> it will call <code>view.template({model: view.model})</code> and set the result to <code>view.el.innerHTML</code>. You can override this to add your own functionality. <code>render()</code> will also handle rendering the <code>layoutView</code> if it has one. Overriding <code>view.render()</code> will still render the <code>layoutView</code> but will let you change how the current view is rendered. The default implementation of <code>view.render()</code> is close to this.</p>
 
@@ -42,15 +42,15 @@
   return this;
 }</pre>
 
-<h4 id="el">el</h4>
+<h4 id="el" class="spacer">el</h4>
 
 <p>The view's DOM element. It exists as soon as you create an instance of the view before it's ever attached to the document. To access DOM elements within the view you should scope your selectors using <code>view.el.querySelector()</code> and <code>view.el.querySelectorAll()</code>. This allows you to access the view's elements before attaching the view to the document. This makes unit testing much easier. It also keeps the selectors scoped to your view so you don't accidentally select an element outside of your view.</p>
 
-<h4 id="model">model</h4>
+<h4 id="model" class="spacer">model</h4>
 
 <p>The model can be an object or a constructor function. For example, if your model is <code>{name: 'Erik Ringsmuth'}</code> it will be passed straight to the template. If your model is a constructor function like <code>function() {this.name = 'Erik Ringsmuth'; this.time = new Date();}</code> it will be called with <code>new view.model()</code> before being passed to the template. This allows for variables to be evaluated at render time. This is useful when you need access to a closure variable that changes often.</p>
 
-<h4 id="template">template()</h4>
+<h4 id="template" class="spacer">template()</h4>
 
 <p>The template generates your view's HTML. You can use your choice of templating engines. Typically you would compile your template and set it on the template property.</p>
 
@@ -65,7 +65,7 @@
 
 <p>The compile step creates a function that takes in a model and returns an HTML string. The <code>render()</code> method passes the model to the compiled template then takes the resulting HTML and attaches it to <code>view.el</code>. The <code>render()</code> method passes the view's model to the template and you can access the model in the template using the <code>model</code> variable.</p>
 
-<h4 id="events">events</h4>
+<h4 id="events" class="spacer">events</h4>
 
 <p>Delegate events are bound once to the view's root element so you don't have to bind events every time you call <code>render()</code>. Events work slightly differently than jQuery delegate events since there aren't native ECMAScript delegate events. <code>event.target</code> and <code>event.currentTarget</code> are swapped from the way jQuery does it. From what I can tell jQuery got these backwards and the native events have them set correctly. Here is an example event and event handler.</p>
 
@@ -78,7 +78,7 @@
   }
 });</pre>
 
-<h4 id="layoutView">layoutView</h4>
+<h4 id="layoutView" class="spacer">layoutView</h4>
 
 <p>The view's <code>layoutView</code> contains your site's general layout like the header, footer, etc. It's like a .NET master page. This makes it easy to use a javascript router to load your views rendering your view will also render the layout. Calling <code>render()</code> on your view will automatically call render() on the layout view and attach the your view to the <code>layoutView</code> using the <code>layoutView.contentPlaceholderId</code> to get the content placeholder element. The <code>layoutView</code>'s render method will be called even if you override the child view's render method. Here's an example view and layout view.</p>
 
@@ -97,19 +97,19 @@ document.querySelector('body').appendChild(new MyView().render().outerEl);
 // The body's innerHTML will be:
 // &lt;header&gt;Header&lt;/header&gt;&lt;div id="content"&gt;&lt;div&gt;MyView HTML&lt;/div&gt;&lt;/div&gt;</pre>
 
-<h4 id="outerEl">outerEl</h4>
+<h4 id="outerEl" class="spacer">outerEl</h4>
 
 <p>The view's or <code>layoutView</code>'s outer most DOM element. If you specify a <code>layoutView</code> then <code>view.outerEl</code> will refer to the <code>layoutView.el</code>. When you attach a view to the DOM you should use the <code>outerEl</code> in case it has a layout view. You should attach your view's to the document like this <code>document.querySelector('body').appendChild(new MyView().render().outerEl)</code>. Then if <code>MyView</code> has set <code>layoutView: new LayoutView()</code> it will be <code>LayoutView.el</code> that is attached to the DOM.</p>
 
-<h4 id="contentPlaceholderId">contentPlaceholderId</h4>
+<h4 id="contentPlaceholderId" class="spacer">contentPlaceholderId</h4>
 
 <p>If a view is going to be used as a <code>layoutView</code> it needs to have a content-placeholder element in its HTML and set <code>view.contentPlaceholderId</code>. This is the ID of the content-placeholder element in the HTML. When you call <code>render()</code> on the child view it will automatically call <code>render()</code> on the layout view and use the <code>layoutView.contentPlaceholderId</code> to attach the child view to the layout view.</p>
 
-<h4 id="remove">remove()</h4>
+<h4 id="remove" class="spacer">remove()</h4>
 
 <p>Removes <code>view.el</code> from the DOM.</p>
 
-<h4 id="initialize">initialize</h4>
+<h4 id="initialize" class="spacer">initialize</h4>
 
 <p>You can use the initialize method to add custom logic when creating a new instance of your view. In this example the <code>view.model.name</code> is passed in as an argument in the constructor.</p>
 
@@ -130,14 +130,14 @@ document.querySelector('body').appendChild(myView.outerEl); // Will display "Hel
 
 <p>The <code>initialize()</code> method is the last step before the instance is returned so everything else is set up at this point.</p>
 
-<h4 id="tagName">tagName</h4>
+<h4 id="tagName" class="spacer">tagName</h4>
 
 <p>The type of DOM element - div, span, section, header, footer, etc. It defaults to a <code>div</code>.</p>
 
-<h4 id="id">id</h4>
+<h4 id="id" class="spacer">id</h4>
 
 <p>The ID of the view's DOM element.</p>
 
-<h4 id="className">className</h4>
+<h4 id="className" class="spacer">className</h4>
 
 <p>The class name(s) of the view's DOM element.</p>

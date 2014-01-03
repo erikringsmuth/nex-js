@@ -2,9 +2,9 @@
 
 <p>This site is built on <a href="http://requirejs.org/">RequireJS</a>, <a href="https://github.com/erikringsmuth/nex-js">nex-js</a>, and the <a href="https://github.com/erikringsmuth/requirejs-router">RequireJS Router</a>. The site's source is available in the <a href="https://github.com/erikringsmuth/nex-js/tree/gh-pages">gh-pages branch</a> of nex-js. This is a great example of a full site setup. Dependencies are installed using <a href="http://bower.io/">Bower</a>.</p>
 
-<h2>Simple site</h2>
+<h2>Site structure</h2>
 
-<p>Directory layout</p>
+<p>Directory layout - the site should be structured so that each page and widget gets its own folder so that related files are kept together</p>
 
 <pre>├── index.html
 └── js/
@@ -16,7 +16,16 @@
         ├── homeView.js
         └── homeTemplate.js</pre>
 
-<p><code>/index.html</code> - loaded when you route to <code>/</code> or any hash route (<code>#/</code> or <code>#!/</code>)</p> 
+<ul class="spacer">
+  <li><code>index.html</code> loads <code>require.js</code></li>
+  <li><code>require.js</code> looks at the <code>data-main</code> attribute and loads <code>main.js</code></li>
+  <li><code>main.js</code> configures <code>require.js</code> and the <code>requirejs-router</code></li>
+  <li>The <code>requirejs-router</code> loads the current route <code>/</code> which gets <code>homeView.js</code></li>
+  <li><code>homeView.js</code> uses <code>layoutView.js</code> as it's layout</li>
+  <li>The home view and layout are rendered and attached to the document in the router's <code>routeLoadedCallback()</code></li>
+</ul>
+
+<p class="spacer"><code>/index.html</code> - loaded when you route to <code>/</code> or any hash route (starting with <code>#/</code> or <code>#!/</code>)</p> 
 
 <pre>&lt;!doctype html&gt;
 &lt;html&gt;
@@ -27,7 +36,7 @@
   &lt;body&gt;&lt;/body&gt;
 &lt;/html&gt;</pre>
 
-<p><code>/js/main.js</code> - configure the router and load the current route</p>
+<p class="spacer"><code>/js/main.js</code> - configure the router and load the current route</p>
 
 <pre>(function() {
   'use strict';
@@ -49,7 +58,7 @@
   });
 })();</pre>
 
-<p><code>/js/layout/layoutView.js</code> - your site's layout</p>
+<p class="spacer"><code>/js/layout/layoutView.js</code> - your site's layout</p>
 
 <pre>define([
   'nex',
@@ -66,7 +75,7 @@
   });
 });</pre>
 
-<p><code>/js/layout/layoutTemplate.html</code> - the layout HTML</p>
+<p class="spacer"><code>/js/layout/layoutTemplate.html</code> - the layout HTML</p>
 
 <pre>&lt;header&gt;
   &lt;ul class="navbar"&gt;
@@ -77,7 +86,7 @@
 &lt;main id="content"&gt;
 &lt;/main&gt;</pre>
 
-<p><code>/js/home/homeView.js</code> - the AMD module loaded for the root route <code>/</code></p>
+<p class="spacer"><code>/js/home/homeView.js</code> - the AMD module loaded for the root route <code>/</code></p>
 
 <pre>define([
   'nex',
@@ -93,6 +102,6 @@
   });
 });</pre>
 
-<p><code>/js/home/homeTemplate.html</code> - the HTML for the root route <code>/</code></p>
+<p class="spacer"><code>/js/home/homeTemplate.html</code> - the HTML for the root route <code>/</code></p>
 
 <pre>&lt;h1&gt;Powerful, modular, AMD compatible views.&lt;/h1&gt;</pre>

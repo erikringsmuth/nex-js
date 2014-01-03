@@ -1,6 +1,7 @@
 /* The fixed header takes up 40px */
 body {
   padding-top: 60px;
+  margin-bottom: 2em;
 }
 
 /* consistency between code and preformatted text */

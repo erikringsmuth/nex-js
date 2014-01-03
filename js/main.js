@@ -28,7 +28,7 @@
     router.config({
       routes: {
         // root matches path = '/' or '/nex-js'
-        root: {matchesUrl: function matchesUrl() { return router.testRoute({path: '/'}) || router.testRoute({path: '/nex-js'}); }, module: 'info/infoView'},
+        root: {matchesUrl: function matchesUrl() { return router.testRoute({path: '/'}) || router.testRoute({path: '/nex-js'}); }, module: 'home/homeView'},
         api: {path: '/api', module: 'api/apiView'},
         example: {path: '/example', module: 'example/exampleView'},
         dev: {path: '/dev', module: 'dev/child/childView'},

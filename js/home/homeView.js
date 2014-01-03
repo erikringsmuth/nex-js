@@ -2,14 +2,14 @@
 define([
   'nex',
   'handlebars',
-  'text!./infoTemplate.html',
+  'text!./homeTemplate.html',
   'layout/layoutView',
   'todo/todoView'
-], function(Nex, Handlebars, infoTemplate, LayoutView, TodoView) {
+], function(Nex, Handlebars, homeTemplate, LayoutView, TodoView) {
   'use strict';
 
   return Nex.View.extend({
-    template: Handlebars.compile(infoTemplate),
+    template: Handlebars.compile(homeTemplate),
 
     layoutView: new LayoutView(),
 

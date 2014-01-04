@@ -8,6 +8,16 @@
 
     <p>Check out the <a href="#/example">examples</a> to see how it works. This site's source is a great example of a <a href="https://github.com/erikringsmuth/nex-js">nex-js</a> and <a href="https://github.com/erikringsmuth/requirejs-router">RequireJS Router</a> setup. It's available in the <a href="https://github.com/erikringsmuth/nex-js/tree/gh-pages">gh-pages branch</a> of nex-js. Licensed under <a href="https://github.com/erikringsmuth/nex-js/blob/master/license.md">MIT</a>.</p>
 
+    <h2 id="whynex">Why Nex</h2>
+
+    <p>First, <a href="http://requirejs.org/docs/whyamd.html">why AMD</a>. AMD is the future of Javascript dependency injection. The only script tag you should ever include should load <a href="http://requirejs.org/">require.js</a>. The rest of your scripts should be loaded by require.js and injected into your modules.</p>
+
+    <p>The router comes next. Other frameworks load all of your app's Javascript up front. You can optimize your site by compiling it down to one file but that still doesn't solve the problem. The <a href="https://github.com/erikringsmuth/requirejs-router">RequireJS Router</a> lazy loads your modules when you navigate to the route. You're site could contain 10mb of Javascript and HTML templates and it would only load the 100kb needed for the current page.</p>
+
+    <p>Last, next-js views. Once you're using AMD and a lazy loading router you can route to your views. Normal view's can't specify a layout (header, footer, etc.). You have to render the layout then use the router to load the content. With Nex Views you route straight to your view and the view specifies a layout that includes your header and footer. Rendering your view also renders the layout and you attach your <code>view.outerEl</code> to the document with everything rendered.</p>
+
+    <p>The combination of AMD, a lazy loading router, and layout views gives you a simple, powerful, modular framework to build your application. This is the next step in web applications.</p>
+
     <h2 id="todomvcexample">TodoMVC Example</h2>
 
     <p>The TodoMVC example in the right column uses a nested nex-js view. You can see the source of TodoMVC implemented with nex-js here <a href="https://github.com/erikringsmuth/todomvc/tree/gh-pages/dependency-examples/viewjs-require">nex-js &amp; RequireJS TodoMVC Example</a>.</p>

@@ -31,6 +31,7 @@
         root: {matchesUrl: function matchesUrl() { return router.testRoute({path: '/'}) || router.testRoute({path: '/nex-js'}); }, module: 'home/homeView'},
         api: {path: '/api', module: 'api/apiView'},
         example: {path: '/example', module: 'example/exampleView'},
+        bestPractices: {path: '/bestpractices', module: 'bestPractices/bestPracticesView'},
         dev: {path: '/dev', module: 'dev/child/childView'},
         notFound: {path: '*', module: 'notFound/NotFoundView'},
 

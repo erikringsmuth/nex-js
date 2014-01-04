@@ -18,20 +18,20 @@ define([
     // Filter the displayed todos based on the route
     model.filteredTodos = function() {
       if (model.routes.todoAll.matchesUrl()) return model.todos;
-      if (model.routes.todoActive.matchesUrl()) return model.todos.filter(function(element) { return !element.completed; });
-      if (model.routes.todoCompleted.matchesUrl()) return model.todos.filter(function(element) { return element.completed; });
+      if (model.routes.todoActive.matchesUrl()) return model.todos.filter(function(todo) { return !todo.completed; });
+      if (model.routes.todoCompleted.matchesUrl()) return model.todos.filter(function(todo) { return todo.completed; });
     };
 
     model.itemsRemaining = function() {
-      return model.todos.reduce(function(previous, current) {return previous + !current.completed;}, 0);
+      return model.todos.reduce(function(previous, current) { return previous + !current.completed; }, 0);
     };
 
     model.itemsCompleted = function() {
-      return model.todos.reduce(function(previous, current) {return previous + current.completed;}, 0);
+      return model.todos.reduce(function(previous, current) { return previous + current.completed; }, 0);
     };
 
     model.editing = function() {
-      return model.todos.some(function(element) { return element.editing; });
+      return model.todos.some(function(todo) { return todo.editing; });
     };
 
     // Set the item(s) left text
@@ -50,8 +50,8 @@ define([
     // Persist the model to localStorage
     model.save = function save() {
       // Don't persist edit mode
-      model.todos.forEach(function(element) {
-        delete element.editing;
+      model.todos.forEach(function(todo) {
+        delete todo.editing;
       });
 
       window.localStorage.setItem(common.LOCAL_STORAGE_KEY, JSON.stringify(model.todos));

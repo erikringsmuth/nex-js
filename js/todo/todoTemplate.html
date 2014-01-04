@@ -9,7 +9,7 @@
     <input id="toggle-all" type="checkbox" {{#unless model.itemsRemaining}}checked{{/unless}} />
     <ul id="todo-list">
       {{#each model.filteredTodos}}
-      <li data-index="{{@index}}" class="{{#if this.completed}}completed{{/if}}{{#if this.editing}} editing{{/if}}">
+      <li data-id="{{this.id}}" class="{{#if this.completed}}completed{{/if}}{{#if this.editing}} editing{{/if}}">
         <div class="view">
           <input class="toggle" type="checkbox" {{#if this.completed}}checked{{/if}} />
           <label>{{this.title}}</label>

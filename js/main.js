@@ -32,6 +32,7 @@
         api: {path: '/api', module: 'api/apiView'},
         examples: {path: '/examples', module: 'examples/examplesView'},
         notes: {path: '/notes', module: 'notes/notesView'},
+        download: {path: '/download', module: 'download/downloadView'},
         dev: {path: '/dev', module: 'dev/child/childView'},
         notFound: {path: '*', module: 'notFound/NotFoundView'},
 

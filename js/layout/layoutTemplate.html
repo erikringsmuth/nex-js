@@ -14,9 +14,10 @@
     <nav class="collapse navbar-collapse" role="navigation">
       <ul class="nav navbar-nav">
         <li {{#if model.routes.api.matchesUrl}}class="active"{{/if}}><a href="#/api">API</a></li>
-        <li {{#if model.routes.example.matchesUrl}}class="active"{{/if}}><a href="#/example">Examples</a></li>
-        <li {{#if model.routes.bestPractices.matchesUrl}}class="active"{{/if}}><a href="#/bestpractices">Best Practices</a></li>
+        <li {{#if model.routes.examples.matchesUrl}}class="active"{{/if}}><a href="#/examples">Examples</a></li>
+        <li {{#if model.routes.notes.matchesUrl}}class="active"{{/if}}><a href="#/notes">Notes</a></li>
         {{#if model.devMode}}<li {{#if model.routes.dev.matchesUrl}}class="active"{{/if}}><a href="#/dev">Dev</a></li>{{/if}}
+        <li><a href="https://github.com/erikringsmuth/requirejs-router">RequireJS Router</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="https://github.com/erikringsmuth/nex-js/zipball/master">Download</a></li>

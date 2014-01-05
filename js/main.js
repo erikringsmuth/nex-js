@@ -30,8 +30,8 @@
         // root matches path = '/' or '/nex-js'
         root: {matchesUrl: function matchesUrl() { return router.testRoute({path: '/'}) || router.testRoute({path: '/nex-js'}); }, module: 'home/homeView'},
         api: {path: '/api', module: 'api/apiView'},
-        example: {path: '/example', module: 'example/exampleView'},
-        bestPractices: {path: '/bestpractices', module: 'bestPractices/bestPracticesView'},
+        examples: {path: '/examples', module: 'examples/examplesView'},
+        notes: {path: '/notes', module: 'notes/notesView'},
         dev: {path: '/dev', module: 'dev/child/childView'},
         notFound: {path: '*', module: 'notFound/NotFoundView'},
 

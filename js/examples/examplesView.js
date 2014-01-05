@@ -2,13 +2,13 @@
 define([
   'nex',
   'handlebars',
-  'text!./bestPracticesTemplate.html',
+  'text!./examplesTemplate.html',
   'layout/layoutView'
-], function(Nex, Handlebars, bestPracticesTemplate, LayoutView) {
+], function(Nex, Handlebars, examplesTemplate, LayoutView) {
   'use strict';
 
   return Nex.View.extend({
-    template: Handlebars.compile(bestPracticesTemplate),
+    template: Handlebars.compile(examplesTemplate),
     
     layoutView: new LayoutView()
   });

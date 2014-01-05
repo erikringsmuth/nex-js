@@ -1,6 +1,6 @@
 <h2>Best Practices</h2>
 
-<p>Avoid globals with <a href="http://requirejs.org/docs/whyamd.html">AMD</a>. This is what <a href="http://requirejs.org/">require.js</a> is for. The only script tag you should ever include should load require.js. The rest of your scripts should be loaded by require.js and injected into your modules.</p>
+<p>Avoid globals with <a href="http://requirejs.org/docs/whyamd.html">AMD</a>. This is what <a href="http://requirejs.org/">require.js</a> is for. require.js is the only script tag you should ever include. The rest of your scripts should be injected into your modules using require.js.</p>
 
 <p class="spacer"><code>'use strict';</code> to enforce safer Javascript practices. [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions_and_function_scope/Strict_mode">MDN Strict Mode</a>]</p>
 

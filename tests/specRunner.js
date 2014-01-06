@@ -9,6 +9,7 @@ define([
 
   // Add the Jasmine configuration
   require.config({
+    baseUrl: '..', // The test runner is in `/tests` but we need the base url to be `/` 
     paths: {
       'jasmine': 'bower_components/jasmine/lib/jasmine-core/jasmine',
       'jasmine-html': 'bower_components/jasmine/lib/jasmine-core/jasmine-html',
@@ -49,4 +50,4 @@ define([
       window.onload();
     });
   });
-})();
+});

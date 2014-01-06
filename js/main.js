@@ -7,7 +7,7 @@ define([
   // Configure require.js paths and shims
   require.config(requireConfig);
 
-  // Use the RequireJS Router to run the app
+  // Load the router
   require(['router', 'js/routes'], function(router, routes) {
     // Configure the router
     router.config({

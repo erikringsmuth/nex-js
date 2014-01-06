@@ -4,9 +4,7 @@ define([], function() {
 
   // Require.js configuration
   return {
-    // main.js is in `/js` but we want the baseUrl to be `/`
-    // This is a fix for the github.io URL starting with /nex-js
-    baseUrl: /^\/nex-js/.test(window.location.pathname) ? '' : '..',
+    baseUrl: '', // main.js is in `/js` but we want the baseUrl to be `/`
     paths: {
       'text': 'bower_components/requirejs-text/text',
       'router': 'bower_components/requirejs-router/router',

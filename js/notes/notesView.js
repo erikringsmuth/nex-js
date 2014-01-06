@@ -3,7 +3,7 @@ define([
   'nex',
   'handlebars',
   'text!./notesTemplate.html',
-  'layout/layoutView'
+  'js/layout/layoutView'
 ], function(Nex, Handlebars, notesTemplate, LayoutView) {
   'use strict';
 

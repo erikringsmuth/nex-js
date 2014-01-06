@@ -2,21 +2,28 @@
 
 <p>This site is built on <a href="http://requirejs.org/">RequireJS</a>, <a href="https://github.com/erikringsmuth/nex-js">nex-js</a>, and the <a href="https://github.com/erikringsmuth/requirejs-router">RequireJS Router</a>. The site's source is available in the <a href="https://github.com/erikringsmuth/nex-js/tree/gh-pages">gh-pages branch</a> of nex-js. This is a great example of a full site setup. Dependencies are installed using <a href="http://bower.io/">Bower</a>.</p>
 
-<h2>Site structure</h2>
+<h2>Site Setup</h2>
 
-<p>Directory layout - the site should be structured so that each page and widget gets its own folder so that related files are kept together</p>
+<p>This is a summary of a full site setup. It demonstrates the use of RequireJS, the RequireJS router, and Nex views.</p>
+
+<p class="spacer">Directory layout - The site should be structured so that each page and widget gets its own folder under <code>/js</code>. This keeps related files together.</p>
 
 <pre>├── index.html
+├── bower_components/
+│   └── // external dependencies
 └── js/
     ├── main.js
     ├── layout/
     │   ├── layoutView.js
     │   └── layoutTemplate.html
-    └── home/
-        ├── homeView.js
-        └── homeTemplate.js</pre>
+    ├── home/
+    │   ├── homeView.js
+    │   └── homeTemplate.js
+    └── // other widets and views</pre>
 
-<ul class="spacer">
+<p class="spacer">Execution order</p> 
+
+<ul>
   <li><code>index.html</code> loads <code>require.js</code></li>
   <li><code>require.js</code> looks at the <code>data-main</code> attribute and loads <code>main.js</code></li>
   <li><code>main.js</code> configures <code>require.js</code> and the <code>requirejs-router</code></li>
@@ -25,7 +32,7 @@
   <li>The home view and layout are rendered and attached to the document in the router's <code>routeLoadedCallback()</code></li>
 </ul>
 
-<p class="spacer"><code>/index.html</code> - loaded when you route to <code>/</code> or any hash route (starting with <code>#/</code> or <code>#!/</code>)</p> 
+<p class="spacer"><code>/index.html</code> - loaded when you route to <code>/</code> or any hash route starting with <code>#/</code> or <code>#!/</code></p> 
 
 <pre>&lt;!doctype html&gt;
 &lt;html&gt;
@@ -36,27 +43,47 @@
   &lt;body&gt;&lt;/body&gt;
 &lt;/html&gt;</pre>
 
-<p class="spacer"><code>/js/main.js</code> - configure the router and load the current route</p>
+<p class="spacer"><code>/js/main.js</code> - the Javascript entry point to the app</p>
 
-<pre>(function() {
+<pre>define([], function() {
   'use strict';
-  require.config({...});
 
+  // Configure require.js paths and shims
+  require.config({
+    baseUrl: '..', // main.js is in `/js` but we want the baseUrl to be `/`
+    paths: {
+      'text': 'bower_components/requirejs-text/text',
+      'router': 'bower_components/requirejs-router/router',
+      'nex': 'bower_components/nex-js/nex',
+      'handlebars': 'bower_components/handlebars/handlebars'
+    },
+    shim: {
+      'handlebars': { exports: 'Handlebars' }
+    }
+  });
+
+  // Load the router
   require(['router'], function(router) {
+    // Configure the router
     router.config({
       routes: {
-        root: {path: '/', module: 'home/homeView'},
-        example: {path: '/example', module: 'example/exampleView'},
+        home: {path: '/', module: 'home/homeView'},
+        example: {path: '/examples', module: 'examples/examplesView'},
         notFound: {path: '*', module: 'notFound/NotFoundView'}
       },
+
+      // When a route loads, render the view and attach it to the document
       routeLoadedCallback: function routeLoadedCallback(View) {
         var body = document.querySelector('body');
         body.innerHTML = '';
         body.appendChild(new View().render().outerEl);
       }
-    }).loadCurrentRoute();
+    });
+
+    // Trigger the initial page load
+    router.loadCurrentRoute();
   });
-})();</pre>
+});</pre>
 
 <p class="spacer"><code>/js/layout/layoutView.js</code> - your site's layout</p>
 
@@ -79,20 +106,20 @@
 
 <pre>&lt;header&gt;
   &lt;ul class="navbar"&gt;
-    &lt;li \{{#if model.routes.root.matchesUrl}}class="active"\{{/if}}&gt;&lt;a href="#/"&gt;nex-js&lt;/a&gt;&lt;/li&gt;
-    &lt;li \{{#if model.routes.example.matchesUrl}}class="active"\{{/if}}&gt;&lt;a href="#/example"&gt;Examples&lt;/a&gt;&lt;/li&gt;
+    &lt;li \{{#if model.routes.home.matchesUrl}}class="active"\{{/if}}&gt;&lt;a href="#/"&gt;Home&lt;/a&gt;&lt;/li&gt;
+    &lt;li \{{#if model.routes.examples.matchesUrl}}class="active"\{{/if}}&gt;&lt;a href="#/examples"&gt;Examples&lt;/a&gt;&lt;/li&gt;
   &lt;/ul&gt;
 &lt;/header&gt;
 &lt;main id="content"&gt;
 &lt;/main&gt;</pre>
 
-<p class="spacer"><code>/js/home/homeView.js</code> - the AMD module loaded for the root route <code>/</code></p>
+<p class="spacer"><code>/js/home/homeView.js</code> - the AMD module loaded for the home route <code>/</code></p>
 
 <pre>define([
   'nex',
   'handlebars',
   'text!./homeTemplate.html',
-  'layout/layoutView'
+  'js/layout/layoutView'
 ], function(Nex, Handlebars, homeTemplate, LayoutView) {
   'use strict';
 
@@ -102,6 +129,6 @@
   });
 });</pre>
 
-<p class="spacer"><code>/js/home/homeTemplate.html</code> - the HTML for the root route <code>/</code></p>
+<p class="spacer"><code>/js/home/homeTemplate.html</code> - the HTML for the home route <code>/</code></p>
 
 <pre>&lt;h1&gt;Powerful, modular, AMD compatible views.&lt;/h1&gt;</pre>

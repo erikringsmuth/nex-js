@@ -4,7 +4,7 @@ define([
   'handlebars',
   './todoModel',
   'text!./todoTemplate.html',
-  'todo/common'
+  './common'
 ], function(Nex, Handlebars, TodoModel, todoTemplate, common) {
   'use strict';
 

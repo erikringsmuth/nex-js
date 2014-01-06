@@ -3,8 +3,8 @@ define([
   'nex',
   'handlebars',
   'text!./homeTemplate.html',
-  'layout/layoutView',
-  'todo/todoView'
+  'js/layout/layoutView',
+  'js/todo/todoView'
 ], function(Nex, Handlebars, homeTemplate, LayoutView, TodoView) {
   'use strict';
 

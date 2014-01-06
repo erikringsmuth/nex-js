@@ -16,8 +16,11 @@
         <li {{#if model.routes.api.matchesUrl}}class="active"{{/if}}><a href="#/api">API</a></li>
         <li {{#if model.routes.examples.matchesUrl}}class="active"{{/if}}><a href="#/examples">Examples</a></li>
         <li {{#if model.routes.notes.matchesUrl}}class="active"{{/if}}><a href="#/notes">Notes</a></li>
-        {{#if model.devMode}}<li {{#if model.routes.dev.matchesUrl}}class="active"{{/if}}><a href="#/dev">Dev</a></li>{{/if}}
         <li><a href="https://github.com/erikringsmuth/requirejs-router">RequireJS Router</a></li>
+        {{#if model.devMode}}
+        <li {{#if model.routes.dev.matchesUrl}}class="active"{{/if}}><a href="#/dev">Dev</a></li>
+        <li><a href="/tests/SpecRunner.html">Tests</a></li>
+        {{/if}}
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li {{#if model.routes.download.matchesUrl}}class="active"{{/if}}><a href="#/download">Download</a></li>

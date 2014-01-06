@@ -3,7 +3,7 @@ define([
   'nex',
   'handlebars',
   'text!./apiTemplate.html',
-  'layout/layoutView'
+  'js/layout/layoutView'
 ], function(Nex, Handlebars, apiTemplate, LayoutView) {
   'use strict';
 

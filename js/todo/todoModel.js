@@ -1,6 +1,6 @@
 /*global define*/
 define([
-  'todo/common',
+  './common',
   'router'
 ], function(common, router) {
   'use strict';

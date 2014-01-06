@@ -10,9 +10,9 @@ define([
   // Add the Jasmine configuration
   require.config({
     paths: {
-      'jasmine': './bower_components/jasmine/lib/jasmine-core/jasmine',
-      'jasmine-html': './bower_components/jasmine/lib/jasmine-core/jasmine-html',
-      'boot': './bower_components/jasmine/lib/jasmine-core/boot',
+      'jasmine': 'bower_components/jasmine/lib/jasmine-core/jasmine',
+      'jasmine-html': 'bower_components/jasmine/lib/jasmine-core/jasmine-html',
+      'boot': 'bower_components/jasmine/lib/jasmine-core/boot',
       'jasmineAmd': 'tests/jasmineAmd'
     },
     shim: {

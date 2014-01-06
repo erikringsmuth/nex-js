@@ -8,6 +8,7 @@ define(['router'], function(router) {
     root: {matchesUrl: function matchesUrl() { return router.testRoute({path: '/'}) || router.testRoute({path: '/nex-js'}); }, module: 'js/home/homeView'},
     api: {path: '/api', module: 'js/api/apiView'},
     examples: {path: '/examples', module: 'js/examples/examplesView'},
+    tdd: {path: '/tdd', module: 'js/tdd/tddView'},
     notes: {path: '/notes', module: 'js/notes/notesView'},
     download: {path: '/download', module: 'js/download/downloadView'},
     dev: {path: '/dev', module: 'js/dev/child/childView'},

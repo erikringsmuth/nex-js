@@ -11,7 +11,7 @@ define([
     expect = env.expect;
 
   describe('The home view', function() {
-    it('should be defined', function() {
+    it('should load', function() {
       expect(HomeView).toBeDefined();
     });
 

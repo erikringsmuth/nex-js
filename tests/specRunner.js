@@ -7,47 +7,37 @@ define([
   // Run the main site's configuration so that all of the normal paths and shims are set up
   require.config(requireConfig);
 
-  // Add the Jasmine configuration
+  // Shim jasmine. jasmine.js creates the `window.jasmineRequire` global. jasmine-html.js adds properties to that global.
   require.config({
-    baseUrl: '..', // The test runner is in `/tests` but we need the base url to be `/` 
+    baseUrl: '..',
     paths: {
       'jasmine': 'bower_components/jasmine/lib/jasmine-core/jasmine',
       'jasmine-html': 'bower_components/jasmine/lib/jasmine-core/jasmine-html',
-      'boot': 'bower_components/jasmine/lib/jasmine-core/boot',
       'jasmineAmd': 'tests/jasmineAmd'
     },
     shim: {
       'jasmine': {
-        exports: 'jasmine'
+        exports: 'jasmineRequire'
       },
       'jasmine-html': {
         deps: ['jasmine'],
-        exports: 'jasmine'
-      },
-      'boot': {
-        deps: ['jasmine', 'jasmine-html'],
-        exports: 'jasmine'
+        exports: 'jasmineRequire'
       }
     }
   });
 
-  // Load the list of specs (array of AMD module names), the router, the routes, and the Jasmine bootloader
-  //
-  // Note - Loading Jasmine will still create all of the normal Jasmine browser globals unless `boot.js` is re-written to use
-  // the AMD or UMD specs. `boot.js` will do a bunch of configuration and attach it's initializers to `window.onload()`. Because
-  // we are using RequireJS `window.onload()` has already been triggered so we have to manually call it again. This will
-  // initialize the HTML Reporter and execute the environment.
-  require(['tests/specs', 'router', 'js/routes', 'boot'], function (specs, router, routes) {
+  // Load the HTML bootloader and all of the specs
+  require(['tests/bootAmd', 'tests/specList', 'router', 'js/routes'], function (boot, specList, router, routes) {
     // Configure the router so that routes are set up the same way as on the main site
     router.config({
       routes: routes,
       routeLoadedCallback: function routeLoadedCallback() { } // no-op for tests
     });
 
-    // Load the all of the specs
-    require(specs, function () {
-      // Initialize the HTML Reporter and execute the environment (setup by `boot.js`)
-      window.onload();
+    // Load the specs, initialize the HTML Reporter, and execute the environment
+    require(specList, function() {
+      boot.initializeHtmlReporter();
+      boot.execute();
     });
   });
 });

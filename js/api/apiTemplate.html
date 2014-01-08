@@ -6,7 +6,7 @@
 
 <pre>var MyView = Nex.View.extend({
   template: Handlebars.compile('&lt;div&gt;Hello \{{model.name}}!&lt;/div&gt;'),
-  model: {name: 'Erik Ringsmuth'}
+  model: {name: 'Nex'}
 });</pre>
 
 <p>Create an instance of your view, render it, and attach it to the document.</p>
@@ -48,7 +48,7 @@
 
 <h4 id="model" class="spacer">model</h4>
 
-<p>The model can be an object or a constructor function. For example, if your model is <code>{name: 'Erik Ringsmuth'}</code> it will be passed straight to the template. If your model is a constructor function like <code>function() {this.name = 'Erik Ringsmuth'; this.time = new Date();}</code> it will be called with <code>new view.model()</code> before being passed to the template. This allows for variables to be evaluated at render time. This is useful when you need access to a closure variable that changes often.</p>
+<p>The model can be an object or a constructor function. For example, if your model is <code>{name: 'Nex'}</code> it will be passed straight to the template. If your model is a constructor function like <code>function() {this.name = 'Nex'; this.time = new Date();}</code> it will be called with <code>new view.model()</code> before being passed to the template. This allows for variables to be evaluated at render time. This is useful when you need access to a closure variable that changes often.</p>
 
 <h4 id="template" class="spacer">template()</h4>
 
@@ -56,7 +56,7 @@
 
 <pre>var MyView = Nex.View.extend({
   template: Handlebars.compile('&lt;div&gt;Hello \{{model.name}}!&lt;/div&gt;'),
-  model: {name: 'Erik Ringsmuth'},
+  model: {name: 'Nex'},
   render: function render() {
     this.el.innerHTML = this.template({model: this.model});
     return this;
@@ -124,9 +124,9 @@ document.querySelector('body').appendChild(new MyView().render().outerEl);
     return this;
   }
 });
-var myView = new MyView("Erik Ringsmuth");
+var myView = new MyView("Nex");
 myView.render();
-document.querySelector('body').appendChild(myView.outerEl); // Will display "Hello Erik Ringsmuth!"</pre>
+document.querySelector('body').appendChild(myView.outerEl); // Will display "Hello Nex!"</pre>
 
 <p>The <code>initialize()</code> method is the last step before the instance is returned so everything else is set up at this point.</p>
 

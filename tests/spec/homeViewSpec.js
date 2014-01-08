@@ -5,9 +5,10 @@ define([
 ], function(jasmine, HomeView) {
   'use strict';
 
-  var describe = jasmine.describe,
-      it =  jasmine.it,
-      expect = jasmine.expect;
+  var env = jasmine.getEnv(),
+    describe = env.describe,
+    it =  env.it,
+    expect = env.expect;
 
   describe('The home view', function() {
     it('should be defined', function() {

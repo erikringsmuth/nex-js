@@ -13,7 +13,8 @@ define([
     paths: {
       'jasmine': 'bower_components/jasmine/lib/jasmine-core/jasmine',
       'jasmine-html': 'bower_components/jasmine/lib/jasmine-core/jasmine-html',
-      'jasmineAmd': 'tests/jasmineAmd'
+      'jasmineAmd': 'tests/jasmineAmd',
+      'Squire': 'bower_components/squire/src/Squire'
     },
     shim: {
       'jasmine': {

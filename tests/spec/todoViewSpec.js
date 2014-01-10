@@ -38,5 +38,34 @@ define([
         done();
       });
     });
+
+    it('should display the todos and check completed todos', function(done) {
+      new Squire().mock('js/todo/todoModel', function TodoModel() {
+        var model = this;
+        model.todos = [
+          { title: 'code something', completed: true },
+          { title: 'code some more', completed: false },
+          { title: 'and test everything!', completed: true }
+        ];
+        model.routes = {
+          todoAll: { matchesUrl: function() { return true; } },
+          todoActive: { matchesUrl: function() { return false; } },
+          todoCompleted: { matchesUrl: function() { return false; } }
+        };
+        model.filteredTodos = function() { return model.todos; };
+        model.itemsRemaining = function() { return 1; };
+        model.itemsCompleted = function() { return 2; };
+        model.editing = function() { return false; };
+        model.itemsRemainingText = function() { return 'items left'; };
+        model.fetch = function() { return model; };
+        model.save = function() { return model; };
+      })
+      .require(['js/todo/todoView'], function(TodoView) {
+        var todoView = new TodoView();
+        todoView.render();
+        expect(todoView.el.querySelectorAll('#todo-list>li').length).toEqual(3);
+        done();
+      });
+    });
   });
 });

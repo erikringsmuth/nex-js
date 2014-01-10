@@ -15,7 +15,7 @@ define([
     it('should have a layout view', function() {
       var examplesView = new ExamplesView();
       examplesView.render();
-      expect(examplesView.outerEl.querySelector('.navbar')).not.toBeFalsy();
+      expect(examplesView.outerEl.querySelector('.navbar')).toBeTruthy();
     });
   });
 });

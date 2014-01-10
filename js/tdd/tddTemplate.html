@@ -1,6 +1,49 @@
 <h3>Unit Testing</h3>
 
-<p>You can test with the framework of your choice. This site's test are written using BDD which is a subset of TDD that focuses on writing specs anyone can understand. The developer and business partner work together writing the specs. They describe a thing (view, button, drop-down, etc.) and state what it should do (how it responds to a click, selection, etc.). The developer then writes the expectations (like assertions) that test the technical aspect of how it works.</p>
+<p>Test with the framework of your choice. Injecting require.js mocks is done with <a href="https://github.com/iammerrick/Squire.js">Squire.js</a>. There is another library <a href="https://github.com/medallia/testr.js">testr.js</a> for injecting mocks but it doesn't follow the AMD spec and it hijacks the main <code>window.require()</code> function. Here's an example Jasmine & Squire.js setup.</p>
+
+<p class="spacer">This is the real <code>/js/home/homeView.js</code> we want to test.</p>
+
+<pre>define([
+  'nex',
+  'handlebars',
+  'js/home/homeModel'
+], function(Nex, Handlebars, homeModel) {
+  'use strict';
+
+  return Nex.View.extend({
+    template: Handlebars.compile('&lt;div&gt;Hello \{{model.name}}!&lt;/div&gt;'),
+    model: homeModel
+  });
+});</pre>
+
+<p class="spacer">Set up your test like this to mock the <code>homeModel</code> with Squire.</p>
+
+<pre>
+define([
+  'jasmineAmd',
+  'Squire'
+], function(jasmine, Squire) {
+  'use strict';
+
+  var env = jasmine.getEnv(), describe = env.describe, it = env.it, expect = env.expect;
+
+  describe('The home view', function() {
+    it('should display "Hello Erik Ringsmuth!"', function(done) {
+      new Squire().mock('js/home/homeModel', {
+        name: 'Erik Ringsmuth'
+      })
+      .require(['js/home/homeView'], function(HomeView) {
+        var homeView = new HomeView();
+        homeView.render();
+        expect(homeView.el.innerHTML).toEqual('&lt;div&gt;Hello Erik Ringsmuth!&lt;/div&gt;');
+        done(); // Tells Jasmine the async test is done
+      });
+    });
+  });
+});</pre>
+
+<h3 class="spacer">Test Runer</h3>
 
 <p>The nex-js website's <a href="tests/SpecRunner.html">Jasmine Spec Runner</a> is run below. You can see how they're written in the nex-js gh-pages branch <a href="https://github.com/erikringsmuth/nex-js/tree/gh-pages/tests">tests folder</a>.</p>
 

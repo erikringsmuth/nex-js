@@ -15,7 +15,7 @@
       <ul class="nav navbar-nav">
         <li {{#if model.routes.api.matchesUrl}}class="active"{{/if}}><a href="#/api">API</a></li>
         <li {{#if model.routes.examples.matchesUrl}}class="active"{{/if}}><a href="#/examples">Examples</a></li>
-        {{#if model.devMode}}<li {{#if model.routes.tdd.matchesUrl}}class="active"{{/if}}><a href="#/tdd">TDD</a></li>{{/if}}
+        <li {{#if model.routes.tdd.matchesUrl}}class="active"{{/if}}><a href="#/tdd">TDD</a></li>
         <li {{#if model.routes.notes.matchesUrl}}class="active"{{/if}}><a href="#/notes">Notes</a></li>
         <li><a href="https://github.com/erikringsmuth/requirejs-router">RequireJS Router</a></li>
         {{#if model.devMode}}<li {{#if model.routes.dev.matchesUrl}}class="active"{{/if}}><a href="#/dev">Dev</a></li>{{/if}}

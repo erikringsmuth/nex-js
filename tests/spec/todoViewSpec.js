@@ -16,7 +16,8 @@ define([
     it('should not display the main section or footer when there are no todos', function(done) {
       var injector = new Squire();
 
-      var model = function() {
+      var TodoModel = function() {
+        var model = this;
         model.todos = [];
         model.routes = {
           todoAll: { matchesUrl: function() { return true; } },
@@ -30,9 +31,10 @@ define([
         model.itemsRemainingText = function() { return 'items left'; };
         model.fetch = function() { return model; };
         model.save = function() { return model; };
+        return model;
       };
 
-      injector.mock('js/todo/todoModel', model);
+      injector.mock('js/todo/todoModel', TodoModel);
 
       injector.require(['js/todo/todoView'], function(TodoView) {
         var todoView = new TodoView();

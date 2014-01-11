@@ -18,6 +18,9 @@ define([
         var body = document.querySelector('body');
         body.innerHTML = '';
         body.appendChild(new View().render().outerEl);
+        
+        // Scroll back to the top of the page since we're just replacing the innerHTML
+        scroll(0, 0);
       }
     });
 

@@ -21,12 +21,12 @@
 
 <pre>
 define([
-  'jasmineAmd',
+  'jasmine/amd/describe',
+  'jasmine/amd/it',
+  'jasmine/amd/expect',
   'Squire'
-], function(jasmine, Squire) {
+], function(describe, it, expect, Squire) {
   'use strict';
-
-  var env = jasmine.getEnv(), describe = env.describe, it = env.it, expect = env.expect;
 
   describe('The home view', function() {
     it('should display "Hello Erik Ringsmuth!"', function(done) {

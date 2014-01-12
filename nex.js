@@ -1,7 +1,6 @@
-// nex-js - Powerful, modular, AMD compatible views.
+// {nex.js} - Powerful, modular, AMD compatible views.
 //
-// Author: Erik Ringsmuth
-// Version: 0.1.7
+// Version: 0.1.8
 // 
 // The MIT License (MIT)
 // Copyright (c) 2014 Erik Ringsmuth
@@ -132,12 +131,12 @@
           // `innerRender()` is actually overridden by specifying a `view.render()` method
           if (typeof(view.render) !== 'undefined') innerRender = view.render;
 
-          var hasLayoutViewThatIsNotRendered = view.layoutView ? true : false;
+          var shouldRenderLayout = view.layoutView ? true : false;
           view.render = function render() {
             // Walk up the view chain rendering layout views on the initial render
-            if(hasLayoutViewThatIsNotRendered) {
+            if(shouldRenderLayout) {
               view.layoutView.render();
-              hasLayoutViewThatIsNotRendered = false;
+              shouldRenderLayout = false;
             }
 
             // Call the method that actually renders the view
@@ -178,6 +177,7 @@
           //    }
           // })
           if (typeof(view.events) === 'undefined') view.events = {};
+          var eventListeners = {};
           for (var eventProperty in view.events) {
             // 'anchorEventHandler' from example
             var callbackName = view.events[eventProperty];
@@ -207,8 +207,20 @@
                 // IE 8 and older
                 view.el.attachEvent(action, eventListener);
               }
+              if (typeof(eventListeners[action]) === 'undefined') eventListeners[action] = [];
+              eventListeners[action].push(eventListener);
             })(action, selector, callbackName);
           }
+
+          // view.displatchMockEvent() - triggers a mock event for integration testing event handlers
+          view.dispatchMockEvent = function dispatchMockEvent(mockEvent) {
+            if (typeof(mockEvent) === 'undefined') throw 'You must pass a mock event';
+            if (typeof(mockEvent.type) === 'undefined') throw 'You specify an event type';
+            if (typeof(mockEvent.target) === 'undefined') throw 'You specify an event target';
+            eventListeners[mockEvent.type].forEach(function(eventListener) {
+              eventListener(mockEvent);
+            });
+          };
 
           // view.initialize() - a hook to add additional logic when creating an instance of the view
           if (typeof(view.initialize) === 'function') {

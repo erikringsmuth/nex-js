@@ -1,6 +1,6 @@
 // {nex.js} - Powerful, modular, AMD compatible views.
 //
-// Version: 0.1.8
+// Version: 0.1.9
 // 
 // The MIT License (MIT)
 // Copyright (c) 2014 Erik Ringsmuth
@@ -217,6 +217,7 @@
             if (typeof(mockEvent) === 'undefined') throw 'You must pass a mock event';
             if (typeof(mockEvent.type) === 'undefined') throw 'You specify an event type';
             if (typeof(mockEvent.target) === 'undefined') throw 'You specify an event target';
+            if (typeof(eventListeners[mockEvent.type]) === 'undefined') throw 'There are no event handlers set up for ' + mockEvent.type + 'events';
             eventListeners[mockEvent.type].forEach(function(eventListener) {
               eventListener(mockEvent);
             });

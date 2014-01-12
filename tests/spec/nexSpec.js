@@ -302,6 +302,76 @@ define([
 
       expect(testView.buttonEventHandler).toHaveBeenCalled();
     });
+
+    it('should throw an exception when no mockEvent.type is specified', function() {
+      var extendingObject = {
+        events: {
+          'click span button#button1': 'buttonEventHandler'
+        },
+        template: '<span><button id="button1">Click Me!</button></span>',
+        buttonEventHandler: function() {}
+      };
+      spyOn(extendingObject, 'buttonEventHandler');
+
+      var TestView = Nex.View.extend(extendingObject);
+      var testView = new TestView();
+      testView.render();
+
+      var testFunction = function() {
+        testView.dispatchMockEvent({
+          target: testView.el.querySelector('#button1')
+        });
+      };
+
+      expect(testFunction).toThrow();
+    });
+
+    it('should throw an exception when no mockEvent.target is specified', function() {
+      var extendingObject = {
+        events: {
+          'click span button#button1': 'buttonEventHandler'
+        },
+        template: '<span><button id="button1">Click Me!</button></span>',
+        buttonEventHandler: function() {}
+      };
+      spyOn(extendingObject, 'buttonEventHandler');
+
+      var TestView = Nex.View.extend(extendingObject);
+      var testView = new TestView();
+      testView.render();
+
+      var testFunction = function() {
+        testView.dispatchMockEvent({
+          type: 'click'
+        });
+      };
+
+      expect(testFunction).toThrow();
+    });
+
+    it('should throw an exception when there aren\'t any event handlers for that type', function() {
+      var extendingObject = {
+        events: {
+          'click span button#button1': 'buttonEventHandler'
+        },
+        template: '<span><button id="button1">Click Me!</button></span>',
+        buttonEventHandler: function() {}
+      };
+      spyOn(extendingObject, 'buttonEventHandler');
+
+      var TestView = Nex.View.extend(extendingObject);
+      var testView = new TestView();
+      testView.render();
+
+      var testFunction = function() {
+        testView.dispatchMockEvent({
+          type: 'hover',
+          target: testView.el.querySelector('#button1')
+        });
+      };
+
+      expect(testFunction).toThrow();
+    });
   });
 
 });

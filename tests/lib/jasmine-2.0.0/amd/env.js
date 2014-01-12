@@ -1,8 +1,7 @@
-/*global define*/
 define([
-  'boot'
+  "amd/jasmine"
 ], function (jasmine) {
-  'use strict';
-  
+  "use strict";
+
   return jasmine.getEnv();
 });

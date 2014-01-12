@@ -8,4 +8,4 @@ API [http://erikringsmuth.github.io/nex-js/#/api](http://erikringsmuth.github.io
 Examples [http://erikringsmuth.github.io/nex-js/#/example](http://erikringsmuth.github.io/nex-js/#/example)
 
 ## Running Tests
-Open `/tests/SpecRunner.html` and make sure all tests pass. The tests are written using Jasmine.
+Open `/tests/AmdSpecRunner.html` and make sure all tests pass. The tests are written using Jasmine.

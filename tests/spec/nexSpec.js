@@ -1,25 +1,28 @@
 /*global define*/
 define([
-  'jasmineAmd',
+  'amd/describe',
+  'amd/it',
+  'amd/expect',
+  'amd/spyOn',
   'nex'
-], function(jasmine, Nex) {
+], function(describe, it, expect, spyOn, Nex) {
   'use strict';
 
-  jasmine.describe('Loading nex-js with an AMD loader like require.js', function() {
-    jasmine.it('should not add nex-js to the global scope', function() {
-      jasmine.expect(window.Nex).toBeUndefined();
+  describe('Loading nex-js with an AMD loader like require.js', function() {
+    it('should not add nex-js to the global scope', function() {
+      expect(window.Nex).toBeUndefined();
     });
   });
 
-  jasmine.describe('Extending the base View', function() {
-    jasmine.it('should return a constructor function', function() {
+  describe('Extending the base View', function() {
+    it('should return a constructor function', function() {
       var TestView = Nex.View.extend();
-      jasmine.expect(typeof TestView).toEqual('function');
+      expect(typeof TestView).toEqual('function');
     });
   });
 
-  jasmine.describe('view.render()', function() {
-    jasmine.it('should process the function template with an object model and add the result HTML to view.el', function() {
+  describe('view.render()', function() {
+    it('should process the function template with an object model and add the result HTML to view.el', function() {
       var TestView = Nex.View.extend({
         template: function(args) { return '<div>Hello ' + args.model.name + '</div>'; },
         model: {
@@ -27,10 +30,10 @@ define([
         }
       });
       var testView = new TestView().render();
-      jasmine.expect(testView.el.innerHTML).toEqual('<div>Hello Erik Ringsmuth</div>');
+      expect(testView.el.innerHTML).toEqual('<div>Hello Erik Ringsmuth</div>');
     });
 
-    jasmine.it('should process the function template with a constructor function model and add the result HTML to view.el', function() {
+    it('should process the function template with a constructor function model and add the result HTML to view.el', function() {
       var TestView = Nex.View.extend({
         template: function(args) { return '<div>Hello ' + args.model.name + '</div>'; },
         model: function() {
@@ -38,18 +41,18 @@ define([
         }
       });
       var testView = new TestView().render();
-      jasmine.expect(testView.el.innerHTML).toEqual('<div>Hello Erik Ringsmuth</div>');
+      expect(testView.el.innerHTML).toEqual('<div>Hello Erik Ringsmuth</div>');
     });
 
-    jasmine.it('should process the string template and add the result HTML to view.el', function() {
+    it('should process the string template and add the result HTML to view.el', function() {
       var TestView = Nex.View.extend({
         template: '<div>Hello Erik Ringsmuth</div>'
       });
       var testView = new TestView().render();
-      jasmine.expect(testView.el.innerHTML).toEqual('<div>Hello Erik Ringsmuth</div>');
+      expect(testView.el.innerHTML).toEqual('<div>Hello Erik Ringsmuth</div>');
     });
 
-    jasmine.it('should render the layout view and attach the child to the layout', function() {
+    it('should render the layout view and attach the child to the layout', function() {
       var LayoutView = Nex.View.extend({
         template: '<div id="main-content"></div>',
         contentPlaceholderId: 'main-content'
@@ -60,19 +63,19 @@ define([
       });
       var testView = new TestView();
       testView.render();
-      jasmine.expect(testView.outerEl.innerHTML).toEqual('<div id="main-content"><div>Hello Erik Ringsmuth</div></div>');
+      expect(testView.outerEl.innerHTML).toEqual('<div id="main-content"><div>Hello Erik Ringsmuth</div></div>');
     });
 
-    jasmine.it('should allow render to be overridden', function() {
+    it('should allow render to be overridden', function() {
       var TestView = Nex.View.extend({
         render: function() { this.el.innerHTML = '<div>Hello Erik Ringsmuth</div>'; }
       });
       var testView = new TestView();
       testView.render();
-      jasmine.expect(testView.el.innerHTML).toEqual('<div>Hello Erik Ringsmuth</div>');
+      expect(testView.el.innerHTML).toEqual('<div>Hello Erik Ringsmuth</div>');
     });
 
-    jasmine.it('should render the layout view and attach the child to the layout even if render is overridden', function() {
+    it('should render the layout view and attach the child to the layout even if render is overridden', function() {
       var LayoutView = Nex.View.extend({
         template: '<div id="main-content"></div>',
         contentPlaceholderId: 'main-content'
@@ -83,20 +86,20 @@ define([
       });
       var testView = new TestView();
       testView.render();
-      jasmine.expect(testView.outerEl.innerHTML).toEqual('<div id="main-content"><div>Hello Erik Ringsmuth</div></div>');
+      expect(testView.outerEl.innerHTML).toEqual('<div id="main-content"><div>Hello Erik Ringsmuth</div></div>');
     });
   });
 
-  jasmine.describe('view.el', function() {
+  describe('view.el', function() {
     var TestView = Nex.View.extend();
     var testView = new TestView();
-    jasmine.it('should default to a div', function() {
-      jasmine.expect(testView.el).toBeDefined();
-      jasmine.expect(testView.el.tagName).toEqual('DIV');
+    it('should default to a div', function() {
+      expect(testView.el).toBeDefined();
+      expect(testView.el.tagName).toEqual('DIV');
     });
   });
 
-  jasmine.describe('view.model', function() {
+  describe('view.model', function() {
     var model = {
       property1: 'jon doe'
     };
@@ -104,48 +107,46 @@ define([
       model: model
     });
     var testView = new TestView();
-    jasmine.it('should be set', function() {
-      jasmine.expect(testView.model).toEqual(model);
+    it('should be set', function() {
+      expect(testView.model).toEqual(model);
     });
   });
 
-  jasmine.describe('view.template()', function() {
+  describe('view.template()', function() {
     var TestView = Nex.View.extend();
     var testView = new TestView();
-    jasmine.it('should default to a compiled template (function) that returns an empty string', function() {
-      jasmine.expect(typeof(testView.template)).toEqual('function');
-      jasmine.expect(testView.template()).toEqual('');
+    it('should default to a compiled template (function) that returns an empty string', function() {
+      expect(typeof(testView.template)).toEqual('function');
+      expect(testView.template()).toEqual('');
     });
   });
 
-  jasmine.describe('view.events', function() {
-    var extendingObject = {
-      events: {
-        'click span button#button1': 'buttonEventHandler'
-      },
-      template: '<span><button id="button1">Click Me!</button></span>',
-      buttonEventHandler: function() {}
-    };
-    jasmine.spyOn(extendingObject, 'buttonEventHandler');
+  describe('view.events', function() {
+    it('should attach delegate events to view.el and call the event handlers when the events are intercepted', function() {
+      var extendingObject = {
+        events: {
+          'click span button#button1': 'buttonEventHandler'
+        },
+        template: '<span><button id="button1">Click Me!</button></span>',
+        buttonEventHandler: function() {}
+      };
+      spyOn(extendingObject, 'buttonEventHandler');
 
-    var TestView = Nex.View.extend(extendingObject);
-    var testView = new TestView().render();
+      var TestView = Nex.View.extend(extendingObject);
+      var testView = new TestView();
+      testView.render();
 
-    // Create and trigger a simulated event (this doesn't actually work)
-    // var event = new MouseEvent('click', {
-    //   'view': window,
-    //   'bubbles': true,
-    //   'cancelable': true
-    // });
-    // testView.el.querySelector('#button1').dispatchEvent(event);
+      testView.dispatchMockEvent({
+        type: 'click',
+        target: testView.el.querySelector('#button1')
+      });
 
-    jasmine.xit('should attach delegate events to view.el and call the event handlers when the events are intercepted', function() {
-      jasmine.expect(testView.buttonEventHandler).toHaveBeenCalled();
+      expect(testView.buttonEventHandler).toHaveBeenCalled();
     });
   });
 
-  jasmine.describe('view.layoutView', function() {
-    jasmine.it('should be defined and an instance of View', function() {
+  describe('view.layoutView', function() {
+    it('should be defined and an instance of View', function() {
       var LayoutView = Nex.View.extend({
         contentPlaceholderId: '#main-content'
       });
@@ -153,26 +154,26 @@ define([
         layoutView: new LayoutView()
       });
       var testView = new TestView();
-      jasmine.expect(testView.layoutView).toBeDefined();
-      jasmine.expect(testView.layoutView instanceof LayoutView).toBeTruthy();
+      expect(testView.layoutView).toBeDefined();
+      expect(testView.layoutView instanceof LayoutView).toBeTruthy();
     });
 
-    jasmine.it('should throw an exception if the layoutView itn\'t of type View', function() {
+    it('should throw an exception if the layoutView itn\'t of type View', function() {
       var TestView = Nex.View.extend({
         layoutView: {}
       });
-      jasmine.expect(function() { new TestView(); }).toThrow();
+      expect(function() { new TestView(); }).toThrow();
     });
 
-    jasmine.it('should throw an exception if the layoutView doesn\'t have a contentPlaceholderId', function() {
+    it('should throw an exception if the layoutView doesn\'t have a contentPlaceholderId', function() {
       var LayoutView = Nex.View.extend();
       var TestView = Nex.View.extend({
         layoutView: new LayoutView()
       });
-      jasmine.expect(function() { new TestView(); }).toThrow();
+      expect(function() { new TestView(); }).toThrow();
     });
 
-    jasmine.it('should give the layout view a reference to the child view as layoutView.childView', function() {
+    it('should give the layout view a reference to the child view as layoutView.childView', function() {
       var LayoutView = Nex.View.extend({
         contentPlaceholderId: 'main-content'
       });
@@ -181,18 +182,18 @@ define([
       });
       var testView = new TestView();
       var layoutView = testView.layoutView;
-      jasmine.expect(layoutView.childView).toEqual(testView);
+      expect(layoutView.childView).toEqual(testView);
     });
   });
 
-  jasmine.describe('view.outerEl', function() {
-    jasmine.it('should be view.el if no layout view is defined', function() {
+  describe('view.outerEl', function() {
+    it('should be view.el if no layout view is defined', function() {
       var TestView = Nex.View.extend();
       var testView = new TestView();
-      jasmine.expect(testView.outerEl).toEqual(testView.el);
+      expect(testView.outerEl).toEqual(testView.el);
     });
 
-    jasmine.it('should be layoutView.el if a layout view is defined', function() {
+    it('should be layoutView.el if a layout view is defined', function() {
       var LayoutView = Nex.View.extend({
         contentPlaceholderId: 'main-content'
       });
@@ -201,20 +202,20 @@ define([
       });
       var testView = new TestView();
       var layoutView = testView.layoutView;
-      jasmine.expect(testView.outerEl).toEqual(layoutView.el);
+      expect(testView.outerEl).toEqual(layoutView.el);
     });
   });
 
-  jasmine.describe('view.contentPlaceholderId', function() {
-    jasmine.it('should throw an exception if it\'s not a string', function() {
+  describe('view.contentPlaceholderId', function() {
+    it('should throw an exception if it\'s not a string', function() {
       var TestView = Nex.View.extend({
         contentPlaceholderId: {}
       });
-      jasmine.expect(function() { new TestView(); }).toThrow();
+      expect(function() { new TestView(); }).toThrow();
     });
   });
 
-  jasmine.describe('view.remove()', function() {
+  describe('view.remove()', function() {
     // Create an outer view
     var OuterView = Nex.View.extend({
       template: '<div id="container"></div>'
@@ -232,50 +233,75 @@ define([
     outerView.el.querySelector('#container').appendChild(testView.outerEl);
 
     testView.remove();
-    jasmine.it('should remove the view from anything it\'s attached to', function() {
-      jasmine.expect(outerView.el.querySelector('#container').innerHTML).toEqual('');
+    it('should remove the view from anything it\'s attached to', function() {
+      expect(outerView.el.querySelector('#container').innerHTML).toEqual('');
     });
   });
 
-  jasmine.describe('view.initialize()', function() {
-    jasmine.it('should be called when creating an instance of a view', function() {
+  describe('view.initialize()', function() {
+    it('should be called when creating an instance of a view', function() {
       var extendingObject = {
         initialize: function initialize() {}
       };
       var TestView = Nex.View.extend(extendingObject);
-      jasmine.spyOn(extendingObject, 'initialize');
+      spyOn(extendingObject, 'initialize');
       var testView = new TestView('arg1', 'arg2');
-      jasmine.expect(testView.initialize).toHaveBeenCalledWith('arg1', 'arg2');
+      expect(testView.initialize).toHaveBeenCalledWith('arg1', 'arg2');
     });
   });
 
-  jasmine.describe('view.tagName', function() {
-    jasmine.it('should create view.el with that tagName', function() {
+  describe('view.tagName', function() {
+    it('should create view.el with that tagName', function() {
       var TestView = Nex.View.extend({
         tagName: 'span'
       });
       var testView = new TestView();
-      jasmine.expect(testView.el.tagName).toEqual('SPAN');
+      expect(testView.el.tagName).toEqual('SPAN');
     });
   });
 
-  jasmine.describe('view.id', function() {
-    jasmine.it('should set the ID of view.el', function() {
+  describe('view.id', function() {
+    it('should set the ID of view.el', function() {
       var TestView = Nex.View.extend({
         id: 'awesome-id'
       });
       var testView = new TestView();
-      jasmine.expect(testView.el.id).toEqual('awesome-id');
+      expect(testView.el.id).toEqual('awesome-id');
     });
   });
 
-  jasmine.describe('view.className', function() {
-    jasmine.it('should set the class of view.el', function() {
+  describe('view.className', function() {
+    it('should set the class of view.el', function() {
       var TestView = Nex.View.extend({
         className: 'awesome-class'
       });
       var testView = new TestView();
-      jasmine.expect(testView.el.className).toEqual('awesome-class');
+      expect(testView.el.className).toEqual('awesome-class');
     });
   });
+
+  describe('view.dispatchMockEvent(mockEvent)', function() {
+    it('should trigger a mock event that is handled by the event handlers', function() {
+      var extendingObject = {
+        events: {
+          'click span button#button1': 'buttonEventHandler'
+        },
+        template: '<span><button id="button1">Click Me!</button></span>',
+        buttonEventHandler: function() {}
+      };
+      spyOn(extendingObject, 'buttonEventHandler');
+
+      var TestView = Nex.View.extend(extendingObject);
+      var testView = new TestView();
+      testView.render();
+
+      testView.dispatchMockEvent({
+        type: 'click',
+        target: testView.el.querySelector('#button1')
+      });
+
+      expect(testView.buttonEventHandler).toHaveBeenCalled();
+    });
+  });
+
 });

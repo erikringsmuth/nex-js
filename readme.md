@@ -1,4 +1,4 @@
-## nex-js
+## {nex.js}
 Powerful, modular, AMD compatible views. 
 
 Info [http://erikringsmuth.github.io/nex-js](http://erikringsmuth.github.io/nex-js)

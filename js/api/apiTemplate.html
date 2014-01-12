@@ -31,6 +31,7 @@
   <li><code>view.tagName</code> - the type of DOM element</li>
   <li><code>view.id</code> - the ID of the view's DOM element</li>
   <li><code>view.className</code> - the class name(s) of the view's DOM element</li>
+  <li><code>view.dispatchMockEvent(mockEvent)</code> - triggers a mock event for integration testing event handlers</li>
 </ul>
 
 <h4 id="render" class="spacer">render()</h4>
@@ -141,3 +142,23 @@ document.querySelector('body').appendChild(myView.outerEl); // Will display "Hel
 <h4 id="className" class="spacer">className</h4>
 
 <p>The class name(s) of the view's DOM element.</p>
+
+<h4 id="dispatchMockEvent" class="spacer">dispatchMockEvent(mockEvent)</h4>
+
+<p>Triggers a mock event for integration testing event handlers. If you just want to unit test your event handlers you can call the functions directly with a mock object. The benefit of dispatching an event is that it might trigger multiple event handlers.</p>
+
+<p>The <code>mockEvent</code> must contain a <code>type</code> and <code>target</code>. The <code>type</code> is a click, keypress, etc. The <code>target</code> is the DOM element you're performing the action on. You can add any other properties your event handlers expect. Here's an example test that verifies that entering a new item and hitting enter saves the item to the view's model.</p>
+
+<pre>var myView = new MyView();
+myView.render();
+
+var textInput = myView.el.querySelector('input.new');
+textInput.value = 'my first item!';
+myView.dispatchMockEvent({
+  type: 'keypress',
+  target: myView.el.querySelector('input.new'),
+  keyCode: 13
+});
+
+expect(myView.model.items.length).toEqual(1);
+expect(myView.model.items[0].title).toEqual('my first item!');</pre>

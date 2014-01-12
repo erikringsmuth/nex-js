@@ -14,11 +14,100 @@ define([
         expect(TodoView).toBeDefined();
       });
 
-      it('should fetch the model when creating a new instance of the view');
+      it('should fetch the model when creating a new instance of the view', function(done) {
+        var fetchSpy = jasmine.createSpy('fetch');
+        new Squire().mock('js/todo/todoModel', function TodoModel() {
+          var model = this;
+          model.todos = [];
+          model.routes = {
+            todoAll: { matchesUrl: function() { return true; } },
+            todoActive: { matchesUrl: function() { return false; } },
+            todoCompleted: { matchesUrl: function() { return false; } }
+          };
+          model.filteredTodos = function() { return []; };
+          model.itemsRemaining = function() { return 0; };
+          model.itemsCompleted = function() { return 0; };
+          model.editing = function() { return false; };
+          model.itemsRemainingText = function() { return 'items left'; };
+          model.fetch = fetchSpy;
+          model.save = function() { return model; };
+        })
+        .require(['js/todo/todoView'], function(TodoView) {
+          new TodoView();
+          expect(fetchSpy).toHaveBeenCalled();
+          done();
+        });
+      });
 
-      it('should create a new todo when the user enters a new todo');
+      it('should create a new todo when the user enters a new todo', function(done) {
+        new Squire().mock('js/todo/todoModel', function TodoModel() {
+          var model = this;
+          model.todos = [];
+          model.routes = {
+            todoAll: { matchesUrl: function() { return true; } },
+            todoActive: { matchesUrl: function() { return false; } },
+            todoCompleted: { matchesUrl: function() { return false; } }
+          };
+          model.filteredTodos = function() { return []; };
+          model.itemsRemaining = function() { return 0; };
+          model.itemsCompleted = function() { return 0; };
+          model.editing = function() { return false; };
+          model.itemsRemainingText = function() { return 'items left'; };
+          model.fetch = function() { return model; };
+          model.save = function() { return model; };
+        })
+        .require(['js/todo/todoView'], function(TodoView) {
+          var todoView = new TodoView();
+          todoView.render();
 
-      it('should clear completed todos when the user clicks clear completed');
+          var newTodoInput = todoView.el.querySelector('#new-todo');
+          newTodoInput.value = 'my first todo!';
+          todoView.dispatchMockEvent({
+            type: 'keypress',
+            target: todoView.el.querySelector('#new-todo'),
+            keyCode: 13
+          });
+
+          expect(todoView.model.todos.length).toEqual(1);
+          expect(todoView.model.todos[0].title).toEqual('my first todo!');
+          done();
+        });
+      });
+
+      it('should clear completed todos when the user clicks clear completed', function(done) {
+        new Squire().mock('js/todo/todoModel', function TodoModel() {
+          var model = this;
+          model.todos = [
+            { title: 'code something', completed: true },
+            { title: 'code some more', completed: false },
+            { title: 'and test everything!', completed: true }
+          ];
+          model.routes = {
+            todoAll: { matchesUrl: function() { return true; } },
+            todoActive: { matchesUrl: function() { return false; } },
+            todoCompleted: { matchesUrl: function() { return false; } }
+          };
+          model.filteredTodos = function() { return model.todos; };
+          model.itemsRemaining = function() { return 1; };
+          model.itemsCompleted = function() { return 2; };
+          model.editing = function() { return false; };
+          model.itemsRemainingText = function() { return 'items left'; };
+          model.fetch = function() { return model; };
+          model.save = function() { return model; };
+        })
+        .require(['js/todo/todoView'], function(TodoView) {
+          var todoView = new TodoView();
+          todoView.render();
+
+          todoView.dispatchMockEvent({
+            type: 'click',
+            target: todoView.el.querySelector('button#clear-completed')
+          });
+
+          expect(todoView.model.todos.length).toEqual(1);
+          done();
+        });
+      });
 
       it('should toggle all completed todos when the user clicks toggle all completed todos');
 

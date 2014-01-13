@@ -1,11 +1,11 @@
 /*global define*/
 define([
-  'jasmineAmd',
+  'amd/describe',
+  'amd/it',
+  'amd/expect',
   'js/tdd/tddView'
-], function(jasmine, TddView) {
+], function(describe, it, expect, TddView) {
   'use strict';
-
-  var env = jasmine.getEnv(), describe = env.describe, it =  env.it, expect = env.expect;
 
   describe('The TDD view', function() {
     it('should load', function() {

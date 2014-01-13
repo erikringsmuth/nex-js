@@ -1,16 +1,11 @@
-/*global define*/
 define([
-  "jasmineAmd",
-  "jasmine-html"
-], function (jasmine, jasmineRequire) {
+  "amd/jasmine",
+  "amd/env",
+  "jasmineRequireHtml"
+], function (jasmine, env, jasmineRequire) {
   "use strict";
 
   var boot = {
-    /**
-     * Create the Jasmine environment. This is used to run all specs in a project.
-     */
-    env: jasmine.getEnv(),
-
     /**
      * ## Reporters
      * The `HtmlReporter` builds all of the HTML UI for the runner page. This reporter paints the dots, stars, and x's for specs, as well as all spec names and all failures (if any).
@@ -33,15 +28,15 @@ define([
       });
 
       var catchingExceptions = queryString.getParam("catch");
-      boot.env.catchExceptions(typeof catchingExceptions === "undefined" ? true : catchingExceptions);
+      env.catchExceptions(typeof catchingExceptions === "undefined" ? true : catchingExceptions);
 
       /**
        * ## Reporters
        * The `HtmlReporter` builds all of the HTML UI for the runner page. This reporter paints the dots, stars, and x"s for specs, as well as all spec names and all failures (if any).
        */
       boot.htmlReporter = new jasmine.HtmlReporter({
-        env: boot.env,
-        onRaiseExceptionsClick: function() { queryString.setParam("catch", !boot.env.catchingExceptions()); },
+        env: env,
+        onRaiseExceptionsClick: function() { queryString.setParam("catch", !env.catchingExceptions()); },
         getContainer: function() { return document.body; },
         createElement: function() { return document.createElement.apply(document, arguments); },
         createTextNode: function() { return document.createTextNode.apply(document, arguments); },
@@ -51,10 +46,10 @@ define([
       /**
        * The `jsApiReporter` also receives spec results, and is used by any environment that needs to extract the results from JavaScript.
        */
-      boot.env.addReporter(new jasmine.JsApiReporter({
+      env.addReporter(new jasmine.JsApiReporter({
         timer: new jasmine.Timer()
       }));
-      boot.env.addReporter(boot.htmlReporter);
+      env.addReporter(boot.htmlReporter);
 
       /**
        * Filter which specs will be run by matching the start of the full name against the `spec` query param.
@@ -63,7 +58,7 @@ define([
         filterString: function() { return queryString.getParam("spec"); }
       });
 
-      boot.env.specFilter = function(spec) {
+      env.specFilter = function(spec) {
         return specFilter.matches(spec.getFullName());
       };
 
@@ -79,13 +74,15 @@ define([
        * Finally, initialize the HTML reporter.
        */
       boot.htmlReporter.initialize();
+
+      return boot.htmlReporter;
     },
 
     /**
      * Execute the Jasmine environment.
      */
     execute: function() {
-      boot.env.execute();
+      env.execute();
     }
   };
 

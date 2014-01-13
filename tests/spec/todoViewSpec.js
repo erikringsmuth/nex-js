@@ -1,12 +1,14 @@
 /*global define*/
 define([
-  'jasmineAmd',
+  'amd/describe',
+  'amd/it',
+  'amd/expect',
+  'amd/jasmine',
+  'amd/spyOn',
   'Squire',
   'js/todo/todoView'
-], function(jasmine, Squire, TodoView) {
+], function(describe, it, expect, jasmine, spyOn, Squire, TodoView) {
   'use strict';
-
-  var env = jasmine.getEnv(), describe = env.describe, it = env.it, expect = env.expect, spyOn = env.spyOn;
 
   describe('The Todo MVC', function() {
     describe('view', function() {

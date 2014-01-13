@@ -1,6 +1,5 @@
-/*global define*/
 define([
-  "jasmine"
+  "jasmineRequire"
 ], function (jasmineRequire) {
   "use strict";
 

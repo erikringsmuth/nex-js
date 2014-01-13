@@ -156,7 +156,7 @@ var textInput = myView.el.querySelector('input.new');
 textInput.value = 'my first item!';
 myView.dispatchMockEvent({
   type: 'keypress',
-  target: myView.el.querySelector('input.new'),
+  target: textInput,
   keyCode: 13
 });
 

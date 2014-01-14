@@ -15,9 +15,9 @@ define(['router'], function(router) {
     notFound: {path: '*', module: 'js/notFound/NotFoundView'},
 
     // You can't use these routes to load a module. They're used by sub-views for their `.matchesUrl()` method.
-    // todoAll matches a query string with 'todoFilter=all' or neither 'todoFilter=active' or 'todoFilter=completed'
-    todoAll: {matchesUrl: function matchesUrl() { return router.testRoute({queryParameters: ['todoFilter=all']}) || !(router.routes.todoActive.matchesUrl() || router.routes.todoCompleted.matchesUrl()); }},
-    todoActive: {queryParameters: ['todoFilter=active']},
+    todoAll: {queryParameters: ['todoFilter=all']},
+    // todoActive matches a query string with 'todoFilter=active' or neither 'todoFilter=all' or 'todoFilter=completed'. This makes it the default TodoMVC filter.
+    todoActive: {matchesUrl: function matchesUrl() { return router.testRoute({queryParameters: ['todoFilter=active']}) || !(router.routes.todoAll.matchesUrl() || router.routes.todoCompleted.matchesUrl()); }},
     todoCompleted: {queryParameters: ['todoFilter=completed']}
   };
 });

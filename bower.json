@@ -9,19 +9,21 @@
   "main": "nex.js",
   "keywords": [
     "mv*",
-    "views"
+    "mvc",
+    "views",
+    "RequireJS",
+    "AMD"
   ],
   "license": "MIT",
   "dependencies": {
-    "requirejs": "",
-    "jasmine": ""
+    "requirejs": "2.1.10",
+    "jasmine": "2.0.0"
   },
   "ignore": [
     "**/.*",
-    "node_modules",
     "bower_components",
-    "test",
     "tests",
+    "bower.json",
     "license.md",
     "readme.md"
   ]

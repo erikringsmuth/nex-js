@@ -1,6 +1,6 @@
 {
   "name": "requirejs-router",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "homepage": "https://github.com/erikringsmuth/requirejs-router",
   "authors": [
     "Erik Ringsmuth <erik.ringsmuth@gmail.com>"
@@ -14,23 +14,24 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "requirejs": "",
-    "jasmine": ""
+    "requirejs": "2.1.10",
+    "jasmine": "2.0.0"
   },
   "ignore": [
     "**/.*",
-    "node_modules",
     "bower_components",
-    "test",
-    "tests"
+    "tests",
+    "bower.json",
+    "license.md",
+    "readme.md"
   ],
-  "_release": "0.1.7",
+  "_release": "0.1.8",
   "_resolution": {
     "type": "version",
-    "tag": "0.1.7",
-    "commit": "0eb437ede5d206691f364c31dd2bb40261026663"
+    "tag": "v0.1.8",
+    "commit": "a5e8ce1bbdb1e25ccf3e1dc6ee3290231546de30"
   },
   "_source": "git://github.com/erikringsmuth/requirejs-router.git",
-  "_target": "~0.1.7",
+  "_target": "~0.1.8",
   "_originalSource": "requirejs-router"
 }

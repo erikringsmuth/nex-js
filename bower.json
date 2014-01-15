@@ -14,7 +14,7 @@
   "dependencies": {
     "requirejs": "~2.1.10",
     "requirejs-text": "~2.0.10",
-    "requirejs-router": "~0.1.7",
+    "requirejs-router": "~0.1.8",
     "nex-js": "~0.1.9",
     "handlebars": "~1.1.2",
     "bootstrap": "~3.0.3",

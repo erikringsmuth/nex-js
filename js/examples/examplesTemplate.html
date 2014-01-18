@@ -73,10 +73,10 @@
       },
 
       // When a route loads, render the view and attach it to the document
-      routeLoadedCallback: function routeLoadedCallback(View) {
+      routeLoadedCallback: function routeLoadedCallback(View, routeArguments) {
         var body = document.querySelector('body');
         body.innerHTML = '';
-        body.appendChild(new View().render().outerEl);
+        body.appendChild(new View(routeArguments).render().outerEl);
       }
     });
 

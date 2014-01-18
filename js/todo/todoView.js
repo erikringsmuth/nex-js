@@ -25,8 +25,10 @@ define([
     // The compiled handlebars template
     template: Handlebars.compile(todoTemplate),
 
-    // The view's model
-    model: new TodoModel().fetch(),
+    // Get the model during initialization
+    initialize: function initialize(routeArguments) {
+      this.model = new TodoModel(routeArguments).fetch();
+    },
 
     // Create a new todo
     createNewTodoOnEnter: function createNewTodoOnEnter(event) {

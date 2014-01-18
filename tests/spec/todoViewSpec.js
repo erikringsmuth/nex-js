@@ -6,8 +6,9 @@ define([
   'amd/jasmine',
   'amd/spyOn',
   'Squire',
-  'js/todo/todoView'
-], function(describe, it, expect, jasmine, spyOn, Squire, TodoView) {
+  'js/todo/todoView',
+  'js/todo/todoModel'
+], function(describe, it, expect, jasmine, spyOn, Squire, TodoView, TodoModel) {
   'use strict';
 
   describe('The Todo MVC', function() {
@@ -22,9 +23,9 @@ define([
           var model = this;
           model.todos = [];
           model.routes = {
-            todoAll: { matchesUrl: function() { return true; } },
-            todoActive: { matchesUrl: function() { return false; } },
-            todoCompleted: { matchesUrl: function() { return false; } }
+            todoAll: function() { return true; },
+            todoActive: function() { return false; },
+            todoCompleted: function() { return false; }
           };
           model.filteredTodos = function() { return []; };
           model.itemsRemaining = function() { return 0; };
@@ -46,9 +47,9 @@ define([
           var model = this;
           model.todos = [];
           model.routes = {
-            todoAll: { matchesUrl: function() { return true; } },
-            todoActive: { matchesUrl: function() { return false; } },
-            todoCompleted: { matchesUrl: function() { return false; } }
+            todoAll: function() { return true; },
+            todoActive: function() { return false; },
+            todoCompleted: function() { return false; }
           };
           model.filteredTodos = function() { return []; };
           model.itemsRemaining = function() { return 0; };
@@ -81,9 +82,9 @@ define([
           var model = this;
           model.todos = [];
           model.routes = {
-            todoAll: { matchesUrl: function() { return true; } },
-            todoActive: { matchesUrl: function() { return false; } },
-            todoCompleted: { matchesUrl: function() { return false; } }
+            todoAll: function() { return true; },
+            todoActive: function() { return false; },
+            todoCompleted: function() { return false; }
           };
           model.filteredTodos = function() { return []; };
           model.itemsRemaining = function() { return 0; };
@@ -116,9 +117,9 @@ define([
           var model = this;
           model.todos = [];
           model.routes = {
-            todoAll: { matchesUrl: function() { return true; } },
-            todoActive: { matchesUrl: function() { return false; } },
-            todoCompleted: { matchesUrl: function() { return false; } }
+            todoAll: function() { return true; },
+            todoActive: function() { return false; },
+            todoCompleted: function() { return false; }
           };
           model.filteredTodos = function() { return []; };
           model.itemsRemaining = function() { return 0; };
@@ -154,9 +155,9 @@ define([
             { title: 'and test everything!', completed: true }
           ];
           model.routes = {
-            todoAll: { matchesUrl: function() { return true; } },
-            todoActive: { matchesUrl: function() { return false; } },
-            todoCompleted: { matchesUrl: function() { return false; } }
+            todoAll: function() { return true; },
+            todoActive: function() { return false; },
+            todoCompleted: function() { return false; }
           };
           model.filteredTodos = function() { return model.todos; };
           model.itemsRemaining = function() { return 1; };
@@ -189,9 +190,9 @@ define([
             { title: 'and test everything!', completed: true }
           ];
           model.routes = {
-            todoAll: { matchesUrl: function() { return true; } },
-            todoActive: { matchesUrl: function() { return false; } },
-            todoCompleted: { matchesUrl: function() { return false; } }
+            todoAll: function() { return true; },
+            todoActive: function() { return false; },
+            todoCompleted: function() { return false; }
           };
           model.filteredTodos = function() { return model.todos; };
           model.itemsRemaining = function() { return 1; };
@@ -226,9 +227,9 @@ define([
             { title: 'and test everything!', completed: true, id: '3' }
           ];
           model.routes = {
-            todoAll: { matchesUrl: function() { return true; } },
-            todoActive: { matchesUrl: function() { return false; } },
-            todoCompleted: { matchesUrl: function() { return false; } }
+            todoAll: function() { return true; },
+            todoActive: function() { return false; },
+            todoCompleted: function() { return false; }
           };
           model.filteredTodos = function() { return model.todos; };
           model.itemsRemaining = function() { return 1; };
@@ -263,9 +264,9 @@ define([
             { title: 'and test everything!', completed: true, id: '3' }
           ];
           model.routes = {
-            todoAll: { matchesUrl: function() { return true; } },
-            todoActive: { matchesUrl: function() { return false; } },
-            todoCompleted: { matchesUrl: function() { return false; } }
+            todoAll: function() { return true; },
+            todoActive: function() { return false; },
+            todoCompleted: function() { return false; }
           };
           model.filteredTodos = function() { return model.todos; };
           model.itemsRemaining = function() { return 1; };
@@ -298,9 +299,9 @@ define([
             { title: 'and test everything!', completed: true, id: '3' }
           ];
           model.routes = {
-            todoAll: { matchesUrl: function() { return true; } },
-            todoActive: { matchesUrl: function() { return false; } },
-            todoCompleted: { matchesUrl: function() { return false; } }
+            todoAll: function() { return true; },
+            todoActive: function() { return false; },
+            todoCompleted: function() { return false; }
           };
           model.filteredTodos = function() { return model.todos; };
           model.itemsRemaining = function() { return 1; };
@@ -336,9 +337,9 @@ define([
             { title: 'and test everything!', completed: true, id: '3' }
           ];
           model.routes = {
-            todoAll: { matchesUrl: function() { return true; } },
-            todoActive: { matchesUrl: function() { return false; } },
-            todoCompleted: { matchesUrl: function() { return false; } }
+            todoAll: function() { return true; },
+            todoActive: function() { return false; },
+            todoCompleted: function() { return false; }
           };
           model.filteredTodos = function() { return model.todos; };
           model.itemsRemaining = function() { return 1; };
@@ -373,9 +374,9 @@ define([
             { title: 'and test everything!', completed: true, id: '3' }
           ];
           model.routes = {
-            todoAll: { matchesUrl: function() { return true; } },
-            todoActive: { matchesUrl: function() { return false; } },
-            todoCompleted: { matchesUrl: function() { return false; } }
+            todoAll: function() { return true; },
+            todoActive: function() { return false; },
+            todoCompleted: function() { return false; }
           };
           model.filteredTodos = function() { return model.todos; };
           model.itemsRemaining = function() { return 1; };
@@ -411,9 +412,9 @@ define([
             { title: 'and test everything!', completed: true, id: '3' }
           ];
           model.routes = {
-            todoAll: { matchesUrl: function() { return true; } },
-            todoActive: { matchesUrl: function() { return false; } },
-            todoCompleted: { matchesUrl: function() { return false; } }
+            todoAll: function() { return true; },
+            todoActive: function() { return false; },
+            todoCompleted: function() { return false; }
           };
           model.filteredTodos = function() { return model.todos; };
           model.itemsRemaining = function() { return 1; };
@@ -450,9 +451,9 @@ define([
             { title: 'and test everything!', completed: true, id: '3' }
           ];
           model.routes = {
-            todoAll: { matchesUrl: function() { return true; } },
-            todoActive: { matchesUrl: function() { return false; } },
-            todoCompleted: { matchesUrl: function() { return false; } }
+            todoAll: function() { return true; },
+            todoActive: function() { return false; },
+            todoCompleted: function() { return false; }
           };
           model.filteredTodos = function() { return model.todos; };
           model.itemsRemaining = function() { return 1; };
@@ -485,9 +486,9 @@ define([
           var model = this;
           model.todos = [];
           model.routes = {
-            todoAll: { matchesUrl: function() { return true; } },
-            todoActive: { matchesUrl: function() { return false; } },
-            todoCompleted: { matchesUrl: function() { return false; } }
+            todoAll: function() { return true; },
+            todoActive: function() { return false; },
+            todoCompleted: function() { return false; }
           };
           model.filteredTodos = function() { return []; };
           model.itemsRemaining = function() { return 0; };
@@ -514,9 +515,9 @@ define([
             { title: 'and test everything!', completed: true }
           ];
           model.routes = {
-            todoAll: { matchesUrl: function() { return false; } },
-            todoActive: { matchesUrl: function() { return false; } },
-            todoCompleted: { matchesUrl: function() { return true; } }
+            todoAll: function() { return false; },
+            todoActive: function() { return false; },
+            todoCompleted: function() { return true; }
           };
           model.filteredTodos = function() { return [
             { title: 'code something', completed: true },
@@ -542,9 +543,9 @@ define([
           var model = this;
           model.todos = [];
           model.routes = {
-            todoAll: { matchesUrl: function() { return true; } },
-            todoActive: { matchesUrl: function() { return false; } },
-            todoCompleted: { matchesUrl: function() { return false; } }
+            todoAll: function() { return true; },
+            todoActive: function() { return false; },
+            todoCompleted: function() { return false; }
           };
           model.filteredTodos = function() { return []; };
           model.itemsRemaining = function() { return 0; };
@@ -572,9 +573,9 @@ define([
             { title: 'and test everything!', completed: true }
           ];
           model.routes = {
-            todoAll: { matchesUrl: function() { return false; } },
-            todoActive: { matchesUrl: function() { return false; } },
-            todoCompleted: { matchesUrl: function() { return true; } }
+            todoAll: function() { return false; },
+            todoActive: function() { return false; },
+            todoCompleted: function() { return true; }
           };
           model.filteredTodos = function() { return [
             { title: 'code something', completed: true },
@@ -604,9 +605,9 @@ define([
             { title: 'and test everything!', completed: true }
           ];
           model.routes = {
-            todoAll: { matchesUrl: function() { return true; } },
-            todoActive: { matchesUrl: function() { return false; } },
-            todoCompleted: { matchesUrl: function() { return false; } }
+            todoAll: function() { return true; },
+            todoActive: function() { return false; },
+            todoCompleted: function() { return false; }
           };
           model.filteredTodos = function() { return model.todos; };
           model.itemsRemaining = function() { return 1; };
@@ -636,9 +637,9 @@ define([
             { title: 'and test everything!', completed: true }
           ];
           model.routes = {
-            todoAll: { matchesUrl: function() { return true; } },
-            todoActive: { matchesUrl: function() { return false; } },
-            todoCompleted: { matchesUrl: function() { return false; } }
+            todoAll: function() { return true; },
+            todoActive: function() { return false; },
+            todoCompleted: function() { return false; }
           };
           model.filteredTodos = function() { return model.todos; };
           model.itemsRemaining = function() { return 1; };
@@ -665,9 +666,9 @@ define([
             { title: 'and test everything!', completed: true }
           ];
           model.routes = {
-            todoAll: { matchesUrl: function() { return true; } },
-            todoActive: { matchesUrl: function() { return false; } },
-            todoCompleted: { matchesUrl: function() { return false; } }
+            todoAll: function() { return true; },
+            todoActive: function() { return false; },
+            todoCompleted: function() { return false; }
           };
           model.filteredTodos = function() { return model.todos; };
           model.itemsRemaining = function() { return 1; };
@@ -694,9 +695,9 @@ define([
             { title: 'and test everything!', completed: true }
           ];
           model.routes = {
-            todoAll: { matchesUrl: function() { return true; } },
-            todoActive: { matchesUrl: function() { return false; } },
-            todoCompleted: { matchesUrl: function() { return false; } }
+            todoAll: function() { return true; },
+            todoActive: function() { return false; },
+            todoCompleted: function() { return false; }
           };
           model.filteredTodos = function() { return model.todos; };
           model.itemsRemaining = function() { return 1; };
@@ -723,9 +724,9 @@ define([
             { title: 'and test everything!', completed: true }
           ];
           model.routes = {
-            todoAll: { matchesUrl: function() { return true; } },
-            todoActive: { matchesUrl: function() { return false; } },
-            todoCompleted: { matchesUrl: function() { return false; } }
+            todoAll: function() { return true; },
+            todoActive: function() { return false; },
+            todoCompleted: function() { return false; }
           };
           model.filteredTodos = function() { return model.todos; };
           model.itemsRemaining = function() { return 1; };
@@ -752,9 +753,9 @@ define([
             { title: 'and test everything!', completed: false }
           ];
           model.routes = {
-            todoAll: { matchesUrl: function() { return true; } },
-            todoActive: { matchesUrl: function() { return false; } },
-            todoCompleted: { matchesUrl: function() { return false; } }
+            todoAll: function() { return true; },
+            todoActive: function() { return false; },
+            todoCompleted: function() { return false; }
           };
           model.filteredTodos = function() { return model.todos; };
           model.itemsRemaining = function() { return 3; };
@@ -774,224 +775,138 @@ define([
     });
 
     describe('model', function() {
-      it('filtered todos should return all todos when using the all todos filter', function(done) {
-        new Squire().mock('router', {
-          routes: {
-            todoAll: { matchesUrl: function() { return true; } },
-            todoActive: { matchesUrl: function() { return false; } },
-            todoCompleted: { matchesUrl: function() { return false; } }
-          }
-        })
-        .require(['js/todo/todoModel'], function(TodoModel) {
-          var model = new TodoModel();
-          model.todos = [
-            { title: 'code something', completed: true },
-            { title: 'code some more', completed: false },
-            { title: 'and test everything!', completed: true }
-          ];
-          expect(model.filteredTodos().length).toEqual(3);
-          done();
-        });
+      it('filtered todos should return all todos when using the all todos filter', function() {
+        var model = new TodoModel({todoFilter: 'all'});
+        model.todos = [
+          { title: 'code something', completed: true },
+          { title: 'code some more', completed: false },
+          { title: 'and test everything!', completed: true }
+        ];
+        expect(model.filteredTodos().length).toEqual(3);
       });
 
-      it('filtered todos should return the completed todos when using the completed filter', function(done) {
-        new Squire().mock('router', {
-          routes: {
-            todoAll: { matchesUrl: function() { return false; } },
-            todoActive: { matchesUrl: function() { return false; } },
-            todoCompleted: { matchesUrl: function() { return true; } }
-          }
-        })
-        .require(['js/todo/todoModel'], function(TodoModel) {
-          var model = new TodoModel();
-          model.todos = [
-            { title: 'code something', completed: true },
-            { title: 'code some more', completed: false },
-            { title: 'and test everything!', completed: true }
-          ];
-          expect(model.filteredTodos().length).toEqual(2);
-          done();
-        });
+      it('filtered todos should return the completed todos when using the completed filter', function() {
+        var model = new TodoModel({todoFilter: 'completed'});
+        model.todos = [
+          { title: 'code something', completed: true },
+          { title: 'code some more', completed: false },
+          { title: 'and test everything!', completed: true }
+        ];
+        expect(model.filteredTodos().length).toEqual(2);
       });
 
-      it('filtered todos should return the active todos when using the active filter', function(done) {
-        new Squire().mock('router', {
-          routes: {
-            todoAll: { matchesUrl: function() { return false; } },
-            todoActive: { matchesUrl: function() { return true; } },
-            todoCompleted: { matchesUrl: function() { return false; } }
-          }
-        })
-        .require(['js/todo/todoModel'], function(TodoModel) {
-          var model = new TodoModel();
-          model.todos = [
-            { title: 'code something', completed: true },
-            { title: 'code some more', completed: false },
-            { title: 'and test everything!', completed: true }
-          ];
-          expect(model.filteredTodos().length).toEqual(1);
-          done();
-        });
+      it('filtered todos should return the active todos when using the active filter', function() {
+        var model = new TodoModel({todoFilter: 'active'});
+        model.todos = [
+          { title: 'code something', completed: true },
+          { title: 'code some more', completed: false },
+          { title: 'and test everything!', completed: true }
+        ];
+        expect(model.filteredTodos().length).toEqual(1);
       });
 
-      it('items remaining should be a count of the active todos', function(done) {
-        new Squire().mock('router', {
-          routes: {
-            todoAll: { matchesUrl: function() { return true; } },
-            todoActive: { matchesUrl: function() { return false; } },
-            todoCompleted: { matchesUrl: function() { return false; } }
-          }
-        })
-        .require(['js/todo/todoModel'], function(TodoModel) {
-          var model = new TodoModel();
-          model.todos = [
-            { title: 'code something', completed: true },
-            { title: 'code some more', completed: false },
-            { title: 'and test everything!', completed: true }
-          ];
-          expect(model.itemsRemaining()).toEqual(1);
-          done();
-        });
+      it('items remaining should be a count of the active todos', function() {
+        var model = new TodoModel();
+        model.todos = [
+          { title: 'code something', completed: true },
+          { title: 'code some more', completed: false },
+          { title: 'and test everything!', completed: true }
+        ];
+        expect(model.itemsRemaining()).toEqual(1);
       });
 
-      it('items completed should be a count of the completed todos', function(done) {
-        new Squire().mock('router', {
-          routes: {
-            todoAll: { matchesUrl: function() { return true; } },
-            todoActive: { matchesUrl: function() { return false; } },
-            todoCompleted: { matchesUrl: function() { return false; } }
-          }
-        })
-        .require(['js/todo/todoModel'], function(TodoModel) {
-          var model = new TodoModel();
-          model.todos = [
-            { title: 'code something', completed: true },
-            { title: 'code some more', completed: false },
-            { title: 'and test everything!', completed: true }
-          ];
-          expect(model.itemsCompleted()).toEqual(2);
-          done();
-        });
+      it('items completed should be a count of the completed todos', function() {
+        var model = new TodoModel();
+        model.todos = [
+          { title: 'code something', completed: true },
+          { title: 'code some more', completed: false },
+          { title: 'and test everything!', completed: true }
+        ];
+        expect(model.itemsCompleted()).toEqual(2);
       });
 
-      it('editing should be true if any todos are in editing mode', function(done) {
-        new Squire().mock('router', {
-          routes: {
-            todoAll: { matchesUrl: function() { return true; } },
-            todoActive: { matchesUrl: function() { return false; } },
-            todoCompleted: { matchesUrl: function() { return false; } }
-          }
-        })
-        .require(['js/todo/todoModel'], function(TodoModel) {
-          var model = new TodoModel();
-          model.todos = [
-            { title: 'code something', completed: true },
-            { title: 'code some more', completed: false, editing: true },
-            { title: 'and test everything!', completed: true }
-          ];
-          expect(model.editing()).toBeTruthy();
-          done();
-        });
+      it('editing should be true if any todos are in editing mode', function() {
+        var model = new TodoModel();
+        model.todos = [
+          { title: 'code something', completed: true },
+          { title: 'code some more', completed: false, editing: true },
+          { title: 'and test everything!', completed: true }
+        ];
+        expect(model.editing()).toBeTruthy();
       });
 
-      it('items remaining text should be pluralized when there are 0 or multiple todos left', function(done) {
-        new Squire().mock('router', {
-          routes: {
-            todoAll: { matchesUrl: function() { return true; } },
-            todoActive: { matchesUrl: function() { return false; } },
-            todoCompleted: { matchesUrl: function() { return false; } }
-          }
-        })
-        .require(['js/todo/todoModel'], function(TodoModel) {
-          var model = new TodoModel();
-          model.todos = [
-            { title: 'code something', completed: false },
-            { title: 'code some more', completed: false },
-            { title: 'and test everything!', completed: true }
-          ];
-          expect(model.itemsRemainingText()).toEqual('items left');
-          done();
-        });
+      it('items remaining text should be pluralized when there are 0 or multiple todos left', function() {
+        var model = new TodoModel();
+        model.todos = [
+          { title: 'code something', completed: false },
+          { title: 'code some more', completed: false },
+          { title: 'and test everything!', completed: true }
+        ];
+        expect(model.itemsRemainingText()).toEqual('items left');
       });
 
-      it('items remaining text should not be pluralized when there is only 1 todo left', function(done) {
-        new Squire().mock('router', {
-          routes: {
-            todoAll: { matchesUrl: function() { return true; } },
-            todoActive: { matchesUrl: function() { return false; } },
-            todoCompleted: { matchesUrl: function() { return false; } }
-          }
-        })
-        .require(['js/todo/todoModel'], function(TodoModel) {
-          var model = new TodoModel();
-          model.todos = [
-            { title: 'code something', completed: true },
-            { title: 'code some more', completed: false },
-            { title: 'and test everything!', completed: true }
-          ];
-          expect(model.itemsRemainingText()).toEqual('item left');
-          done();
-        });
+      it('items remaining text should not be pluralized when there is only 1 todo left', function() {
+        var model = new TodoModel();
+        model.todos = [
+          { title: 'code something', completed: true },
+          { title: 'code some more', completed: false },
+          { title: 'and test everything!', completed: true }
+        ];
+        expect(model.itemsRemainingText()).toEqual('item left');
       });
 
-      it('fetch should retrieve todos from localStorage', function(done) {
+      it('fetch should retrieve todos from localStorage', function() {
+        // Arrange
         var todos = JSON.stringify([
           { title: 'code something', completed: true },
           { title: 'code some more', completed: false },
           { title: 'and test everything!', completed: true }
         ]);
         spyOn(window.localStorage, 'getItem').and.returnValue(todos);
+        var model = new TodoModel();
 
-        new Squire().mock('router', {
-          routes: {}
-        })
-        .require(['js/todo/todoModel'], function(TodoModel) {
-          var model = new TodoModel();
-          model.fetch();
-          expect(window.localStorage.getItem).toHaveBeenCalled();
-          expect(model.todos.length).toEqual(3);
-          expect(model.todos[0].title = 'code something');
-          done();
-        });
+        // Act
+        model.fetch();
+
+        // Assert
+        expect(window.localStorage.getItem).toHaveBeenCalled();
+        expect(model.todos.length).toEqual(3);
+        expect(model.todos[0].title = 'code something');
       });
 
-      it('save should write todos to localStorage', function(done) {
+      it('save should write todos to localStorage', function() {
+        // Arrange
         spyOn(window.localStorage, 'setItem');
+        var model = new TodoModel();
+        model.todos = [
+          { title: 'code something', completed: true },
+          { title: 'code some more', completed: false },
+          { title: 'and test everything!', completed: true }
+        ];
 
-        new Squire().mock('router', {
-          routes: {}
-        })
-        .require(['js/todo/todoModel'], function(TodoModel) {
-          var model = new TodoModel();
-          model.todos = [
-            { title: 'code something', completed: true },
-            { title: 'code some more', completed: false },
-            { title: 'and test everything!', completed: true }
-          ];
-          model.save();
-          expect(window.localStorage.setItem).toHaveBeenCalled();
-          done();
-        });
+        // Act
+        model.save();
+
+        // Assert
+        expect(window.localStorage.setItem).toHaveBeenCalled();
       });
 
-      it('save should not persist edit mode', function(done) {
+      it('save should not persist edit mode', function() {
+        // Arrange
         spyOn(window.localStorage, 'setItem');
+        var model = new TodoModel();
+        model.todos = [
+          { title: 'code something', completed: true },
+          { title: 'code some more', completed: false, editing: true },
+          { title: 'and test everything!', completed: true }
+        ];
 
-        new Squire().mock('router', {
-          routes: {}
-        })
-        .require(['js/todo/todoModel'], function(TodoModel) {
-          var model = new TodoModel();
-          model.todos = [
-            { title: 'code something', completed: true },
-            { title: 'code some more', completed: false, editing: true },
-            { title: 'and test everything!', completed: true }
-          ];
-          model.save();
-          var savedTodos = JSON.parse(window.localStorage.setItem.calls.argsFor(0)[1]);
-          expect(savedTodos.some(function(todo) { return todo.editing; })).toBeFalsy();
-          done();
-        });
+        // Act
+        model.save();
+
+        // Assert
+        var savedTodos = JSON.parse(window.localStorage.setItem.calls.argsFor(0)[1]);
+        expect(savedTodos.some(function(todo) { return todo.editing; })).toBeFalsy();
       });
     });
   });

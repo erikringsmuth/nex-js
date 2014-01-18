@@ -23,9 +23,9 @@
   <footer id="footer">
     <span id="todo-count"><strong>{{model.itemsRemaining}}</strong> {{model.itemsRemainingText}}</span>
     <ul id="filters">
-      <li><a {{#if model.routes.todoAll.matchesUrl}}class="selected"{{/if}} href="#/?todoFilter=all">All</a></li>
-      <li><a {{#if model.routes.todoActive.matchesUrl}}class="selected"{{/if}} href="#/?todoFilter=active">Active</a></li>
-      <li><a {{#if model.routes.todoCompleted.matchesUrl}}class="selected"{{/if}} href="#/?todoFilter=completed">Completed</a></li>
+      <li><a {{#if model.routes.todoAll}}class="selected"{{/if}} href="#/?todoFilter=all">All</a></li>
+      <li><a {{#if model.routes.todoActive}}class="selected"{{/if}} href="#/?todoFilter=active">Active</a></li>
+      <li><a {{#if model.routes.todoCompleted}}class="selected"{{/if}} href="#/?todoFilter=completed">Completed</a></li>
     </ul>
     {{#if model.itemsCompleted}}
     <button id="clear-completed">Clear completed ({{model.itemsCompleted}})</button>

@@ -1,25 +1,31 @@
 /*global define*/
 define([
-  './common',
-  'router'
-], function(common, router) {
+  './common'
+], function(common) {
   'use strict';
 
-  return function TodoModel() {
+  return function TodoModel(routeArguments) {
     var model = this;
+    if (typeof(routeArguments) === 'undefined') {
+      routeArguments = {};
+    }
 
     // Fields
     model.todos = [];
 
     // Properties
 
-    model.routes = router.routes;
+    model.routes = {
+      todoAll: function() { return routeArguments.todoFilter === 'all'; },
+      todoActive: function() { return typeof(routeArguments.todoFilter) === 'undefined' || routeArguments.todoFilter === 'active'; },
+      todoCompleted: function() { return routeArguments.todoFilter === 'completed'; }
+    };
 
     // Filter the displayed todos based on the route
     model.filteredTodos = function() {
-      if (model.routes.todoAll.matchesUrl()) return model.todos;
-      if (model.routes.todoActive.matchesUrl()) return model.todos.filter(function(todo) { return !todo.completed; });
-      if (model.routes.todoCompleted.matchesUrl()) return model.todos.filter(function(todo) { return todo.completed; });
+      if (model.routes.todoAll()) return model.todos;
+      if (model.routes.todoActive()) return model.todos.filter(function(todo) { return !todo.completed; });
+      if (model.routes.todoCompleted()) return model.todos.filter(function(todo) { return todo.completed; });
     };
 
     model.itemsRemaining = function() {

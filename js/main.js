@@ -14,7 +14,7 @@ define([
       // Define all of your routes here
       routes: {
         // root matches path = '/' or '/nex-js'
-        root: {matchesUrl: function matchesUrl() { return router.testRoute({path: '/'}) || router.testRoute({path: '/nex-js'}); }, module: 'js/home/homeView'},
+        root: {matchesUrl: function matchesUrl() { return router.testRoute({path: '/'}) || router.testRoute({path: '/nex-js/'}); }, module: 'js/home/homeView'},
         api: {path: '/api', module: 'js/api/apiView'},
         examples: {path: '/examples', module: 'js/examples/examplesView'},
         tdd: {path: '/tdd', module: 'js/tdd/tddView'},

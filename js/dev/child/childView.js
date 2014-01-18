@@ -8,6 +8,11 @@ define([
   'use strict';
 
   return Nex.View.extend({
+    initialize: function initialize(routeArguments) {
+      // Store the route arguments during initialization
+      this.model.routeArguments = JSON.stringify(routeArguments, null, 2);
+    },
+
     events: {
       'click button#child-input-text-button': 'updateInputText',
       'keypress #child-input-text': 'updateInputTextOnEnter'

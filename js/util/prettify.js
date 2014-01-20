@@ -6,7 +6,11 @@ define([
 
   return {
     formatCode: function formatCode(element) {
-      [].forEach.call(element.querySelectorAll('code'), function(el) { el.innerHTML = prettify.prettyPrintOne(el.innerHTML); });
+      [].forEach.call(element.querySelectorAll('code'), function(el) {
+        if (el.className !== 'pln') {
+          el.innerHTML = prettify.prettyPrintOne(el.innerHTML);
+        }
+      });
       return element;
     }
   };

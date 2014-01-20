@@ -1,7 +1,7 @@
 ## {nex.js}
 Unleashing the power of AMD for web applications.
 
-Info [http://erikringsmuth.github.io/nex-js/](http://erikringsmuth.github.io/nex-js)
+Info [http://erikringsmuth.github.io/nex-js/](http://erikringsmuth.github.io/nex-js/)
 
 API [http://erikringsmuth.github.io/nex-js/#/api](http://erikringsmuth.github.io/nex-js/#/api)
 

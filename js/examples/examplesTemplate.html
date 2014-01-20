@@ -8,7 +8,7 @@
 
 <p class="spacer">Directory layout - The site should be structured so that each page and widget gets its own folder under <code>/js</code>. This keeps related files together.</p>
 
-<pre>├── index.html
+<pre class="prettyprint"><code>├── index.html
 ├── bower_components/
 │   └── // external dependencies
 └── js/
@@ -19,7 +19,7 @@
     ├── home/
     │   ├── homeView.js
     │   └── homeTemplate.js
-    └── // other widets and views</pre>
+    └── // other widets and views</code></pre>
 
 <p class="spacer">Execution order</p> 
 
@@ -32,20 +32,20 @@
   <li>The home view and layout are rendered and attached to the document in the router's <code>routeLoadedCallback()</code></li>
 </ul>
 
-<p class="spacer"><code>/index.html</code> - loaded when you route to <code>/</code> or any hash route starting with <code>#/</code> or <code>#!/</code></p> 
+<p class="spacer"><code class="lang-htm">/index.html</code> - loaded when you route to <code>/</code> or any hash route starting with <code>#/</code> or <code>#!/</code></p> 
 
-<pre>&lt;!doctype html&gt;
+<pre class="prettyprint"><code>&lt;!doctype html&gt;
 &lt;html&gt;
   &lt;head&gt;
     &lt;title&gt;nex-js&lt;/title&gt;
     &lt;script data-main="js/main" src="bower_components/require/require.js"&gt;&lt;/script&gt;
   &lt;/head&gt;
   &lt;body&gt;&lt;/body&gt;
-&lt;/html&gt;</pre>
+&lt;/html&gt;</code></pre>
 
 <p class="spacer"><code>/js/main.js</code> - the Javascript entry point to the app</p>
 
-<pre>define([], function() {
+<pre class="prettyprint"><code>define([], function() {
   'use strict';
 
   // Configure require.js paths and shims
@@ -83,11 +83,11 @@
     // Trigger the initial page load
     router.loadCurrentRoute();
   });
-});</pre>
+});</code></pre>
 
 <p class="spacer"><code>/js/layout/layoutView.js</code> - your site's layout</p>
 
-<pre>define([
+<pre class="prettyprint"><code>define([
   'nex',
   'handlebars',
   'text!./layoutTemplate.html',
@@ -100,22 +100,22 @@
     model: {routes: router.routes},
     contentPlaceholderId: 'content'
   });
-});</pre>
+});</code></pre>
 
 <p class="spacer"><code>/js/layout/layoutTemplate.html</code> - the layout HTML</p>
 
-<pre>&lt;header&gt;
+<pre class="prettyprint"><code>&lt;header&gt;
   &lt;ul class="navbar"&gt;
     &lt;li \{{#if model.routes.home.matchesUrl}}class="active"\{{/if}}&gt;&lt;a href="#/"&gt;Home&lt;/a&gt;&lt;/li&gt;
     &lt;li \{{#if model.routes.examples.matchesUrl}}class="active"\{{/if}}&gt;&lt;a href="#/examples"&gt;Examples&lt;/a&gt;&lt;/li&gt;
   &lt;/ul&gt;
 &lt;/header&gt;
 &lt;main id="content"&gt;
-&lt;/main&gt;</pre>
+&lt;/main&gt;</code></pre>
 
 <p class="spacer"><code>/js/home/homeView.js</code> - the AMD module loaded for the home route <code>/</code></p>
 
-<pre>define([
+<pre class="prettyprint"><code>define([
   'nex',
   'handlebars',
   'text!./homeTemplate.html',
@@ -127,8 +127,8 @@
     template: Handlebars.compile(homeTemplate),
     layoutView: new LayoutView()
   });
-});</pre>
+});</code></pre>
 
 <p class="spacer"><code>/js/home/homeTemplate.html</code> - the HTML for the home route <code>/</code></p>
 
-<pre>&lt;h1&gt;Powerful, modular, AMD compatible views.&lt;/h1&gt;</pre>
+<pre class="prettyprint"><code>&lt;h1&gt;Powerful, modular, AMD compatible views.&lt;/h1&gt;</code></pre>

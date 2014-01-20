@@ -3,8 +3,9 @@ define([
   'nex',
   'handlebars',
   'text!./childTemplate.html',
-  'js/dev/parent/parentView'
-], function(Nex, Handlebars, childTemplate, ParentView) {
+  'js/dev/parent/parentView',
+  'js/util/prettify'
+], function(Nex, Handlebars, childTemplate, ParentView, prettify) {
   'use strict';
 
   return Nex.View.extend({
@@ -25,6 +26,12 @@ define([
     },
     
     layoutView: new ParentView(),
+
+    render: function render() {
+      this.el.innerHTML = this.template({model: this.model});
+      prettify.formatCode(this.el);
+      return this;
+    },
 
     updateInputText: function updateInputText() {
       this.model.inputText = this.el.querySelector('#child-input-text').value;

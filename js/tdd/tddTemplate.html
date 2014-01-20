@@ -4,7 +4,7 @@
 
 <p class="spacer">This is the real <code>/js/home/homeView.js</code> we want to test.</p>
 
-<pre>define([
+<pre class="prettyprint"><code>define([
   'nex',
   'handlebars',
   'js/home/homeModel'
@@ -15,11 +15,11 @@
     template: Handlebars.compile('&lt;div&gt;Hello \{{model.name}}!&lt;/div&gt;'),
     model: homeModel
   });
-});</pre>
+});</code></pre>
 
 <p class="spacer">Set up your test like this to inject a <code>homeModel</code> mock with Squire.</p>
 
-<pre>
+<pre class="prettyprint"><code>
 define([
   'jasmine/amd/describe',
   'jasmine/amd/it',
@@ -41,7 +41,7 @@ define([
       });
     });
   });
-});</pre>
+});</code></pre>
 
 <h2 class="spacer">Test Runer</h2>
 

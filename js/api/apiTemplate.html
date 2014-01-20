@@ -4,14 +4,14 @@
 
 <p>Create a view by extending the base view.</p>
 
-<pre>var MyView = Nex.View.extend({
+<pre class="prettyprint"><code>var MyView = Nex.View.extend({
   template: Handlebars.compile('&lt;div&gt;Hello \{{model.name}}!&lt;/div&gt;'),
   model: {name: 'Nex'}
-});</pre>
+});</code></pre>
 
 <p>Create an instance of your view, render it, and attach it to the document.</p>
 
-<pre>document.querySelector('body').appendChild(new MyView().render().outerEl);</pre>
+<pre class="prettyprint"><code>document.querySelector('body').appendChild(new MyView().render().outerEl);</code></pre>
 
 <h4 id="properties" class="spacer">View Properties</h4>
 
@@ -38,10 +38,10 @@
 
 <p>If you don't override <code>view.render()</code> it will call <code>view.template({model: view.model})</code> and set the result to <code>view.el.innerHTML</code>. You can override this to add your own functionality. <code>render()</code> will also handle rendering the <code>layoutView</code> if it has one. Overriding <code>view.render()</code> will still render the <code>layoutView</code> but will let you change how the current view is rendered. The default implementation of <code>view.render()</code> is close to this.</p>
 
-<pre>function render() {
+<pre class="prettyprint"><code>function render() {
   this.el.innerHTML = this.template({model: this.model});
   return this;
-}</pre>
+}</code></pre>
 
 <h4 id="el" class="spacer">el</h4>
 
@@ -55,14 +55,14 @@
 
 <p>The template generates your view's HTML. You can use your choice of templating engines. Typically you would compile your template and set it on the template property.</p>
 
-<pre>var MyView = Nex.View.extend({
+<pre class="prettyprint"><code>var MyView = Nex.View.extend({
   template: Handlebars.compile('&lt;div&gt;Hello \{{model.name}}!&lt;/div&gt;'),
   model: {name: 'Nex'},
   render: function render() {
     this.el.innerHTML = this.template({model: this.model});
     return this;
   }
-});</pre>
+});</code></pre>
 
 <p>The compile step creates a function that takes in a model and returns an HTML string. The <code>render()</code> method passes the model to the compiled template then takes the resulting HTML and attaches it to <code>view.el</code>. The <code>render()</code> method passes the view's model to the template and you can access the model in the template using the <code>model</code> variable.</p>
 
@@ -70,20 +70,20 @@
 
 <p>Delegate events are bound once to the view's root element so you don't have to bind events every time you call <code>render()</code>. Events work slightly differently than jQuery delegate events since there aren't native ECMAScript delegate events. <code>event.target</code> and <code>event.currentTarget</code> are swapped from the way jQuery does it. From what I can tell jQuery got these backwards and the native events have them set correctly. Here is an example event and event handler.</p>
 
-<pre>var MyView = Nex.View.extend({
+<pre class="prettyprint"><code>var MyView = Nex.View.extend({
   events: { 'click span a': 'anchorEventHandler' },
   anchorEventHandler : function(event) {
     this; // will reference your instance of `MyView`
     event.target; // will reference the DOM element the action took place on. This is `a` in this example.
     event.currentTarget; // will reference `this.el` which is the root element that all events are bound to.
   }
-});</pre>
+});</code></pre>
 
 <h4 id="layoutView" class="spacer">layoutView</h4>
 
 <p>The view's <code>layoutView</code> contains your site's general layout like the header, footer, etc. It's like a .NET master page. This makes it easy to use a javascript router to load your views rendering your view will also render the layout. Calling <code>render()</code> on your view will automatically call render() on the layout view and attach the your view to the <code>layoutView</code> using the <code>layoutView.contentPlaceholderId</code> to get the content placeholder element. The <code>layoutView</code>'s render method will be called even if you override the child view's render method. Here's an example view and layout view.</p>
 
-<pre>var LayoutView = Nex.View.extend({
+<pre class="prettyprint"><code>var LayoutView = Nex.View.extend({
   template: Handlebars.compile('&lt;header&gt;Header&lt;/header&gt;&lt;div id="content"&gt;&lt;/div&gt;'),
   contentPlaceholderId: 'content'
 });
@@ -96,7 +96,7 @@ var MyView = Nex.View.extend({
 document.querySelector('body').appendChild(new MyView().render().outerEl);
 
 // The body's innerHTML will be:
-// &lt;header&gt;Header&lt;/header&gt;&lt;div id="content"&gt;&lt;div&gt;MyView HTML&lt;/div&gt;&lt;/div&gt;</pre>
+// &lt;header&gt;Header&lt;/header&gt;&lt;div id="content"&gt;&lt;div&gt;MyView HTML&lt;/div&gt;&lt;/div&gt;</code></pre>
 
 <h4 id="outerEl" class="spacer">outerEl</h4>
 
@@ -114,7 +114,7 @@ document.querySelector('body').appendChild(new MyView().render().outerEl);
 
 <p>You can use the initialize method to add custom logic when creating a new instance of your view. In this example the <code>view.model.name</code> is passed in as an argument in the constructor.</p>
 
-<pre>var MyView = Nex.View.extend({
+<pre class="prettyprint"><code>var MyView = Nex.View.extend({
   initialize: function(name) {
     this.model.name = name;
   },
@@ -127,7 +127,7 @@ document.querySelector('body').appendChild(new MyView().render().outerEl);
 });
 var myView = new MyView("Nex");
 myView.render();
-document.querySelector('body').appendChild(myView.outerEl); // Will display "Hello Nex!"</pre>
+document.querySelector('body').appendChild(myView.outerEl); // Will display "Hello Nex!"</code></pre>
 
 <p>The <code>initialize()</code> method is the last step before the instance is returned so everything else is set up at this point.</p>
 
@@ -149,7 +149,7 @@ document.querySelector('body').appendChild(myView.outerEl); // Will display "Hel
 
 <p>The <code>mockEvent</code> must contain a <code>type</code> and <code>target</code>. The <code>type</code> is a click, keypress, etc. The <code>target</code> is the DOM element you're performing the action on. You can add any other properties your event handlers expect. Here's an example test that verifies that entering a new item and hitting enter saves the item to the view's model.</p>
 
-<pre>var myView = new MyView();
+<pre class="prettyprint"><code>var myView = new MyView();
 myView.render();
 
 var textInput = myView.el.querySelector('input.new');
@@ -161,4 +161,4 @@ myView.dispatchMockEvent({
 });
 
 expect(myView.model.items.length).toEqual(1);
-expect(myView.model.items[0].title).toEqual('my first item!');</pre>
+expect(myView.model.items[0].title).toEqual('my first item!');</code></pre>

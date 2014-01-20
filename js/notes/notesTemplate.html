@@ -6,12 +6,12 @@
 
 <p class="spacer">If your overriding a function like <code>render()</code> it's helpful to <code>return this;</code> at the end.</p>
 
-<pre>Nex.View.extend({
+<pre class="prettyprint"><code>Nex.View.extend({
   render: function render() {
     this.el.innerHTML = this.template({model: this.model});.
     return this;
   }
-});</pre>
+});</code></pre>
 
 <p><code>this</code> refers to the instance of your view. Now you can write chained calls like <code>new View().render().outerEl</code>. If <code>render()</code> didn't return <code>this</code> then <code>render().outerEl</code> would throw <code>TypeError: Cannot read property 'outerEl' of undefined</code>.</p>
 

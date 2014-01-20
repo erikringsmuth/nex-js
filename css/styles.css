@@ -4,15 +4,15 @@ body {
   margin-bottom: 2em;
 }
 
-/* consistency between code and preformatted text */
-code, pre {
-  color: #0058b1;
-  background-color: #f5f5f5;
+span.brand {
+  color: #93A1A1;
 }
 
-/* Make pre-formatted code use 4 space tabs instead of 8 */
-pre {
-  tab-size: 4;
+/* make un-prettified code and preformatted text match google-code-prettify */
+code, pre {
+  color: #48484C;
+  background-color: #F7F7F9;
+  border-color: rgb(225, 225, 232);
 }
 
 .spacer {

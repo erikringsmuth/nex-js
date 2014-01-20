@@ -519,10 +519,12 @@ define([
             todoActive: function() { return false; },
             todoCompleted: function() { return true; }
           };
-          model.filteredTodos = function() { return [
-            { title: 'code something', completed: true },
-            { title: 'and test everything!', completed: true }
-          ]; };
+          model.filteredTodos = function() {
+            return [
+              { title: 'code something', completed: true },
+              { title: 'and test everything!', completed: true }
+            ];
+          };
           model.itemsRemaining = function() { return 1; };
           model.itemsCompleted = function() { return 2; };
           model.editing = function() { return false; };
@@ -577,10 +579,12 @@ define([
             todoActive: function() { return false; },
             todoCompleted: function() { return true; }
           };
-          model.filteredTodos = function() { return [
-            { title: 'code something', completed: true },
-            { title: 'and test everything!', completed: true }
-          ]; };
+          model.filteredTodos = function() {
+            return [
+              { title: 'code something', completed: true },
+              { title: 'and test everything!', completed: true }
+            ];
+          };
           model.itemsRemaining = function() { return 1; };
           model.itemsCompleted = function() { return 2; };
           model.editing = function() { return false; };

@@ -4,29 +4,86 @@
 
     <p class="lead">Unleashing the power of AMD for web applications.</p>
 
-    <p>Nex views and the <a href="https://github.com/erikringsmuth/requirejs-router">RequireJS Router</a> give you a powerful, modular framework to build your next web app. The router lazy loads dependencies. Nex gives you layout views. It's fully AMD compatible plus it's built on vanilla JS, no jQuery required.</p>
+    <p>Nex.js and the <a href="https://github.com/erikringsmuth/requirejs-router">RequireJS Router</a> give you a powerful IoC pattern for routing and loading views. The router lazy loads dependencies. Nex injects layout views. It's fully AMD compatible plus it's built on vanilla JS, no jQuery required.</p>
 
     <p>Check out the <a href="#/examples">examples</a> to see how it works. This site's source is a great example of a <a href="https://github.com/erikringsmuth/nex-js">nex-js</a> and <a href="https://github.com/erikringsmuth/requirejs-router">RequireJS Router</a> setup. It's available in the <a href="https://github.com/erikringsmuth/nex-js/tree/gh-pages">gh-pages branch</a> of nex-js. Licensed under <a href="https://github.com/erikringsmuth/nex-js/blob/master/license.md">MIT</a>.</p>
 
-    <h2 id="whynex">Why Nex</h2>
+    <h2>Why Nex</h2>
 
     <p>First, <a href="http://requirejs.org/docs/whyamd.html">why AMD</a>. AMD is the future of Javascript dependency injection. <a href="http://requirejs.org/">require.js</a> is the only script tag you need to include. The rest of your scripts are injected using AMD. No more globals!</p>
 
-    <p>The router comes next. Other frameworks load all of your app's Javascript up front. You can optimize your site by compiling it down to one file but that still doesn't solve the problem. The <a href="https://github.com/erikringsmuth/requirejs-router">RequireJS Router</a> lazy loads your modules as you navigate to each page. You're site could contain 10mb of Javascript and HTML templates and it would only load the 10kb needed for the current page.</p>
+    <p>The router comes next. Other frameworks load all of your app's Javascript up front. You can optimize your site by compiling it down to one file but that still doesn't solve the problem. The <a href="https://github.com/erikringsmuth/requirejs-router">RequireJS Router</a> lazy loads modules as you navigate to each page. You're site could contain 10MB of Javascript and HTML templates and it would only load the 10KB needed for the current page.</p>
 
     <p>Last, nex-js views. Other frameworks render the layout (header, footer, etc.) then use the router to load the content. With nex-js the router loads your view and your view injects the layout. You attach your <code>view.outerEl</code> to the document with everything rendered.</p>
 
     <p>The combination of AMD, a lazy loading router, and layout views gives you an awesome framework to build your application. This is the next step in web application design.</p>
+  </div>
 
-    <h2 id="todomvcexample">TodoMVC Example</h2>
+  <div class="col-md-5">
+    <div class="todo-mvc-container"></div>
+  </div>
+</div>
 
-    <p>The TodoMVC example in the right column uses a nested nex-js view. You can see the source of TodoMVC implemented with nex-js here <a href="https://github.com/erikringsmuth/todomvc/tree/nex/labs/dependency-examples/nex-require">nex-js &amp; RequireJS TodoMVC Example</a>.</p>
+<div class="row">
+  <div class="col-md-12">
+    <h2>Layout Views</h2>
+  </div>
+</div>
 
-    <h2 id="browsersupport">Browser Support</h2>
+<div class="row">
+  <div class="col-md-8">
+<pre>Nex.View.extend({
+  template: Handlebars.compile(layoutTemplate),
+  model: { home: true, examples: false },
+  contentPlaceholderId: 'content'
+});</pre>
+<pre>&lt;header&gt;
+  &lt;a href="#/" \{{#if model.home}}class="active"\{{/if}}&gt;Home&lt;/a&gt;
+  &lt;a href="#/examples" \{{#if model.examples}}class="active"\{{/if}}&gt;Examples&lt;/a&gt;
+&lt;/header&gt;
+&lt;main id="content"&gt;&lt;/main&gt;</pre>
+  </div>
+  <div class="col-md-4">
+    <p><code>LayoutView</code> and <code>layoutTemplate.html</code></p>
+    <p>The layout contains your site's header, footer, etc. This will get rendered on every page.</p>
+  </div>
+</div>
+
+<div class="row spacer">
+  <div class="col-md-8">
+<pre>Nex.View.extend({
+  template: Handlebars.compile(homeTemplate),
+  layoutView: new LayoutView()
+});</pre>
+<pre>&lt;h1&gt;Hello World!&lt;/h1&gt;</pre>
+  </div>
+  <div class="col-md-4">
+    <p><code>HomeView</code> and <code>homeTemplate.html</code></p>
+    <p>Route directly to your home view. The home view specifies a layout.</p>
+  </div>
+</div>
+
+<div class="row spacer">
+  <div class="col-md-8">
+<pre>&lt;header&gt;
+  &lt;a href="#/" class="active"&gt;Home&lt;/a&gt;
+  &lt;a href="#/examples"&gt;Examples&lt;/a&gt;
+&lt;/header&gt;
+&lt;main id="content"&gt;
+  &lt;div&gt;&lt;h1&gt;Hello World!&lt;/h1&gt;&lt;/div&gt;
+&lt;/main&gt;</pre>
+  </div>
+  <div class="col-md-4">
+    <p>Calling <code>new HomeView().render().outerEl</code> will render the home view and layout.</p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <h2>Browser Support</h2>
 
     <p>Browser support is limited by <code>document.querySelector()</code> and its variants. IE8 has additional problems with <code>element.innerHTML</code>.</p>
 
     <p>Chrome 1, Firefox 3.5, IE 9, Opera 10, Safari 3.2</p>
   </div>
-  <div class="col-md-5 todo-mvc-container"></div>
 </div>

@@ -42,18 +42,18 @@
   var Nex = {
     // Nex.View
     View: {
-      // Extend the base view like this `var MyView = Nex.View.extend({});` where the object being passed in is `extendingView`.
-      extend: function extend(extendingView) {
-        if (typeof(extendingView) === 'undefined') extendingView = {};
+      // Extend the base view like this `var MyView = Nex.View.extend(function MyView() {...});`
+      extend: function extend(ExtendingView) {
+        if (typeof(ExtendingView) === 'undefined') ExtendingView = function() {};
 
         // Your view's constructor function. Call like this `var view = new MyView();`.
-        return function View() {
+        var View = function View() {
           var view = this;
 
-          // Allow the implementing view to override extendingView on this object
-          for (var property in extendingView) {
-            view[property] = extendingView[property];
-          }
+          // Backwards inheritance. Set the extending view as the base view's prototype. When we return View at the end we're actually
+          // returning a base view that extends the "extending view". The reason is we need the base view to override the extending
+          // view's methods. We also don't want to call the extending view's constructor until we create an instance of the base view.
+          this.prototype = ExtendingView.apply(view, Array.prototype.slice.call(arguments, 0));
 
           // view.tagName - the type of DOM element
           if (typeof(view.tagName) === 'undefined') view.tagName = 'div';
@@ -222,12 +222,10 @@
               eventListener(mockEvent);
             });
           };
-
-          // view.initialize() - a hook to add additional logic when creating an instance of the view
-          if (typeof(view.initialize) === 'function') {
-            view.initialize.apply(view, arguments);
-          }
         };
+        View.prototype.constructor = ExtendingView;
+
+        return View;
       }
     }
   };

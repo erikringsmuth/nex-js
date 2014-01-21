@@ -8,14 +8,14 @@ define([
 ], function(Nex, Handlebars, layoutTemplate, router) {
   'use strict';
 
-  return Nex.View.extend({
-    template: Handlebars.compile(layoutTemplate),
+  return Nex.View.extend(function LayoutView() {
+    this.template = Handlebars.compile(layoutTemplate);
 
-    contentPlaceholderId: 'content-placeholder',
+    this.contentPlaceholderId = 'content-placeholder';
 
-    model: {
+    this.model = {
       routes: router.routes,
       devMode: function devMode() { return window.location.hostname === 'localhost'; }
-    }
+    };
   });
 });

@@ -9,21 +9,21 @@ define([
 ], function(Nex, Handlebars, homeTemplate, LayoutView, TodoView, prettify) {
   'use strict';
 
-  return Nex.View.extend({
-    template: Handlebars.compile(homeTemplate),
+  return Nex.View.extend(function HomeView() {
+    this.template = Handlebars.compile(homeTemplate);
 
-    initialize: function initialize(routeArguments) {
+    this.initialize = function initialize(routeArguments) {
       // Store the route arguments during initialization
       this.model = routeArguments;
-    },
+    };
 
-    layoutView: new LayoutView(),
+    this.layoutView = new LayoutView();
 
-    render: function render() {
+    this.render = function render() {
       this.el.innerHTML = this.template({model: this.model});
       prettify.formatCode(this.el);
       this.el.querySelector('.todo-mvc-container').appendChild(new TodoView(this.model).render().el);
       return this;
-    }
+    };
   });
 });

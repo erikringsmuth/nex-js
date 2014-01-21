@@ -65,13 +65,17 @@
 
 <div class="row spacer">
   <div class="col-md-8">
-<pre class="prettyprint"><code>&lt;header&gt;
-  &lt;a href="#/" class="active"&gt;Home&lt;/a&gt;
-  &lt;a href="#/examples"&gt;Examples&lt;/a&gt;
-&lt;/header&gt;
-&lt;main id="content"&gt;
-  &lt;div&gt;&lt;h1&gt;Hello World!&lt;/h1&gt;&lt;/div&gt;
-&lt;/main&gt;</code></pre>
+<pre class="prettyprint"><code>&lt;div&gt; &lt;!-- layoutView.el, homeView.outerEl --&gt;
+  &lt;header&gt;
+    &lt;a href="#/" class="active"&gt;Home&lt;/a&gt;
+    &lt;a href="#/examples"&gt;Examples&lt;/a&gt;
+  &lt;/header&gt;
+  &lt;main id="content"&gt;
+    &lt;div&gt; &lt;!-- homeView.el --&gt;
+      &lt;h1&gt;Hello World!&lt;/h1&gt;
+    &lt;/div&gt;
+  &lt;/main&gt;
+&lt;div&gt;</code></pre>
   </div>
   <div class="col-md-4">
     <p>Calling <code>new HomeView().render().outerEl</code> will render the home view and layout.</p>

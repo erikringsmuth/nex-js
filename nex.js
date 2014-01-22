@@ -153,7 +153,7 @@
             return innerRenderReturnValue;
           };
 
-          // view.html() -  replace `view.el`'s HTML with the htmlString
+          // view.html(htmlString) -  replace `view.el`'s HTML with the htmlString
           view.html = function html(htmlString) {
             // IE8 workaround since el.innerHTML fails when an event is currently being triggered on it. Create a new element
             // and set innerHTML which will work since no event is occurring on this temp element.

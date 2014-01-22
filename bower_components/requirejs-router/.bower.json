@@ -1,6 +1,6 @@
 {
   "name": "requirejs-router",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "homepage": "https://github.com/erikringsmuth/requirejs-router",
   "authors": [
     "Erik Ringsmuth <erik.ringsmuth@gmail.com>"
@@ -20,18 +20,21 @@
   "ignore": [
     "**/.*",
     "bower_components",
+    "node_modules",
     "tests",
     "bower.json",
+    "package.json",
+    "gulpfile.js",
     "license.md",
     "readme.md"
   ],
-  "_release": "0.2.1",
+  "_release": "0.2.2",
   "_resolution": {
     "type": "version",
-    "tag": "v0.2.1",
-    "commit": "6e48a71c78ecac2b7406a4e29dd943004c6bb7ed"
+    "tag": "v0.2.2",
+    "commit": "eb00f95a772f6f3558ccd87a892cafc5f7ca1ced"
   },
   "_source": "git://github.com/erikringsmuth/requirejs-router.git",
-  "_target": "~0.2.1",
+  "_target": "~0.2.2",
   "_originalSource": "requirejs-router"
 }

@@ -238,6 +238,18 @@ define([
     });
   });
 
+  describe('view.html()', function() {
+    it('should replace view.el\'s innerHTML', function() {
+      var TestView = Nex.View.extend({
+        template: 'some text'
+      });
+      var testView = new TestView();
+      testView.render();
+      testView.html('<div id="main-content"><div>New content</div></div>');
+      expect(testView.el.querySelector('#main-content').innerHTML).toEqual('<div>New content</div>');
+    });
+  });
+
   describe('view.initialize()', function() {
     it('should be called when creating an instance of a view', function() {
       var extendingObject = {

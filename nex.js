@@ -1,6 +1,6 @@
-// {nex.js} - Powerful, modular, AMD compatible views.
+// {nex.js} - Unleashing the power of AMD for web applications.
 //
-// Version: 0.1.9
+// Version: 0.2.0
 // 
 // The MIT License (MIT)
 // Copyright (c) 2014 Erik Ringsmuth
@@ -23,8 +23,7 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 // OR OTHER DEALINGS IN THE SOFTWARE.
 
-/*global define, console*/
-/*jshint loopfunc: true*/
+/*global console*/
 (function(root, factory) {
   'use strict';
 
@@ -103,7 +102,7 @@
             };
           }
 
-          // view.render() - call the template with the view's model and set the result to `el.innerHTML`
+          // view.render() - call the template with the view's model and replace view's HTML
           //
           // In order to guarantee that the layout view will be rendered when this view is rendered we need to wrap
           // the `render()` method in a render method that will also render the layout.
@@ -117,13 +116,13 @@
               model = view.model;
             }
 
-            // Compile the template and set `view.el.innerHTML`
+            // Compile the template and set the view's HTML
             if (typeof(view.template) === 'function') {
               // Compiled template
-              view.el.innerHTML = view.template({model: model});
+              view.html(view.template({model: model}));
             } else if (typeof(view.template) === 'string') {
               // Simple, non-dynamic HTML
-              view.el.innerHTML = view.template;
+              view.html(view.template);
             }
             
             return view;
@@ -145,12 +144,29 @@
             // When a layout view is rendered it should attach it's child to it's content placeholder
             if (view.childView) {
               var contentPlaceholder = view.el.querySelector('#' + view.contentPlaceholderId);
-              contentPlaceholder.innerHTML = '';
+              // IE8 workaround since el.innerHTML fails when an event is currently being triggered on it
+              while (contentPlaceholder.firstChild) contentPlaceholder.removeChild(contentPlaceholder.firstChild);
               contentPlaceholder.appendChild(view.childView.el);
             }
 
             // Return the value from the original render method
             return innerRenderReturnValue;
+          };
+
+          // view.html() -  replace `view.el`'s HTML with the htmlString
+          view.html = function html(htmlString) {
+            // IE8 workaround since el.innerHTML fails when an event is currently being triggered on it. Create a new element
+            // and set innerHTML which will work since no event is occurring on this temp element.
+            var a = document.createElement('div');
+            a.innerHTML = htmlString;
+
+            // Copy the contents of the temp element to a document fragment. This doesn't contain a wrapping div.
+            var b = document.createDocumentFragment();
+            while (a.firstChild) b.appendChild(a.firstChild);
+
+            // Clear out view.el and attach the new HTML
+            while (view.el.firstChild) view.el.removeChild(view.el.firstChild);
+            view.el.appendChild(b);
           };
 
           // view.remove() - remove the view from the DOM

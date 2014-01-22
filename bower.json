@@ -1,11 +1,11 @@
 {
   "name": "nex-js",
-  "version": "0.1.9",
+  "version": "0.2.0",
   "homepage": "https://github.com/erikringsmuth/nex-js",
   "authors": [
     "Erik Ringsmuth <erik.ringsmuth@gmail.com>"
   ],
-  "description": "Powerful, modular, AMD compatible views.",
+  "description": "Unleashing the power of AMD for web applications.",
   "main": "nex.js",
   "keywords": [
     "mv*",

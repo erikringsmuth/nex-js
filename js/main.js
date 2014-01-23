@@ -7,8 +7,8 @@ define([
   // Configure require.js paths and shims
   require.config(requireConfig);
 
-  // Load the router
-  require(['router'], function(router) {
+  // Load the router and get ECMAScript 5 polyfills for cool new Array.prototype extension methods
+  require(['router', 'polyfill/es5'], function(router) {
     // Configure the router
     router.config({
       // Define all of your routes here

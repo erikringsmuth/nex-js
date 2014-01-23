@@ -13,13 +13,15 @@ define([], function() {
       'jquery': 'bower_components/jquery/jquery',
       'bootstrap': 'bower_components/bootstrap/dist/js/bootstrap',
       'html5shiv': 'bower_components/html5shiv/dist/html5shiv',
-      'respond': 'bower_components/respond/src/respond'
+      'respond': 'bower_components/respond/src/respond',
+      'polyfill': 'bower_components/polyfills'
     },
     shim: {
       'handlebars': {
         exports: 'Handlebars'
       },
       'bootstrap': {
+        // bootstrap extends jQuery, it doesn't export anything
         deps: ['jquery', 'html5shiv', 'respond']
       },
       'html5shiv': {

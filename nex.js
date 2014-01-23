@@ -1,6 +1,6 @@
 // {nex.js} - Unleashing the power of AMD for web applications.
 //
-// Version: 0.2.0
+// Version: 0.2.1
 // 
 // The MIT License (MIT)
 // Copyright (c) 2014 Erik Ringsmuth
@@ -51,7 +51,9 @@
 
           // Allow the implementing view to override extendingView on this object
           for (var property in extendingView) {
-            view[property] = extendingView[property];
+            if (extendingView.hasOwnProperty(property)) {
+              view[property] = extendingView[property];
+            }
           }
 
           // view.tagName - the type of DOM element
@@ -153,20 +155,17 @@
             return innerRenderReturnValue;
           };
 
-          // view.html(htmlString) -  replace `view.el`'s HTML with the htmlString
+          // view.html() -  replace `view.el`'s HTML with the htmlString
           view.html = function html(htmlString) {
-            // IE8 workaround since el.innerHTML fails when an event is currently being triggered on it. Create a new element
-            // and set innerHTML which will work since no event is occurring on this temp element.
-            var a = document.createElement('div');
-            a.innerHTML = htmlString;
+            // IE8 workaround since el.innerHTML and el.insertAdjacentHTML fail when an event is currently being triggered on
+            // the element. Create a new element and set it's innerHTML which will work since no event is occurring on this
+            // temp element.
+            var tempEl = document.createElement('div');
+            tempEl.innerHTML = htmlString;
 
-            // Copy the contents of the temp element to a document fragment. This doesn't contain a wrapping div.
-            var b = document.createDocumentFragment();
-            while (a.firstChild) b.appendChild(a.firstChild);
-
-            // Clear out view.el and attach the new HTML
+            // Clear out view.el and add the new HTML
             while (view.el.firstChild) view.el.removeChild(view.el.firstChild);
-            view.el.appendChild(b);
+            while (tempEl.firstChild) view.el.appendChild(tempEl.firstChild);
           };
 
           // view.remove() - remove the view from the DOM
@@ -195,37 +194,39 @@
           if (typeof(view.events) === 'undefined') view.events = {};
           var eventListeners = {};
           for (var eventProperty in view.events) {
-            // 'anchorEventHandler' from example
-            var callbackName = view.events[eventProperty];
-            var eventParts = eventProperty.split(' ');
+            if (view.events.hasOwnProperty(eventProperty)) {
+              // 'anchorEventHandler' from example
+              var callbackName = view.events[eventProperty];
+              var eventParts = eventProperty.split(' ');
 
-            // 'click' from example
-            var action = eventParts[0];
+              // 'click' from example
+              var action = eventParts[0];
 
-            // 'span a' from example
-            var selector = eventParts.splice(1).join(' ');
+              // 'span a' from example
+              var selector = eventParts.splice(1).join(' ');
 
-            // Bind all events to the root element
-            (function(action, selector, callbackName) {
-              var eventListener = function eventListener(event) {
-                // Check if the event was triggered on an element that matches the query selector
-                var matchingElements = view.el.querySelectorAll(selector);
-                for (var i in matchingElements) {
-                  if (event.target === matchingElements[i]) {
-                    view[callbackName].call(view, event);
-                    break;
+              // Bind all events to the root element
+              (function(action, selector, callbackName) {
+                var eventListener = function eventListener(event) {
+                  // Check if the event was triggered on an element that matches the query selector
+                  var matchingElements = view.el.querySelectorAll(selector);
+                  for (var i in matchingElements) {
+                    if (matchingElements.hasOwnProperty(i) && event.target === matchingElements[i]) {
+                      view[callbackName].call(view, event);
+                      break;
+                    }
                   }
+                };
+                if (window.addEventListener) {
+                  view.el.addEventListener(action, eventListener, true);
+                } else {
+                  // IE 8 and older
+                  view.el.attachEvent(action, eventListener);
                 }
-              };
-              if (window.addEventListener) {
-                view.el.addEventListener(action, eventListener, true);
-              } else {
-                // IE 8 and older
-                view.el.attachEvent(action, eventListener);
-              }
-              if (typeof(eventListeners[action]) === 'undefined') eventListeners[action] = [];
-              eventListeners[action].push(eventListener);
-            })(action, selector, callbackName);
+                if (typeof(eventListeners[action]) === 'undefined') eventListeners[action] = [];
+                eventListeners[action].push(eventListener);
+              })(action, selector, callbackName);
+            }
           }
 
           // view.displatchMockEvent() - triggers a mock event for integration testing event handlers

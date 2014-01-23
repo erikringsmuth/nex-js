@@ -19,6 +19,7 @@
 
 <ul>
   <li><code>view.render()</code> - renders the view which populates <code>view.el</code></li>
+  <li><code>view.html(htmlString)</code> - converts the HTML string to DOM elements and replaces the contents of <code>view.el</code></li>
   <li><code>view.el</code> - the view's DOM element</li>
   <li><code>view.model</code> - the model that gets passed to the template</li>
   <li><code class="pln">view.template()</code> - generates the view's HTML</li>
@@ -36,14 +37,18 @@
 
 <h4 id="render" class="spacer">render()</h4>
 
-<p>Every view has a default <code>render()</code> method that looks like this.</p>
+<p>Render calls the template to generate your view's HTML and populates the view's DOM element <code>view.el</code>. Every view has a default <code>render()</code> method that looks like this.</p>
 
 <pre class="prettyprint"><code>function render() {
-  this.el.innerHTML = this.template({model: this.model});
+  this.html(this.template({model: this.model}));
   return this;
 }</code></pre>
 
 <p>You can override this to add your own functionality. <code>render()</code> will also handle rendering the <code>layoutView</code> if it has one. Overriding <code>view.render()</code> will still render the <code>layoutView</code> but will let you change how the current view is rendered.</p>
+
+<h4 id="html" class="spacer">html(htmlString)</h4>
+
+<p>Converts the HTML string to DOM elements and replaces the contents of <code>view.el</code>. This is like setting <code>view.el.innerHTML</code> but works better in IE8. This is used by the default <code>render()</code> method.</p>
 
 <h4 id="el" class="spacer">el</h4>
 
@@ -63,7 +68,7 @@
   template: Handlebars.compile('&lt;div&gt;Hello \{{model.name}}!&lt;/div&gt;'),
   model: {name: 'Nex'},
   render: function render() {
-    this.el.innerHTML = this.template({model: this.model});
+    this.html(this.template({model: this.model}));
     return this;
   }
 });</code></pre>
@@ -128,7 +133,7 @@ new MyView().render().outerEl;
   },
 
   render: function render() {
-    this.el.innerHTML = this.template({model: this.model});.
+    this.html(this.template({model: this.model}));
     return this;
   }
 });

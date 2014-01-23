@@ -8,7 +8,7 @@
 
 <pre class="prettyprint"><code>Nex.View.extend({
   render: function render() {
-    this.el.innerHTML = this.template({model: this.model});.
+    this.html(this.template({model: this.model}));
     return this;
   }
 });</code></pre>

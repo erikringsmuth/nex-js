@@ -28,7 +28,7 @@ define([
     layoutView: new ParentView(),
 
     render: function render() {
-      this.el.innerHTML = this.template({model: this.model});
+      this.html(this.template({model: this.model}));
       utilities.formatCode(this.el);
       return this;
     },

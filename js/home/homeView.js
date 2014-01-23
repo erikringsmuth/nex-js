@@ -20,7 +20,7 @@ define([
     layoutView: new LayoutView(),
 
     render: function render() {
-      this.el.innerHTML = this.template({model: this.model});
+      this.html(this.template({model: this.model}));
       utilities.formatCode(this.el);
       this.el.querySelector('.todo-mvc-container').appendChild(new TodoView(this.model).render().el);
       return this;

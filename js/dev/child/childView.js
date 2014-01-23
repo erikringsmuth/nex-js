@@ -4,8 +4,8 @@ define([
   'handlebars',
   'text!./childTemplate.html',
   'js/dev/parent/parentView',
-  'js/util/prettify'
-], function(Nex, Handlebars, childTemplate, ParentView, prettify) {
+  'js/util/utilities'
+], function(Nex, Handlebars, childTemplate, ParentView, utilities) {
   'use strict';
 
   return Nex.View.extend({
@@ -29,7 +29,7 @@ define([
 
     render: function render() {
       this.el.innerHTML = this.template({model: this.model});
-      prettify.formatCode(this.el);
+      utilities.formatCode(this.el);
       return this;
     },
 

@@ -5,8 +5,8 @@ define([
   'text!./homeTemplate.html',
   'js/layout/layoutView',
   'js/todo/todoView',
-  'js/util/prettify'
-], function(Nex, Handlebars, homeTemplate, LayoutView, TodoView, prettify) {
+  'js/util/utilities'
+], function(Nex, Handlebars, homeTemplate, LayoutView, TodoView, utilities) {
   'use strict';
 
   return Nex.View.extend({
@@ -21,7 +21,7 @@ define([
 
     render: function render() {
       this.el.innerHTML = this.template({model: this.model});
-      prettify.formatCode(this.el);
+      utilities.formatCode(this.el);
       this.el.querySelector('.todo-mvc-container').appendChild(new TodoView(this.model).render().el);
       return this;
     }

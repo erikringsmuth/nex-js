@@ -4,8 +4,8 @@ define([
   'handlebars',
   'text!./apiTemplate.html',
   'js/layout/layoutView',
-  'js/util/prettify'
-], function(Nex, Handlebars, apiTemplate, LayoutView, prettify) {
+  'js/util/utilities'
+], function(Nex, Handlebars, apiTemplate, LayoutView, utilities) {
   'use strict';
 
   return Nex.View.extend({
@@ -15,7 +15,7 @@ define([
 
     render: function render() {
       this.el.innerHTML = this.template({model: this.model});
-      prettify.formatCode(this.el);
+      utilities.formatCode(this.el);
       return this;
     }
   });

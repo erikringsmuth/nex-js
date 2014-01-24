@@ -11,15 +11,12 @@ define([
     },
 
     formatCode: function formatCode(element) {
-      var codeElements = element.querySelectorAll('code');
-      for (var i in codeElements) {
-        if (codeElements.hasOwnProperty(i)) {
-          var el = codeElements[i];
-          if (el.className !== 'pln') {
-            $(el).html(prettify.prettyPrintOne(el.innerHTML));
-          }
+      $(element).find('code').each(function() {
+        var $el = $(this);
+        if (!$el.hasClass('pln')) {
+          $el.html(prettify.prettyPrintOne($el.html()));
         }
-      }
+      });
       return element;
     }
   };

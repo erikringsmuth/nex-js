@@ -12,8 +12,6 @@ define([], function() {
       'handlebars': 'bower_components/handlebars/handlebars',
       'jquery': 'bower_components/jquery/jquery',
       'bootstrap': 'bower_components/bootstrap/dist/js/bootstrap',
-      'html5shiv': 'bower_components/html5shiv/dist/html5shiv',
-      'respond': 'bower_components/respond/src/respond',
       'polyfill': 'bower_components/polyfills'
     },
     shim: {
@@ -21,8 +19,8 @@ define([], function() {
         exports: 'Handlebars'
       },
       'bootstrap': {
-        // bootstrap extends jQuery, it doesn't export anything
-        deps: ['jquery', 'html5shiv', 'respond']
+        // bootstrap extends jQuery, it doesn't export anything. It requires html5shiv and respond for IE8.
+        deps: ['jquery', 'bower_components/html5shiv/dist/html5shiv', 'bower_components/respond/src/respond']
       },
       'html5shiv': {
         exports: 'html5'

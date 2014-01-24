@@ -5,8 +5,25 @@
 <p>Create a view by extending the base view.</p>
 
 <pre class="prettyprint"><code>var MyView = Nex.View.extend({
-  template: Handlebars.compile('&lt;div&gt;Hello \{{model.name}}!&lt;/div&gt;'),
-  model: {name: 'Nex'}
+  // The view's HTML template
+  template: Handlebars.compile('&lt;div&gt;Hello \{{model.name}}!&lt;/div&gt;&lt;input type="text" placeholder="enter your name"&gt;'),
+
+  // The model gets passed to the template
+  model: {name: 'Nex'},
+
+  // A view that contains your site's header, footer, etc. The layout has a contentPlaceholderId that this view will be attached to.
+  layoutView: new LayoutView(),
+
+  // Event handlers
+  events: {
+    'keypress input': 'inputChangeHandler'
+  },
+
+  // Change the view to display your name
+  inputChangeHandler: function(event) {
+    this.model.name = event.target.value;
+    this.render();
+  }
 });</code></pre>
 
 <p>Create an instance of your view, render it, and attach it to the document.</p>
@@ -18,8 +35,8 @@
 <p>The view will have these properties.</p>
 
 <ul>
-  <li><code>view.render()</code> - renders the view which populates <code>view.el</code></li>
-  <li><code>view.html(htmlString)</code> - converts the HTML string to DOM elements and replaces the contents of <code>view.el</code></li>
+  <li><code>view.render()</code> - renders the view which populates <code>view.el</code> with the template HTML</li>
+  <li><code>view.html(htmlString)</code> - replaces the contents of <code>view.el</code> with the HTML string</li>
   <li><code>view.el</code> - the view's DOM element</li>
   <li><code>view.model</code> - the model that gets passed to the template</li>
   <li><code class="pln">view.template()</code> - generates the view's HTML</li>
@@ -37,7 +54,7 @@
 
 <h4 id="render" class="spacer">render()</h4>
 
-<p>Render calls the template to generate your view's HTML and populates the view's DOM element <code>view.el</code>. Every view has a default <code>render()</code> method that looks like this.</p>
+<p>Render populates the contents of <code>view.el</code> with the template HTML. Every view has a default <code>render()</code> method that looks like this.</p>
 
 <pre class="prettyprint"><code>function render() {
   this.html(this.template({model: this.model}));

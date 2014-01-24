@@ -1,6 +1,6 @@
 // {nex.js} - Unleashing the power of AMD for web applications.
 //
-// Version: 0.2.1
+// Version: 0.2.2
 // 
 // The MIT License (MIT)
 // Copyright (c) 2014 Erik Ringsmuth
@@ -38,10 +38,13 @@
 }(this, function() {
   'use strict';
 
+  // Check for html5 support
+  var html5 = ('querySelector' in document && 'localStorage' in window && 'addEventListener' in window);
+
   var Nex = {
     // Nex.View
     View: {
-      // Extend the base view like this `var MyView = Nex.View.extend({});` where the object being passed in is `extendingView`.
+      // Extend the base view like this `var MyView = Nex.View.extend(extendingView);`
       extend: function extend(extendingView) {
         if (typeof(extendingView) === 'undefined') extendingView = {};
 
@@ -106,8 +109,7 @@
 
           // view.render() - call the template with the view's model and replace view's HTML
           //
-          // In order to guarantee that the layout view will be rendered when this view is rendered we need to wrap
-          // the `render()` method in a render method that will also render the layout.
+          // We wrap the original render method so that rendering this view will also render it's layout view.
           var innerRender = function innerRender() {
             // Allow the model to be defined as a constructor function so that variables don't need to be
             // evaluated until render time
@@ -140,7 +142,7 @@
               shouldRenderLayout = false;
             }
 
-            // Call the method that actually renders the view
+            // Call the method that renders this view
             var innerRenderReturnValue = innerRender.call(this, arguments);
 
             // When a layout view is rendered it should attach it's child to it's content placeholder
@@ -157,15 +159,19 @@
 
           // view.html() -  replace `view.el`'s HTML with the htmlString
           view.html = function html(htmlString) {
-            // IE8 workaround since el.innerHTML and el.insertAdjacentHTML fail when an event is currently being triggered on
-            // the element. Create a new element and set it's innerHTML which will work since no event is occurring on this
-            // temp element.
-            var tempEl = document.createElement('div');
-            tempEl.innerHTML = htmlString;
+            if (html5) {
+              view.el.innerHTML = htmlString;
+            } else {
+              // IE8 workaround since el.innerHTML and el.insertAdjacentHTML fail when an event is currently being triggered on
+              // the element. Create a new element and set it's innerHTML which will work since no event is occurring on this
+              // temp element.
+              var tempEl = document.createElement('div');
+              tempEl.innerHTML = htmlString;
 
-            // Clear out view.el and add the new HTML
-            while (view.el.firstChild) view.el.removeChild(view.el.firstChild);
-            while (tempEl.firstChild) view.el.appendChild(tempEl.firstChild);
+              // Clear out view.el and add the new HTML
+              while (view.el.firstChild) view.el.removeChild(view.el.firstChild);
+              while (tempEl.firstChild) view.el.appendChild(tempEl.firstChild);
+            }
           };
 
           // view.remove() - remove the view from the DOM
@@ -203,7 +209,7 @@
               var action = eventParts[0];
 
               // 'span a' from example
-              var selector = eventParts.splice(1).join(' ');
+              var selector = eventParts.splice(1, eventParts.length - 1).join(' ');
 
               // Bind all events to the root element
               (function(action, selector, callbackName) {
@@ -211,7 +217,8 @@
                   // Check if the event was triggered on an element that matches the query selector
                   var matchingElements = view.el.querySelectorAll(selector);
                   for (var i in matchingElements) {
-                    if (matchingElements.hasOwnProperty(i) && event.target === matchingElements[i]) {
+                    if (!event.target) event.target = event.srcElement; // IE8
+                    if (event.target === matchingElements[i]) {
                       view[callbackName].call(view, event);
                       break;
                     }
@@ -220,8 +227,8 @@
                 if (window.addEventListener) {
                   view.el.addEventListener(action, eventListener, true);
                 } else {
-                  // IE 8 and older
-                  view.el.attachEvent(action, eventListener);
+                  // IE 8 and older, events are prefixed with 'on'
+                  view.el.attachEvent('on' + action, eventListener);
                 }
                 if (typeof(eventListeners[action]) === 'undefined') eventListeners[action] = [];
                 eventListeners[action].push(eventListener);

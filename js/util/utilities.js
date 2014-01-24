@@ -1,7 +1,8 @@
 /*global define*/
 define([
+  'jquery',
   'bower_components/google-code-prettify/src/prettify'
-], function(prettify) {
+], function($, prettify) {
   'use strict';
 
   return {
@@ -12,9 +13,11 @@ define([
     formatCode: function formatCode(element) {
       var codeElements = element.querySelectorAll('code');
       for (var i in codeElements) {
-        var el = codeElements[i];
-        if (el.className !== 'pln') {
-          el.innerHTML = prettify.prettyPrintOne(el.innerHTML);
+        if (codeElements.hasOwnProperty(i)) {
+          var el = codeElements[i];
+          if (el.className !== 'pln') {
+            $(el).html(prettify.prettyPrintOne(el.innerHTML));
+          }
         }
       }
       return element;

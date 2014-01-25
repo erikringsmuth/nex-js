@@ -1,13 +1,13 @@
 <h2>Unit Testing</h2>
 
-<p>Test with the framework of your choice. Injecting require.js mocks is done with <a href="https://github.com/iammerrick/Squire.js">Squire.js</a>. Here's an example <a href="http://jasmine.github.io/2.0/introduction.html">Jasmine</a> & Squire.js setup.</p>
+<p>Test with the framework of your choice. Injecting AMD mocks is done with <a href="https://github.com/iammerrick/Squire.js">Squire.js</a>. Here's an example <a href="http://jasmine.github.io/2.0/introduction.html">Jasmine</a> & Squire.js setup.</p>
 
 <p class="spacer">This is the real <code class="pln">/js/home/homeView.js</code> we want to test.</p>
 
 <pre class="prettyprint"><code>define([
   'nex',
   'handlebars',
-  'js/home/homeModel'
+  'js/home/homeModel' // This is the dependency we want to mock
 ], function(Nex, Handlebars, homeModel) {
   'use strict';
 
@@ -29,16 +29,24 @@ define([
   'use strict';
 
   describe('The home view', function() {
-    it('should display "Hello Erik Ringsmuth!"', function(done) {
-      new Squire().mock('js/home/homeModel', {
-        name: 'Erik Ringsmuth'
-      })
-      .require(['js/home/homeView'], function(HomeView) {
-        var homeView = new HomeView();
-        homeView.render();
-        expect(homeView.el.innerHTML).toEqual('&lt;div&gt;Hello Erik Ringsmuth!&lt;/div&gt;');
-        done(); // Tells Jasmine the async test is done
-      });
+    it('should display "Hello Nex!"', function(done) {
+      // Arrange
+      new Squire()
+        .mock('js/home/homeModel', { // This is how we mock the dependency
+          name: 'Nex'
+        })
+        .require(['js/home/homeView'], function(HomeView) {
+          var homeView = new HomeView();
+
+          // Act
+          homeView.render();
+
+          // Assert
+          expect(homeView.el.innerHTML).toEqual('&lt;div&gt;Hello Nex!&lt;/div&gt;');
+
+          // Tells Jasmine the async test is done
+          done();
+        });
     });
   });
 });</code></pre>

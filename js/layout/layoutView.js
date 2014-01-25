@@ -3,8 +3,7 @@ define([
   'nex',
   'handlebars',
   'text!./layoutTemplate.html',
-  'router',
-  'bootstrap'
+  'router'
 ], function(Nex, Handlebars, layoutTemplate, router) {
   'use strict';
 
@@ -15,7 +14,7 @@ define([
 
     model: {
       routes: router.routes,
-      devMode: function devMode() { return window.location.hostname === 'localhost'; }
+      devMode: window.location.hostname === 'localhost'
     }
   });
 });

@@ -79,9 +79,9 @@
     router.config({
       // Add all of your routes here
       routes: {
-        home: {path: '/', module: 'js/home/homeView'},
-        example: {path: '/examples', module: 'js/examples/examplesView'},
-        notFound: {path: '*', module: 'js/notFound/notFoundView'}
+        home: {path: '/', moduleId: 'js/home/homeView'},
+        example: {path: '/examples', moduleId: 'js/examples/examplesView'},
+        notFound: {path: '*', moduleId: 'js/notFound/notFoundView'}
       },
 
       // When a route loads, render the view and attach it to the document

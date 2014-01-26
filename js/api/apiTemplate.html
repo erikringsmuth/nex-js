@@ -4,14 +4,19 @@
 
 <p>Create a view by extending the base view.</p>
 
+<pre class="prettyprint"><code>&lt;!-- myTemplate.html --&gt;
+&lt;div&gt;Hello \{{model.name}}!&lt;/div&gt;
+&lt;input type="text" placeholder="enter your name"&gt;
+&lt;div id="todo-widget"&gt;&lt;/div&gt;</code></pre>
+
 <pre class="prettyprint"><code>var MyView = Nex.View.extend({
   // The view's HTML template
-  template: Handlebars.compile('&lt;div&gt;Hello \{{model.name}}!&lt;/div&gt;&lt;input type="text" placeholder="enter your name"&gt;'),
+  template: Handlebars.compile(myTemplate),
 
   // The model gets passed to the template
   model: { name: 'Nex' },
 
-  // A view that contains your site's header, footer, etc. The layout has a contentPlaceholder that this view will be attached to.
+  // The layout contains your site's header, footer, etc.
   layout: LayoutView,
 
   // Event handlers
@@ -21,6 +26,11 @@
       this.model.name = event.target.value;
       this.render();
     }
+  },
+
+  // Components are other views that are automatically created and attached to this view
+  components: {
+    '#todo-widget': TodoView
   }
 });</code></pre>
 

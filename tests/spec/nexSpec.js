@@ -71,11 +71,11 @@ define([
       // Arrange
       var LayoutView = Nex.View.extend({
         template: '<div id="main-content"></div>',
-        contentPlaceholderId: 'main-content'
+        contentPlaceholder: '#main-content'
       });
       var TestView = Nex.View.extend({
         template: 'Hello Erik Ringsmuth',
-        layout: new LayoutView()
+        layout: LayoutView
       });
 
       // Act
@@ -102,11 +102,11 @@ define([
       // Arrange
       var LayoutView = Nex.View.extend({
         template: '<div id="main-content"></div>',
-        contentPlaceholderId: 'main-content'
+        contentPlaceholder: '#main-content'
       });
       var TestView = Nex.View.extend({
         render: function() { this.el.innerHTML = 'Hello Erik Ringsmuth'; },
-        layout: new LayoutView()
+        layout: LayoutView
       });
 
       // Act
@@ -193,7 +193,7 @@ define([
       // Arrange
       var LayoutView = Nex.View.extend({
         template: '<div id="content"></div>',
-        contentPlaceholderId: 'content'
+        contentPlaceholder: '#content'
       });
       var TestView = Nex.View.extend({
         layout: LayoutView
@@ -217,32 +217,32 @@ define([
       expect(function() { new TestView(); }).toThrow();
     });
 
-    it('should throw an exception if the layout doesn\'t have a contentPlaceholderId', function() {
+    it('should throw an exception if the layout doesn\'t have a contentPlaceholder', function() {
       // Arrange
       var LayoutView = Nex.View.extend();
       var TestView = Nex.View.extend({
-        layout: new LayoutView()
+        layout: LayoutView
       });
 
       // Act, Assert
       expect(function() { new TestView(); }).toThrow();
     });
 
-    it('should give the layout view a reference to the child view as layout.childView', function() {
+    it('should give the layout view a reference to the child view as layout._initializedComponents[layout.contentPlaceholder]', function() {
       // Arrange
       var LayoutView = Nex.View.extend({
         template: '<div id="content"></div>',
-        contentPlaceholderId: 'content'
+        contentPlaceholder: '#content'
       });
       var TestView = Nex.View.extend({
-        layout: new LayoutView()
+        layout: LayoutView
       });
 
       // Act
       var testView = new TestView();
 
       // Assert
-      expect(testView.layout.childView).toEqual(testView);
+      expect(testView.layout._initializedComponents['#content']).toEqual(testView);
     });
   });
 
@@ -262,10 +262,10 @@ define([
       // Arrange
       var LayoutView = Nex.View.extend({
         template: '<div id="content"></div>',
-        contentPlaceholderId: 'content'
+        contentPlaceholder: '#content'
       });
       var TestView = Nex.View.extend({
-        layout: new LayoutView()
+        layout: LayoutView
       });
 
       // Act
@@ -276,11 +276,11 @@ define([
     });
   });
 
-  describe('view.contentPlaceholderId', function() {
+  describe('view.contentPlaceholder', function() {
     it('should throw an exception if it\'s not a string', function() {
       // Arrange
       var TestView = Nex.View.extend({
-        contentPlaceholderId: {}
+        contentPlaceholder: {}
       });
 
       // Act, Assert
@@ -389,6 +389,27 @@ define([
 
       // Assert
       expect(testView.el.className).toEqual('awesome-class');
+    });
+  });
+
+  describe('view.components', function() {
+    it('should create instances of the components and attach them to this view', function() {
+      // Arrange
+      var TestComponent = Nex.View.extend({
+        template: 'A component'
+      });
+      var TestView = Nex.View.extend({
+        template: '<div>Some components will go in the placeholder</div><div id="widget"></div>',
+        components: {
+          '#widget': TestComponent
+        }
+      });
+
+      // Act
+      var testView = new TestView();
+
+      // Assert
+      expect(testView.el.innerHTML).toEqual('<div>Some components will go in the placeholder</div><div id="widget"><div>A component</div></div>');
     });
   });
 

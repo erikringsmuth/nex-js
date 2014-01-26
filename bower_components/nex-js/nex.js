@@ -1,6 +1,6 @@
 // {nex.js} - Unleashing the power of AMD for web applications.
 //
-// Version: 0.2.3
+// Version: 0.3.0
 // 
 // The MIT License (MIT)
 // Copyright (c) 2014 Erik Ringsmuth

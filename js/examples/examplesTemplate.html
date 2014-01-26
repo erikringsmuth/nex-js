@@ -111,7 +111,7 @@
 &lt;main id="content" class="container"&gt;
 &lt;/main&gt;</code></pre>
 
-<p class="spacer">Create <code class="pln">/js/layout/layoutView.js</code> - This is the nex-js layout view. You can see the <code>contentPlaceholderId</code> points to the layout HTML <code>&lt;main id="content" class="container"&gt;</code>. This is how your view's are attached to the layout.</p>
+<p class="spacer">Create <code class="pln">/js/layout/layoutView.js</code> - This is the nex-js layout view. You can see the <code>contentPlaceholder</code> points to the layout HTML <code>&lt;main id="content" class="container"&gt;</code>. This is how your view's are attached to the layout.</p>
 
 <pre class="prettyprint"><code>define([
   'nex',
@@ -123,8 +123,8 @@
 
   return Nex.View.extend({
     template: Handlebars.compile(layoutTemplate),
-    model: {routes: router.routes},
-    contentPlaceholderId: 'content'
+    model: { routes: router.routes },
+    contentPlaceholder: '#content'
   });
 });</code></pre>
 

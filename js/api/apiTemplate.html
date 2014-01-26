@@ -11,7 +11,7 @@
   // The model gets passed to the template
   model: { name: 'Nex' },
 
-  // A view that contains your site's header, footer, etc. The layout has a contentPlaceholderId that this view will be attached to.
+  // A view that contains your site's header, footer, etc. The layout has a contentPlaceholder that this view will be attached to.
   layout: LayoutView,
 
   // Event handlers
@@ -41,7 +41,8 @@
   <li><code>view.on</code> - event handlers</li>
   <li><code>view.layout</code> - the layout contains your site's layout (header, footer, etc.)</li>
   <li><code>view.outerEl</code> - the <code>view</code>'s or <code>layout</code>'s outer most DOM element</li>
-  <li><code>view.contentPlaceholderId</code> - the ID of a layout view's content placeholder element</li>
+  <li><code>view.contentPlaceholder</code> - the CSS selector to the content placeholder element (only for layout views)</li>
+  <li><code>view.components</code> - sub-views or widgets that are automatically created and attached to the view</li>
   <li><code>view.remove()</code> - remove the view from the DOM</li>
   <li><code>view.initialize()</code> - a hook to add additional logic when creating an instance of the view</li>
   <li><code>view.tagName</code> - the type of DOM element</li>
@@ -110,11 +111,11 @@
 
 <h4 id="layout" class="spacer">layout</h4>
 
-<p>The <code>layout</code> is a constructor or instance of a special view that contains your site's header, footer, etc. The layout is like a .NET master page or Razor layout. This makes routing easy since you don't need an intermediate step to render the layout. Calling <code>render()</code> on the view will automatically call <code>render()</code> on the layout. The view uses the layout's <code>contentPlaceholderId</code> to get the content placeholder element. Once the views are done rendering <code>view.outerEl</code> will contain both the view and the layout. Here's an example view and layout view.</p>
+<p>The <code>layout</code> is a constructor or instance of a special view that contains your site's header, footer, etc. The layout is like a .NET master page or Razor layout. This makes routing easy since you don't need an intermediate step to render the layout. Calling <code>render()</code> on the view will automatically call <code>render()</code> on the layout. The view is attached to the layout using the layout's <code>contentPlaceholder</code> selector. Once the views are done rendering <code>view.outerEl</code> will contain both the view and the layout. Here's an example view and layout view.</p>
 
 <pre class="prettyprint"><code>var LayoutView = Nex.View.extend({
   template: Handlebars.compile('&lt;header&gt;Header&lt;/header&gt;&lt;div id="content"&gt;&lt;/div&gt;'),
-  contentPlaceholderId: 'content'
+  contentPlaceholder: '#content'
 });
 
 var MyView = Nex.View.extend({
@@ -136,9 +137,32 @@ The <code>body</code> HTML will be.
 
 <p>The view's or <code>layout</code>'s outer most DOM element. If you specify a <code>layout</code> then <code>view.outerEl</code> will refer to the <code>layout.el</code>. When you attach a view to the DOM you should use <code>outerEl</code> in case it has a layout view. You should attach your view's to the document like this <code>document.querySelector('body').appendChild(new MyView().outerEl)</code>. Then if <code>MyView</code> has set <code>layout: LayoutView</code> it will be <code>LayoutView.el</code> that is attached to the DOM.</p>
 
-<h4 id="contentPlaceholderId" class="spacer">contentPlaceholderId</h4>
+<h4 id="contentPlaceholder" class="spacer">contentPlaceholder</h4>
 
-<p>If a view is going to be used as a <code>layout</code> it needs to have a content-placeholder element in its HTML and set <code>view.contentPlaceholderId</code>. This is the ID of the content-placeholder element in the HTML. When you call <code>render()</code> on the child view it will automatically call <code>render()</code> on the layout view and use the <code>layout.contentPlaceholderId</code> to attach the child view to the layout view.</p>
+<p>If a view is going to be used as a <code>layout</code> it needs to have a content placeholder element in its HTML and set <code>view.contentPlaceholder</code>. This is the CSS selector of the content placeholder element in the HTML. When you call <code>render()</code> on the child view it will automatically call <code>render()</code> on the layout view and use the <code>layout.contentPlaceholder</code> to attach the child view to the layout.</p>
+
+<p>Note: If a view has a <code>contentPlaceholder</code> it is considered a layout and will not be rendered when a new instance is constructed. Instead it will wait to be rendered until the child view is rendered.</p>
+
+<h4 id="components" class="spacer">components</h4>
+
+<p>These are views or widgets that are automatically created and attached to the view. When an instance of the view is created it creates instances of the components and attaches them to their selectors.</p>
+
+<pre class="prettyprint"><code>var Widget = Nex.View.extend({
+  template: Handlebars.compile('I\'m a widget!')
+});
+
+var MyView = Nex.View.extend({
+  template: Handlebars.compile('&lt;div&gt;Example component below.&lt;/div&gt;&lt;div id="widget1"&gt;&lt;/div&gt;'),
+  components: {
+    '#widget1': Widget
+  }
+});</code></pre>
+
+An instance of <code>MyView</code> will have this HTML.
+<pre class="prettyprint"><code>&lt;div&gt;Example component below.&lt;/div&gt;
+&lt;div id="widget1"&gt;
+  &lt;div&gt;I'm a widget!&lt;/div&gt;
+&lt;/div&gt;</code></pre>
 
 <h4 id="remove" class="spacer">remove()</h4>
 

@@ -35,7 +35,7 @@
 <pre class="prettyprint"><code>var LayoutView = Nex.View.extend({
   template: Handlebars.compile(layoutTemplate),
   model: { home: true, examples: false },
-  contentPlaceholderId: 'content'
+  contentPlaceholder: '#content'
 });</code></pre>
 <pre class="prettyprint"><code>&lt;header&gt;
   &lt;a href="#/" \{{#if model.home}}class="active"\{{/if}}&gt;Home&lt;/a&gt;

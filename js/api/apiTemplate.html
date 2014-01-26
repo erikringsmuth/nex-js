@@ -159,6 +159,8 @@ An instance of <code>MyView</code> will have this HTML.
   &lt;div&gt;I'm a widget!&lt;/div&gt;
 &lt;/div&gt;</code></pre>
 
+<p>The cool thing about components is if you re-render this view it doesn't have to re-render the components. This view already has references to the rendered components so it just attaches them again when the view finishes re-rendering. The same thing goes for re-rendering a layout view. Underneath it takes the <code>contentPlaceholder</code> and turns it into a component. When you re-render the layout it just attaches this view again using the <code>contentPlaceholder</code>.</p>
+
 <h4 id="render" class="spacer">render()</h4>
 
 <p>Render populates the contents of <code>view.el</code> with the template HTML. This is called when you create a new instance of a view. When your model changes you call <code>render()</code> to update the DOM. Every view has a default <code>render()</code> method that looks like this.</p>

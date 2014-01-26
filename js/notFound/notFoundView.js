@@ -9,6 +9,6 @@ define([
 
   return Nex.View.extend({
     template: Handlebars.compile(notFoundTemplate),
-    layoutView: LayoutView
+    layout: LayoutView
   });
 });

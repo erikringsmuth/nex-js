@@ -9,20 +9,18 @@
   template: Handlebars.compile('&lt;div&gt;Hello \{{model.name}}!&lt;/div&gt;&lt;input type="text" placeholder="enter your name"&gt;'),
 
   // The model gets passed to the template
-  model: {name: 'Nex'},
+  model: { name: 'Nex' },
 
   // A view that contains your site's header, footer, etc. The layout has a contentPlaceholderId that this view will be attached to.
-  layoutView: LayoutView,
+  layout: LayoutView,
 
   // Event handlers
-  events: {
-    'keypress input': 'inputChangeHandler'
-  },
-
-  // Change the view to display your name
-  inputChangeHandler: function(event) {
-    this.model.name = event.target.value;
-    this.render();
+  on: {
+    // Change the view to display your name
+    'keypress input': function(event) {
+      this.model.name = event.target.value;
+      this.render();
+    }
   }
 });</code></pre>
 
@@ -40,9 +38,9 @@
   <li><code>view.el</code> - the view's DOM element</li>
   <li><code>view.model</code> - the model that gets passed to the template</li>
   <li><code class="pln">view.template()</code> - generates the view's HTML</li>
-  <li><code>view.events</code> - delegate events that are bound once to the root object so subsequent calls to <code>view.render()</code> don't need to re-bind events</li>
-  <li><code>view.layoutView</code> - the layout view contains your site's layout (header, footer, etc.)</li>
-  <li><code>view.outerEl</code> - the <code>view</code>'s or <code>layoutView</code>'s outer most DOM element</li>
+  <li><code>view.on</code> - event handlers</li>
+  <li><code>view.layout</code> - the layout contains your site's layout (header, footer, etc.)</li>
+  <li><code>view.outerEl</code> - the <code>view</code>'s or <code>layout</code>'s outer most DOM element</li>
   <li><code>view.contentPlaceholderId</code> - the ID of a layout view's content placeholder element</li>
   <li><code>view.remove()</code> - remove the view from the DOM</li>
   <li><code>view.initialize()</code> - a hook to add additional logic when creating an instance of the view</li>
@@ -62,7 +60,7 @@
   return this;
 }</code></pre>
 
-<p>You can override this to add your own functionality. <code>render()</code> will also handle rendering the <code>layoutView</code> if it has one. Overriding <code>view.render()</code> will still render the <code>layoutView</code> but will let you change how the current view is rendered.</p>
+<p>You can override this to add your own functionality. <code>render()</code> will also handle rendering the <code>layout</code> if it has one. Overriding <code>view.render()</code> will still render the <code>layout</code> but will let you change how the current view is rendered.</p>
 
 <h4 id="html" class="spacer">html(htmlString)</h4>
 
@@ -96,22 +94,23 @@
 
 <p>The compile step creates a function that takes in a model and returns an HTML string. The <code>render()</code> method passes the model to the compiled template then takes the resulting HTML and attaches it to <code>view.el</code>.</p>
 
-<h4 id="events" class="spacer">events</h4>
+<h4 id="on" class="spacer">on</h4>
 
-<p>Delegate events are bound once to the view's root element so you don't have to bind events every time you call <code>render()</code>. Events are slightly different than jQuery delegate events since there aren't native ECMAScript delegate events. <code>event.target</code> and <code>event.currentTarget</code> are swapped from the way jQuery does it. jQuery got these backwards and the native events have them set correctly. Here is an example event and event handler.</p>
+<p>Event handlers. These are delegate events. They are bound once to the view's root element so you don't have to bind events every time you call <code>render()</code>. Events are slightly different than jQuery delegate events since there aren't native ECMAScript delegate events. <code>event.target</code> and <code>event.currentTarget</code> are swapped from the way jQuery does it. jQuery got these backwards and the native events have them set correctly. Here is an example event and event handler.</p>
 
 <pre class="prettyprint"><code>var MyView = Nex.View.extend({
-  events: { 'click span a': 'anchorEventHandler' },
-  anchorEventHandler : function(event) {
-    this; // will reference your instance of `MyView`
-    event.target; // will reference the DOM element the action took place on. This is `a` in this example.
-    event.currentTarget; // will reference `this.el` which is the root element that all events are bound to.
+  on: {
+    'click span a': function(event) {
+      this; // will reference your instance of `MyView`
+      event.target; // will reference the DOM element the action took place on. This is `a` in this example.
+      event.currentTarget; // will reference `this.el` which is the root element that all events are bound to.
+    }
   }
 });</code></pre>
 
-<h4 id="layoutView" class="spacer">layoutView</h4>
+<h4 id="layout" class="spacer">layout</h4>
 
-<p>The <code>layoutView</code> is a constructor or instance of a special view that contains your site's header, footer, etc. The layout is like a .NET master page or Razor layout. This makes routing easy since you don't need an intermediate step to render the layout. Calling <code>render()</code> on the view will automatically call <code>render()</code> on the layout. The view uses the layout's <code>contentPlaceholderId</code> to get the content placeholder element. Once the views are done rendering <code>view.outerEl</code> will contain both the view and the layout. Here's an example view and layout view.</p>
+<p>The <code>layout</code> is a constructor or instance of a special view that contains your site's header, footer, etc. The layout is like a .NET master page or Razor layout. This makes routing easy since you don't need an intermediate step to render the layout. Calling <code>render()</code> on the view will automatically call <code>render()</code> on the layout. The view uses the layout's <code>contentPlaceholderId</code> to get the content placeholder element. Once the views are done rendering <code>view.outerEl</code> will contain both the view and the layout. Here's an example view and layout view.</p>
 
 <pre class="prettyprint"><code>var LayoutView = Nex.View.extend({
   template: Handlebars.compile('&lt;header&gt;Header&lt;/header&gt;&lt;div id="content"&gt;&lt;/div&gt;'),
@@ -120,7 +119,7 @@
 
 var MyView = Nex.View.extend({
   template: Handlebars.compile('MyView HTML'),
-  layoutView: LayoutView
+  layout: LayoutView
 });
 
 document.querySelector('body').appendChild(new MyView().outerEl);</code></pre>
@@ -135,11 +134,11 @@ The <code>body</code> HTML will be.
 
 <h4 id="outerEl" class="spacer">outerEl</h4>
 
-<p>The view's or <code>layoutView</code>'s outer most DOM element. If you specify a <code>layoutView</code> then <code>view.outerEl</code> will refer to the <code>layoutView.el</code>. When you attach a view to the DOM you should use <code>outerEl</code> in case it has a layout view. You should attach your view's to the document like this <code>document.querySelector('body').appendChild(new MyView().outerEl)</code>. Then if <code>MyView</code> has set <code>layoutView: LayoutView</code> it will be <code>LayoutView.el</code> that is attached to the DOM.</p>
+<p>The view's or <code>layout</code>'s outer most DOM element. If you specify a <code>layout</code> then <code>view.outerEl</code> will refer to the <code>layout.el</code>. When you attach a view to the DOM you should use <code>outerEl</code> in case it has a layout view. You should attach your view's to the document like this <code>document.querySelector('body').appendChild(new MyView().outerEl)</code>. Then if <code>MyView</code> has set <code>layout: LayoutView</code> it will be <code>LayoutView.el</code> that is attached to the DOM.</p>
 
 <h4 id="contentPlaceholderId" class="spacer">contentPlaceholderId</h4>
 
-<p>If a view is going to be used as a <code>layoutView</code> it needs to have a content-placeholder element in its HTML and set <code>view.contentPlaceholderId</code>. This is the ID of the content-placeholder element in the HTML. When you call <code>render()</code> on the child view it will automatically call <code>render()</code> on the layout view and use the <code>layoutView.contentPlaceholderId</code> to attach the child view to the layout view.</p>
+<p>If a view is going to be used as a <code>layout</code> it needs to have a content-placeholder element in its HTML and set <code>view.contentPlaceholderId</code>. This is the ID of the content-placeholder element in the HTML. When you call <code>render()</code> on the child view it will automatically call <code>render()</code> on the layout view and use the <code>layout.contentPlaceholderId</code> to attach the child view to the layout view.</p>
 
 <h4 id="remove" class="spacer">remove()</h4>
 
@@ -185,8 +184,10 @@ document.querySelector('body').appendChild(myView.outerEl); // Will display "Hel
 
 <p>The <code>mockEvent</code> must contain a <code>type</code> and <code>target</code>. The <code>type</code> is a click, keypress, etc. The <code>target</code> is the DOM element you're performing the action on. You can add any other properties your event handlers expect. Here's an example test that verifies that entering a new item and hitting enter saves the item to the view's model.</p>
 
-<pre class="prettyprint"><code>var myView = new MyView();
+<pre class="prettyprint"><code>// Arrange
+var myView = new MyView();
 
+// Act
 var textInput = myView.el.querySelector('input.new');
 textInput.value = 'my first item!';
 myView.dispatchMockEvent({
@@ -195,5 +196,6 @@ myView.dispatchMockEvent({
   keyCode: 13
 });
 
+// Assert
 expect(myView.model.items.length).toEqual(1);
 expect(myView.model.items[0].title).toEqual('my first item!');</code></pre>

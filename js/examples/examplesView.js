@@ -11,7 +11,7 @@ define([
   return Nex.View.extend({
     template: Handlebars.compile(examplesTemplate),
     
-    layoutView: LayoutView,
+    layout: LayoutView,
 
     render: function render() {
       this.html(this.template({model: this.model}));

@@ -1,6 +1,6 @@
 // {nex.js} - Unleashing the power of AMD for web applications.
 //
-// Version: 0.3.0
+// Version: 0.4.0
 // 
 // The MIT License (MIT)
 // Copyright (c) 2014 Erik Ringsmuth
@@ -65,20 +65,20 @@
           // view.el - the view's DOM element
           if (typeof(view.el) === 'undefined') view.el = document.createElement(view.tagName);
 
-          // view.layoutView - the layout view contains your site's layout (header, footer, etc.)
-          if (typeof(view.layoutView) !== 'undefined') {
+          // view.layout - the layout view contains your site's layout (header, footer, etc.)
+          if (typeof(view.layout) !== 'undefined') {
             // If the layout view is a constructor function create an instance
-            if (typeof view.layoutView === 'function') {
-              view.layoutView = new view.layoutView();
+            if (typeof view.layout === 'function') {
+              view.layout = new view.layout();
             }
-            if (!view.layoutView instanceof View) {
-              throw 'The `view.layoutView` must be a View constructor or an instance of a View.';
+            if (!view.layout instanceof View) {
+              throw 'The `view.layout` must be a View constructor or an instance of a View.';
             }
-            if (typeof(view.layoutView.contentPlaceholderId) !== 'string') {
+            if (typeof(view.layout.contentPlaceholderId) !== 'string') {
               throw 'The layout view must have `view.contentPlaceholderId` specified.';
             }
             // Give the layout view a reference to the child view in case it needs to modify its render method
-            view.layoutView.childView = view;
+            view.layout.childView = view;
           }
 
           // view.contentPlaceholderId - the ID of a layout view's content placeholder element
@@ -87,11 +87,11 @@
           }
 
           // view.childView - the child view is attached to the layout if it needs to be re-rendered without re-rendering the child view
-          if (typeof(view.childView) !== 'undefined') throw 'You can\'t specify `view.childView`. This is set automatically on the layout when a view specifies `view.layoutView`.';
+          if (typeof(view.childView) !== 'undefined') throw 'You can\'t specify `view.childView`. This is set automatically on the layout when a view specifies `view.layout`.';
 
           // view.outerEl - the view's or layout view's outer most element
           if (typeof(view.outerEl) !== 'undefined') throw '`view.outerEl` is a read only property that is automatically populated.';
-          view.outerEl = view.layoutView ? view.layoutView.outerEl : view.el;
+          view.outerEl = view.layout ? view.layout.outerEl : view.el;
 
           // view.id - the ID of the view's DOM element
           if (typeof(view.id) !== 'undefined') view.el.id = view.id;
@@ -138,11 +138,11 @@
           // `innerRender()` is actually overridden by specifying a `view.render()` method
           if (typeof(view.render) !== 'undefined') innerRender = view.render;
 
-          var shouldRenderLayout = view.layoutView ? true : false;
+          var shouldRenderLayout = view.layout ? true : false;
           view.render = function render() {
             // Walk up the view chain rendering layout views on the initial render
             if(shouldRenderLayout) {
-              view.layoutView.render();
+              view.layout.render();
               shouldRenderLayout = false;
             }
 
@@ -187,27 +187,25 @@
             };
           }
 
-          // view.events - delegate events that are bound once to the root object so subsequent calls to
-          // view.render() don't need to re-bind events.
+          // view.on - delegate events that are bound once to the root object so subsequent calls to view.render() don't need to re-bind events.
           //
-          // Events work slightly differently than jQuery delegate events since there aren't native ECMAScript
-          // delegate events.
+          // Events work differently than jQuery delegate events since there aren't native ECMAScript delegate events. jQuery swapped
+          // event.target and event.currentTarget. Who knows why...
           //
           // var MyView = View.extend({
-          //   this.events: { 'click span a': 'anchorEventHandler' },
-          //   this.anchorEventHandler: function(event) {
-          //     // `this` will reference `MyView`.
-          //     // `event.target` will reference the DOM element the action took place on. This is `a` in this example.
-          //     // `event.currentTarget` will reference `this.el` which is the root element that all events are bound to.
+          //   this.on: {
+          //    'click span a': function(event) {
+          //       this; // will reference your instance of `MyView`
+          //       event.target; // will reference the DOM element the action took place on. This is `a` in this example.
+          //       event.currentTarget; // will reference `this.el` which is the root element that all events are bound to.
           //    }
           // })
-          if (typeof(view.events) === 'undefined') view.events = {};
+          if (typeof(view.on) === 'undefined') view.on = {};
           var eventListeners = {};
-          for (var eventProperty in view.events) {
-            if (view.events.hasOwnProperty(eventProperty)) {
+          for (var callbackName in view.on) {
+            if (view.on.hasOwnProperty(callbackName)) {
               // 'anchorEventHandler' from example
-              var callbackName = view.events[eventProperty];
-              var eventParts = eventProperty.split(' ');
+              var eventParts = callbackName.split(' ');
 
               // 'click' from example
               var action = eventParts[0];
@@ -223,7 +221,7 @@
                   for (var i in matchingElements) {
                     if (!event.target) event.target = event.srcElement; // IE8
                     if (event.target === matchingElements[i]) {
-                      view[callbackName].call(view, event);
+                      view.on[callbackName].call(view, event);
                       break;
                     }
                   }

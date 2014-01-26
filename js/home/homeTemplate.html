@@ -4,7 +4,7 @@
 
     <p class="lead">Unleashing the power of AMD for web applications.</p>
 
-    <p>Nex.js and the <a href="https://github.com/erikringsmuth/requirejs-router">RequireJS Router</a> give you a powerful IoC pattern for routing and loading views. The router lazy loads dependencies. Nex injects layout views. It's fully AMD compatible plus it's built on vanilla JS, no jQuery required.</p>
+    <p>Nex.js and the <a href="https://github.com/erikringsmuth/requirejs-router">RequireJS Router</a> give you a powerful IoC pattern for routing and loading views. The router lazy loads views. Nex renders the view and it's layout. Rendering the layout is now completely decoupled from the router. It's fully AMD compatible plus it's built on vanilla JS.</p>
 
     <p>Check out the <a href="#/examples">examples</a> to see how it works. This site's source is a great example of a <a href="https://github.com/erikringsmuth/nex-js">nex-js</a> and <a href="https://github.com/erikringsmuth/requirejs-router">RequireJS Router</a> setup. It's available in the <a href="https://github.com/erikringsmuth/nex-js/tree/gh-pages">gh-pages branch</a> of nex-js. Licensed under <a href="https://github.com/erikringsmuth/nex-js/blob/master/license.md">MIT</a>.</p>
 
@@ -53,7 +53,7 @@
   <div class="col-md-8">
 <pre class="prettyprint"><code>var HomeView = Nex.View.extend({
   template: Handlebars.compile(homeTemplate),
-  layoutView: LayoutView
+  layout: LayoutView
 });</code></pre>
 <pre class="prettyprint"><code>&lt;h1&gt;Hello World!&lt;/h1&gt;</code></pre>
   </div>

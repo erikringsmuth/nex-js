@@ -255,6 +255,11 @@
           if (typeof(view.initialize) === 'function') {
             view.initialize.apply(view, arguments);
           }
+
+          // Do the initial render of the view
+          if (view.autoRender !== false) {
+            view.render.call(view);
+          }
         };
       }
     }

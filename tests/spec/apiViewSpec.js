@@ -14,7 +14,6 @@ define([
 
     it('should have a layout view', function() {
       var apiView = new ApiView();
-      apiView.render();
       expect(apiView.outerEl.querySelector('.navbar')).toBeTruthy();
     });
   });

@@ -14,7 +14,6 @@ define([
 
     it('should have a layout view', function() {
       var downloadView = new DownloadView();
-      downloadView.render();
       expect(downloadView.outerEl.querySelector('.navbar')).toBeTruthy();
     });
   });

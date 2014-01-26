@@ -36,10 +36,8 @@ define([
           name: 'Nex'
         })
         .require(['js/home/homeView'], function(HomeView) {
-          var homeView = new HomeView();
-
           // Act
-          homeView.render();
+          var homeView = new HomeView();
 
           // Assert
           expect(homeView.el.innerHTML).toEqual('&lt;div&gt;Hello Nex!&lt;/div&gt;');

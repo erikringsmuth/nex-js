@@ -22,7 +22,7 @@ define([
     render: function render() {
       this.html(this.template({model: this.model}));
       utilities.formatCode(this.el);
-      this.el.querySelector('.todo-mvc-container').appendChild(new TodoView(this.model).render().el);
+      this.el.querySelector('.todo-mvc-container').appendChild(new TodoView(this.model).el);
       return this;
     }
   });

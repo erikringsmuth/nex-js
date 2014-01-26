@@ -14,7 +14,6 @@ define([
 
     it('should have a layout view', function() {
       var notesView = new NotesView();
-      notesView.render();
       expect(notesView.outerEl.querySelector('.navbar')).toBeTruthy();
     });
   });

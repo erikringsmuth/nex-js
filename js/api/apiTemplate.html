@@ -28,7 +28,7 @@
 
 <p>Create an instance of your view, render it, and attach it to the document.</p>
 
-<pre class="prettyprint"><code>document.querySelector('body').appendChild(new MyView().render().outerEl);</code></pre>
+<pre class="prettyprint"><code>document.querySelector('body').appendChild(new MyView().outerEl);</code></pre>
 
 <h4 id="properties" class="spacer">View Properties</h4>
 
@@ -49,12 +49,13 @@
   <li><code>view.tagName</code> - the type of DOM element</li>
   <li><code>view.id</code> - the ID of the view's DOM element</li>
   <li><code>view.className</code> - the class name(s) of the view's DOM element</li>
+  <li><code>view.autoRender</code> - defaults to <code>true</code>, set to <code>false</code> to manually trigger the first render</li>
   <li><code>view.dispatchMockEvent(mockEvent)</code> - triggers a mock event for integration testing event handlers</li>
 </ul>
 
 <h4 id="render" class="spacer">render()</h4>
 
-<p>Render populates the contents of <code>view.el</code> with the template HTML. Every view has a default <code>render()</code> method that looks like this.</p>
+<p>Render populates the contents of <code>view.el</code> with the template HTML. This is called when you create a new instance of a view. When your model changes you call <code>render()</code> to update the DOM. Every view has a default <code>render()</code> method that looks like this.</p>
 
 <pre class="prettyprint"><code>function render() {
   this.html(this.template({model: this.model}));
@@ -83,7 +84,10 @@
 
 <pre class="prettyprint"><code>var MyView = Nex.View.extend({
   template: Handlebars.compile('&lt;div&gt;Hello \{{model.name}}!&lt;/div&gt;'),
+
   model: {name: 'Nex'},
+
+  // The default render method processes the template and attaches it to the view's DOM element
   render: function render() {
     this.html(this.template({model: this.model}));
     return this;
@@ -94,7 +98,7 @@
 
 <h4 id="events" class="spacer">events</h4>
 
-<p>Delegate events are bound once to the view's root element so you don't have to bind events every time you call <code>render()</code>. Events work slightly differently than jQuery delegate events since there aren't native ECMAScript delegate events. <code>event.target</code> and <code>event.currentTarget</code> are swapped from the way jQuery does it. From what I can tell jQuery got these backwards and the native events have them set correctly. Here is an example event and event handler.</p>
+<p>Delegate events are bound once to the view's root element so you don't have to bind events every time you call <code>render()</code>. Events are slightly different than jQuery delegate events since there aren't native ECMAScript delegate events. <code>event.target</code> and <code>event.currentTarget</code> are swapped from the way jQuery does it. jQuery got these backwards and the native events have them set correctly. Here is an example event and event handler.</p>
 
 <pre class="prettyprint"><code>var MyView = Nex.View.extend({
   events: { 'click span a': 'anchorEventHandler' },
@@ -119,7 +123,7 @@ var MyView = Nex.View.extend({
   layoutView: LayoutView
 });
 
-document.querySelector('body').appendChild(new MyView().render().outerEl);</code></pre>
+document.querySelector('body').appendChild(new MyView().outerEl);</code></pre>
 
 The <code>body</code> HTML will be.
 <pre class="prettyprint"><code>&lt;div&gt; &lt;!-- layoutView.el, homeView.outerEl --&gt;
@@ -131,7 +135,7 @@ The <code>body</code> HTML will be.
 
 <h4 id="outerEl" class="spacer">outerEl</h4>
 
-<p>The view's or <code>layoutView</code>'s outer most DOM element. If you specify a <code>layoutView</code> then <code>view.outerEl</code> will refer to the <code>layoutView.el</code>. When you attach a view to the DOM you should use <code>outerEl</code> in case it has a layout view. You should attach your view's to the document like this <code>document.querySelector('body').appendChild(new MyView().render().outerEl)</code>. Then if <code>MyView</code> has set <code>layoutView: LayoutView</code> it will be <code>LayoutView.el</code> that is attached to the DOM.</p>
+<p>The view's or <code>layoutView</code>'s outer most DOM element. If you specify a <code>layoutView</code> then <code>view.outerEl</code> will refer to the <code>layoutView.el</code>. When you attach a view to the DOM you should use <code>outerEl</code> in case it has a layout view. You should attach your view's to the document like this <code>document.querySelector('body').appendChild(new MyView().outerEl)</code>. Then if <code>MyView</code> has set <code>layoutView: LayoutView</code> it will be <code>LayoutView.el</code> that is attached to the DOM.</p>
 
 <h4 id="contentPlaceholderId" class="spacer">contentPlaceholderId</h4>
 
@@ -147,21 +151,13 @@ The <code>body</code> HTML will be.
 
 <pre class="prettyprint"><code>var MyView = Nex.View.extend({
   template: Handlebars.compile('&lt;div&gt;Hello \{{model.name}}!&lt;/div&gt;'),
-
   model: {},
-
   initialize: function(name) {
     this.model.name = name;
-  },
-
-  render: function render() {
-    this.html(this.template({model: this.model}));
-    return this;
   }
 });
 
 var myView = new MyView("Nex");
-myView.render();
 
 document.querySelector('body').appendChild(myView.outerEl); // Will display "Hello Nex!"</code></pre>
 
@@ -179,6 +175,10 @@ document.querySelector('body').appendChild(myView.outerEl); // Will display "Hel
 
 <p>The class name(s) of the view's DOM element.</p>
 
+<h4 id="autoRender" class="spacer">autoRender</h4>
+
+<p>Defaults to <code>true</code>, set to <code>false</code> to manually trigger the first render.</p>
+
 <h4 id="dispatchMockEvent" class="spacer">dispatchMockEvent(mockEvent)</h4>
 
 <p>Triggers a mock event for integration testing event handlers. If you just want to unit test your event handlers you can call the functions directly with a mock object. The benefit of dispatching an event is that it might trigger multiple event handlers.</p>
@@ -186,7 +186,6 @@ document.querySelector('body').appendChild(myView.outerEl); // Will display "Hel
 <p>The <code>mockEvent</code> must contain a <code>type</code> and <code>target</code>. The <code>type</code> is a click, keypress, etc. The <code>target</code> is the DOM element you're performing the action on. You can add any other properties your event handlers expect. Here's an example test that verifies that entering a new item and hitting enter saves the item to the view's model.</p>
 
 <pre class="prettyprint"><code>var myView = new MyView();
-myView.render();
 
 var textInput = myView.el.querySelector('input.new');
 textInput.value = 'my first item!';

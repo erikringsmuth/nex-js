@@ -14,13 +14,11 @@ define([
 
     it('should have a layout view', function() {
       var homeView = new HomeView();
-      homeView.render();
       expect(homeView.outerEl.querySelector('.navbar')).toBeTruthy();
     });
 
     it('should render the Todo MVC widget', function() {
       var homeView = new HomeView();
-      homeView.render();
       var todoMvcWidgetHtml = homeView.el.querySelector('#todoapp');
       expect(todoMvcWidgetHtml).toBeDefined();
     });

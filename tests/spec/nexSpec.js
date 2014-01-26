@@ -23,36 +23,52 @@ define([
 
   describe('view.render()', function() {
     it('should process the function template with an object model and add the result HTML to view.el', function() {
+      // Arrange
       var TestView = Nex.View.extend({
         template: function(args) { return '<div>Hello ' + args.model.name + '</div>'; },
         model: {
           name: 'Erik Ringsmuth'
         }
       });
-      var testView = new TestView().render();
+
+      // Act
+      var testView = new TestView();
+
+      // Assert
       expect(testView.el.innerHTML).toEqual('<div>Hello Erik Ringsmuth</div>');
     });
 
     it('should process the function template with a constructor function model and add the result HTML to view.el', function() {
+      // Arrange
       var TestView = Nex.View.extend({
         template: function(args) { return '<div>Hello ' + args.model.name + '</div>'; },
         model: function() {
           this.name = 'Erik Ringsmuth';
         }
       });
-      var testView = new TestView().render();
+
+      // Act
+      var testView = new TestView();
+
+      // Assert
       expect(testView.el.innerHTML).toEqual('<div>Hello Erik Ringsmuth</div>');
     });
 
     it('should process the string template and add the result HTML to view.el', function() {
+      // Arrange
       var TestView = Nex.View.extend({
         template: '<div>Hello Erik Ringsmuth</div>'
       });
-      var testView = new TestView().render();
+
+      // Act
+      var testView = new TestView();
+
+      // Assert
       expect(testView.el.innerHTML).toEqual('<div>Hello Erik Ringsmuth</div>');
     });
 
     it('should render the layout view and attach the child to the layout', function() {
+      // Arrange
       var LayoutView = Nex.View.extend({
         template: '<div id="main-content"></div>',
         contentPlaceholderId: 'main-content'
@@ -61,21 +77,29 @@ define([
         template: 'Hello Erik Ringsmuth',
         layoutView: new LayoutView()
       });
+
+      // Act
       var testView = new TestView();
-      testView.render();
+
+      // Assert
       expect(testView.outerEl.innerHTML).toEqual('<div id="main-content"><div>Hello Erik Ringsmuth</div></div>');
     });
 
     it('should allow render to be overridden', function() {
+      // Arrange
       var TestView = Nex.View.extend({
         render: function() { this.el.innerHTML = '<div>Hello Erik Ringsmuth</div>'; }
       });
+
+      // Act
       var testView = new TestView();
-      testView.render();
+
+      // Assert
       expect(testView.el.innerHTML).toEqual('<div>Hello Erik Ringsmuth</div>');
     });
 
     it('should render the layout view and attach the child to the layout even if render is overridden', function() {
+      // Arrange
       var LayoutView = Nex.View.extend({
         template: '<div id="main-content"></div>',
         contentPlaceholderId: 'main-content'
@@ -84,38 +108,56 @@ define([
         render: function() { this.el.innerHTML = 'Hello Erik Ringsmuth'; },
         layoutView: new LayoutView()
       });
+
+      // Act
       var testView = new TestView();
-      testView.render();
+
+      // Assert
       expect(testView.outerEl.innerHTML).toEqual('<div id="main-content"><div>Hello Erik Ringsmuth</div></div>');
     });
   });
 
   describe('view.el', function() {
-    var TestView = Nex.View.extend();
-    var testView = new TestView();
     it('should default to a div', function() {
+      // Arrange
+      var TestView = Nex.View.extend();
+
+      // Act
+      var testView = new TestView();
+
+      // Assert
       expect(testView.el).toBeDefined();
       expect(testView.el.tagName).toEqual('DIV');
     });
   });
 
   describe('view.model', function() {
-    var model = {
-      property1: 'jon doe'
-    };
-    var TestView = Nex.View.extend({
-      model: model
-    });
-    var testView = new TestView();
     it('should be set', function() {
+      // Arrange
+      var model = {
+        property1: 'jon doe'
+      };
+      var TestView = Nex.View.extend({
+        model: model
+      });
+
+      // Act
+      var testView = new TestView();
+
+      // Assert
       expect(testView.model).toEqual(model);
     });
   });
 
   describe('view.template()', function() {
-    var TestView = Nex.View.extend();
-    var testView = new TestView();
     it('should default to a compiled template (function) that returns an empty string', function() {
+      // Arrange
+      var TestView = Nex.View.extend();
+
+      // Act
+      var testView = new TestView();
+
+      // Assert
       expect(typeof(testView.template)).toEqual('function');
       expect(testView.template()).toEqual('');
     });
@@ -123,6 +165,7 @@ define([
 
   describe('view.events', function() {
     it('should attach delegate events to view.el and call the event handlers when the events are intercepted', function() {
+      // Arrange
       var extendingObject = {
         events: {
           'click span button#button1': 'buttonEventHandler'
@@ -134,166 +177,241 @@ define([
 
       var TestView = Nex.View.extend(extendingObject);
       var testView = new TestView();
-      testView.render();
 
+      // Act
       testView.dispatchMockEvent({
         type: 'click',
         target: testView.el.querySelector('#button1')
       });
 
+      // Assert
       expect(testView.buttonEventHandler).toHaveBeenCalled();
     });
   });
 
   describe('view.layoutView', function() {
     it('should be defined and an instance of View', function() {
+      // Arrange
       var LayoutView = Nex.View.extend({
-        contentPlaceholderId: '#main-content'
+        template: '<div id="content"></div>',
+        contentPlaceholderId: 'content'
       });
       var TestView = Nex.View.extend({
-        layoutView: new LayoutView()
+        layoutView: LayoutView
       });
+
+      // Act
       var testView = new TestView();
+
+      // Assert
       expect(testView.layoutView).toBeDefined();
       expect(testView.layoutView instanceof LayoutView).toBeTruthy();
     });
 
     it('should throw an exception if the layoutView itn\'t of type View', function() {
+      // Arrange
       var TestView = Nex.View.extend({
         layoutView: {}
       });
+
+      // Act, Assert
       expect(function() { new TestView(); }).toThrow();
     });
 
     it('should throw an exception if the layoutView doesn\'t have a contentPlaceholderId', function() {
+      // Arrange
       var LayoutView = Nex.View.extend();
       var TestView = Nex.View.extend({
         layoutView: new LayoutView()
       });
+
+      // Act, Assert
       expect(function() { new TestView(); }).toThrow();
     });
 
     it('should give the layout view a reference to the child view as layoutView.childView', function() {
+      // Arrange
       var LayoutView = Nex.View.extend({
-        contentPlaceholderId: 'main-content'
+        template: '<div id="content"></div>',
+        contentPlaceholderId: 'content'
       });
       var TestView = Nex.View.extend({
         layoutView: new LayoutView()
       });
+
+      // Act
       var testView = new TestView();
-      var layoutView = testView.layoutView;
-      expect(layoutView.childView).toEqual(testView);
+
+      // Assert
+      expect(testView.layoutView.childView).toEqual(testView);
     });
   });
 
   describe('view.outerEl', function() {
     it('should be view.el if no layout view is defined', function() {
+      // Arrange
       var TestView = Nex.View.extend();
+
+      // Act
       var testView = new TestView();
+
+      // Assert
       expect(testView.outerEl).toEqual(testView.el);
     });
 
     it('should be layoutView.el if a layout view is defined', function() {
+      // Arrange
       var LayoutView = Nex.View.extend({
-        contentPlaceholderId: 'main-content'
+        template: '<div id="content"></div>',
+        contentPlaceholderId: 'content'
       });
       var TestView = Nex.View.extend({
         layoutView: new LayoutView()
       });
+
+      // Act
       var testView = new TestView();
-      var layoutView = testView.layoutView;
-      expect(testView.outerEl).toEqual(layoutView.el);
+
+      // Assert
+      expect(testView.outerEl).toEqual(testView.layoutView.el);
     });
   });
 
   describe('view.contentPlaceholderId', function() {
     it('should throw an exception if it\'s not a string', function() {
+      // Arrange
       var TestView = Nex.View.extend({
         contentPlaceholderId: {}
       });
+
+      // Act, Assert
       expect(function() { new TestView(); }).toThrow();
     });
   });
 
   describe('view.remove()', function() {
-    // Create an outer view
-    var OuterView = Nex.View.extend({
-      template: '<div id="container"></div>'
-    });
-    var outerView = new OuterView();
-    outerView.render();
-
-    // Create an inner view
-    var TestView = Nex.View.extend({
-      template: 'some text'
-    });
-    var testView = new TestView();
-    testView.render();
-
-    outerView.el.querySelector('#container').appendChild(testView.outerEl);
-
-    testView.remove();
     it('should remove the view from anything it\'s attached to', function() {
+      // Arrange
+      // Create an outer view
+      var OuterView = Nex.View.extend({
+        template: '<div id="container"></div>'
+      });
+      var outerView = new OuterView();
+      outerView.render();
+
+      // Create an inner view
+      var TestView = Nex.View.extend({
+        template: 'some text'
+      });
+      var testView = new TestView();
+
+      outerView.el.querySelector('#container').appendChild(testView.outerEl);
+
+      // Act
+      testView.remove();
+
+      // Assert
       expect(outerView.el.querySelector('#container').innerHTML).toEqual('');
     });
   });
 
   describe('view.html()', function() {
     it('should replace view.el\'s innerHTML', function() {
+      // Arrange
       var TestView = Nex.View.extend({
         template: 'some text'
       });
       var testView = new TestView();
-      testView.render();
+
+      // Act
       testView.html('<div id="main-content"><div>New content</div></div>');
+
+      // Assert
       expect(testView.el.querySelector('#main-content').innerHTML).toEqual('<div>New content</div>');
     });
   });
 
   describe('view.initialize()', function() {
     it('should be called when creating an instance of a view', function() {
+      // Arrange
       var extendingObject = {
         initialize: function initialize() {}
       };
       var TestView = Nex.View.extend(extendingObject);
       spyOn(extendingObject, 'initialize');
+
+      // Act
       var testView = new TestView('arg1', 'arg2');
+
+      // Assert
       expect(testView.initialize).toHaveBeenCalledWith('arg1', 'arg2');
     });
   });
 
   describe('view.tagName', function() {
     it('should create view.el with that tagName', function() {
+      // Arrange
       var TestView = Nex.View.extend({
         tagName: 'span'
       });
+
+      // Act
       var testView = new TestView();
+
+      // Assert
       expect(testView.el.tagName).toEqual('SPAN');
     });
   });
 
   describe('view.id', function() {
     it('should set the ID of view.el', function() {
+      // Arrange
       var TestView = Nex.View.extend({
         id: 'awesome-id'
       });
+
+      // Act
       var testView = new TestView();
+
+      // Assert
       expect(testView.el.id).toEqual('awesome-id');
     });
   });
 
   describe('view.className', function() {
     it('should set the class of view.el', function() {
+      // Arrange
       var TestView = Nex.View.extend({
         className: 'awesome-class'
       });
+
+      // Act
       var testView = new TestView();
+
+      // Assert
       expect(testView.el.className).toEqual('awesome-class');
+    });
+  });
+
+  describe('view.autoRender', function() {
+    it('should prevent the view from being rendered when an instance is created if it\'s set to false', function() {
+      // Arrange
+      var TestView = Nex.View.extend({
+        template: '<div>this should not show up</div>',
+        autoRender: false
+      });
+
+      // Act
+      var testView = new TestView();
+
+      // Assert
+      expect(testView.el.innerHTML).toEqual('');
     });
   });
 
   describe('view.dispatchMockEvent(mockEvent)', function() {
     it('should trigger a mock event that is handled by the event handlers', function() {
+      // Arrange
       var extendingObject = {
         events: {
           'click span button#button1': 'buttonEventHandler'
@@ -305,17 +423,19 @@ define([
 
       var TestView = Nex.View.extend(extendingObject);
       var testView = new TestView();
-      testView.render();
 
+      // Act
       testView.dispatchMockEvent({
         type: 'click',
         target: testView.el.querySelector('#button1')
       });
 
+      // Assert
       expect(testView.buttonEventHandler).toHaveBeenCalled();
     });
 
     it('should throw an exception when no mockEvent.type is specified', function() {
+      // Arrange
       var extendingObject = {
         events: {
           'click span button#button1': 'buttonEventHandler'
@@ -327,7 +447,6 @@ define([
 
       var TestView = Nex.View.extend(extendingObject);
       var testView = new TestView();
-      testView.render();
 
       var testFunction = function() {
         testView.dispatchMockEvent({
@@ -335,10 +454,12 @@ define([
         });
       };
 
+      // Act, Assert
       expect(testFunction).toThrow();
     });
 
     it('should throw an exception when no mockEvent.target is specified', function() {
+      // Arrange
       var extendingObject = {
         events: {
           'click span button#button1': 'buttonEventHandler'
@@ -350,7 +471,6 @@ define([
 
       var TestView = Nex.View.extend(extendingObject);
       var testView = new TestView();
-      testView.render();
 
       var testFunction = function() {
         testView.dispatchMockEvent({
@@ -358,10 +478,12 @@ define([
         });
       };
 
+      // Act, Assert
       expect(testFunction).toThrow();
     });
 
     it('should throw an exception when there aren\'t any event handlers for that type', function() {
+      // Arrange
       var extendingObject = {
         events: {
           'click span button#button1': 'buttonEventHandler'
@@ -382,6 +504,7 @@ define([
         });
       };
 
+      // Act, Assert
       expect(testFunction).toThrow();
     });
   });

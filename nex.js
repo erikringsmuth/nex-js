@@ -1,6 +1,6 @@
 // {nex.js} - Unleashing the power of AMD for web applications.
 //
-// Version: 0.2.3
+// Version: 0.3.0
 // 
 // The MIT License (MIT)
 // Copyright (c) 2014 Erik Ringsmuth
@@ -254,6 +254,11 @@
           // view.initialize() - a hook to add additional logic when creating an instance of the view
           if (typeof(view.initialize) === 'function') {
             view.initialize.apply(view, arguments);
+          }
+
+          // Do the initial render of the view
+          if (view.autoRender !== false) {
+            view.render.call(view);
           }
         };
       }

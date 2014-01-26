@@ -1,6 +1,6 @@
 {
   "name": "nex-js",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "homepage": "https://github.com/erikringsmuth/nex-js",
   "authors": [
     "Erik Ringsmuth <erik.ringsmuth@gmail.com>"
@@ -30,13 +30,13 @@
     "license.md",
     "readme.md"
   ],
-  "_release": "0.2.2",
+  "_release": "0.2.3",
   "_resolution": {
     "type": "version",
-    "tag": "v0.2.2",
-    "commit": "64cc475cc93a62212c2250f7bd93d9c177e949b4"
+    "tag": "v0.2.3",
+    "commit": "0386a46598da67258ab8e6c7b0aaed14dd5c00be"
   },
   "_source": "git://github.com/erikringsmuth/nex-js.git",
-  "_target": "~0.2.2",
+  "_target": "~0.2.3",
   "_originalSource": "nex-js"
 }

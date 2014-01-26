@@ -15,11 +15,6 @@ define([
     model: {
       routes: router.routes,
       devMode: window.location.hostname === 'localhost'
-    },
-
-    render: function render() {
-      this.html(this.template({model: this.model}));
-      return this;
     }
   });
 });

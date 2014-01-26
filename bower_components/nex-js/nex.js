@@ -24,6 +24,7 @@
 // OR OTHER DEALINGS IN THE SOFTWARE.
 
 /*global console*/
+/*jshint proto:true*/
 (function(root, factory) {
   'use strict';
 
@@ -67,19 +68,21 @@
 
           // view.components - views that are automatically created, rendered, and attached to this view
           if (typeof(view.components) !== 'object') view.components = {};
+          view._initializedComponents = {};
           for (var componentSelector in view.components) {
             if(view.components.hasOwnProperty(componentSelector)) {
+              view._initializedComponents[componentSelector] = view.components[componentSelector];
               // Create an instance of the component if it's a constructor function
-              if (typeof view.components[componentSelector] === 'function') {
+              if (typeof view._initializedComponents[componentSelector] === 'function') {
                 var currentArguments = arguments;
                 var WrappedComponent = function() {
-                  view.components[componentSelector].apply(this, currentArguments);
-                  this.__proto__ = view.components[componentSelector].prototype;
+                  view._initializedComponents[componentSelector].apply(this, currentArguments);
+                  this.__proto__ = view._initializedComponents[componentSelector].prototype;
                   return this;
                 };
-                view.components[componentSelector] = new WrappedComponent();
+                view._initializedComponents[componentSelector] = new WrappedComponent();
               }
-              if (!view.components[componentSelector] instanceof View) {
+              if (!view._initializedComponents[componentSelector] instanceof View) {
                 throw 'components must be a View constructors or instances of Views.';
               }
             }
@@ -98,7 +101,7 @@
               throw 'The layout view must have `view.contentPlaceholder` specified.';
             }
             // Give the layout view a reference to the child view in case it needs to modify its render method
-            view.layout.components[view.layout.contentPlaceholder] = view;
+            view.layout._initializedComponents[view.layout.contentPlaceholder] = view;
           }
 
           // view.contentPlaceholder - the layout view's content placeholder selector for the child view
@@ -169,13 +172,13 @@
             var innerRenderReturnValue = innerRender.call(this, arguments);
 
             // When a view is rendered it should attach it's components
-            for (var componentSelector in view.components) {
-              if(view.components.hasOwnProperty(componentSelector)) {
+            for (var componentSelector in view._initializedComponents) {
+              if(view._initializedComponents.hasOwnProperty(componentSelector)) {
                 var componentPlaceholderElement = view.el.querySelector(componentSelector);
                 // Remove any existing children from the placeholder element
                 // IE8 workaround since el.innerHTML fails when an event is currently being triggered on it
                 while (componentPlaceholderElement.firstChild) componentPlaceholderElement.removeChild(componentPlaceholderElement.firstChild);
-                componentPlaceholderElement.appendChild(view.components[componentSelector].el);
+                componentPlaceholderElement.appendChild(view._initializedComponents[componentSelector].el);
               }
             }
 

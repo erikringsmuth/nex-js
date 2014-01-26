@@ -43,18 +43,18 @@
 <p>The view will have these properties.</p>
 
 <ul>
+  <li><code>view.el</code> - the view's DOM element</li>
+  <li><code>view.outerEl</code> - the <code>view</code>'s or <code>layout</code>'s outer most DOM element</li>
+  <li><code class="pln">view.template()</code> - generates the view's HTML</li>
+  <li><code>view.model</code> - the model that gets passed to the template</li>
+  <li><code>view.layout</code> - the layout contains your site's layout (header, footer, etc.)</li>
+  <li><code>view.contentPlaceholder</code> - the CSS selector to the content placeholder element (only for layout views)</li>
+  <li><code>view.on</code> - event handlers</li>
+  <li><code>view.components</code> - sub-views or widgets that are automatically created and attached to the view</li>
   <li><code>view.render()</code> - renders the view which populates <code>view.el</code> with the template HTML</li>
   <li><code>view.html(htmlString)</code> - replaces the contents of <code>view.el</code> with the HTML string</li>
-  <li><code>view.el</code> - the view's DOM element</li>
-  <li><code>view.model</code> - the model that gets passed to the template</li>
-  <li><code class="pln">view.template()</code> - generates the view's HTML</li>
-  <li><code>view.on</code> - event handlers</li>
-  <li><code>view.layout</code> - the layout contains your site's layout (header, footer, etc.)</li>
-  <li><code>view.outerEl</code> - the <code>view</code>'s or <code>layout</code>'s outer most DOM element</li>
-  <li><code>view.contentPlaceholder</code> - the CSS selector to the content placeholder element (only for layout views)</li>
-  <li><code>view.components</code> - sub-views or widgets that are automatically created and attached to the view</li>
-  <li><code>view.remove()</code> - remove the view from the DOM</li>
   <li><code>view.initialize()</code> - a hook to add additional logic when creating an instance of the view</li>
+  <li><code>view.remove()</code> - remove the view from the DOM</li>
   <li><code>view.tagName</code> - the type of DOM element</li>
   <li><code>view.id</code> - the ID of the view's DOM element</li>
   <li><code>view.className</code> - the class name(s) of the view's DOM element</li>
@@ -62,30 +62,15 @@
   <li><code>view.dispatchMockEvent(mockEvent)</code> - triggers a mock event for integration testing event handlers</li>
 </ul>
 
-<h4 id="render" class="spacer">render()</h4>
-
-<p>Render populates the contents of <code>view.el</code> with the template HTML. This is called when you create a new instance of a view. When your model changes you call <code>render()</code> to update the DOM. Every view has a default <code>render()</code> method that looks like this.</p>
-
-<pre class="prettyprint"><code>function render() {
-  this.html(this.template({model: this.model}));
-  return this;
-}</code></pre>
-
-<p>You can override this to add your own functionality. <code>render()</code> will also handle rendering the <code>layout</code> if it has one. Overriding <code>view.render()</code> will still render the <code>layout</code> but will let you change how the current view is rendered.</p>
-
-<h4 id="html" class="spacer">html(htmlString)</h4>
-
-<p>Converts the HTML string to DOM elements and replaces the contents of <code>view.el</code>. This is like setting <code>view.el.innerHTML</code> but works better in IE8. This is used by the default <code>render()</code> method.</p>
-
 <h4 id="el" class="spacer">el</h4>
 
 <p>The view's DOM element. It exists as soon as you create an instance of the view. This alows you to render the view before it's attached to the document. Delegate events are attached to <code>view.el</code> so they don't need to be re-bound every time you render your view.</p>
 
 <p>To access DOM elements within the view you should scope your selectors using <code>view.el.querySelector()</code> and <code>view.el.querySelectorAll()</code>. This allows you to access the view's elements before attaching the view to the document. This makes unit testing much easier. It also keeps the selectors scoped to your view so you don't accidentally select an element outside of your view.</p>
 
-<h4 id="model" class="spacer">model</h4>
+<h4 id="outerEl" class="spacer">outerEl</h4>
 
-<p>The model contains your view's data. It can be an object or a constructor function. For example, if your model is <code>{name: 'Nex'}</code> it will be passed straight to the template. If your model is a constructor function like <code>function MyModel() {this.name = 'Nex'; this.time = new Date();}</code> it will be called with <code>new view.model()</code> before being passed to the template. This allows for variables to be evaluated at render time. This is useful when you need access to a closure variable that changes often.</p>
+<p>The view's or <code>layout</code>'s outer most DOM element. If you specify a <code>layout</code> then <code>view.outerEl</code> will refer to the <code>layout.el</code>. When you attach a view to the DOM you should use <code>outerEl</code> in case it has a layout view. You should attach your view's to the document like this <code>document.querySelector('body').appendChild(new MyView().outerEl)</code>. Then if <code>MyView</code> has set <code>layout: LayoutView</code> it will be <code>LayoutView.el</code> that is attached to the DOM.</p>
 
 <h4 id="template" class="spacer">template()</h4>
 
@@ -105,19 +90,9 @@
 
 <p>The compile step creates a function that takes in a model and returns an HTML string. The <code>render()</code> method passes the model to the compiled template then takes the resulting HTML and attaches it to <code>view.el</code>.</p>
 
-<h4 id="on" class="spacer">on</h4>
+<h4 id="model" class="spacer">model</h4>
 
-<p>Event handlers. These are delegate events. They are bound once to the view's root element so you don't have to bind events every time you call <code>render()</code>. Events are slightly different than jQuery delegate events since there aren't native ECMAScript delegate events. <code>event.target</code> and <code>event.currentTarget</code> are swapped from the way jQuery does it. jQuery got these backwards and the native events have them set correctly. Here is an example event and event handler.</p>
-
-<pre class="prettyprint"><code>var MyView = Nex.View.extend({
-  on: {
-    'click span a': function(event) {
-      this; // will reference your instance of `MyView`
-      event.target; // will reference the DOM element the action took place on. This is `a` in this example.
-      event.currentTarget; // will reference `this.el` which is the root element that all events are bound to.
-    }
-  }
-});</code></pre>
+<p>The model contains your view's data. It can be an object or a constructor function. For example, if your model is <code>{name: 'Nex'}</code> it will be passed straight to the template. If your model is a constructor function like <code>function MyModel() {this.name = 'Nex'; this.time = new Date();}</code> it will be called with <code>new view.model()</code> before being passed to the template. This allows for variables to be evaluated at render time. This is useful when you need access to a closure variable that changes often.</p>
 
 <h4 id="layout" class="spacer">layout</h4>
 
@@ -143,15 +118,25 @@ The <code>body</code> HTML will be.
   &lt;/div&gt;
 &lt;/div&gt;</code></pre>
 
-<h4 id="outerEl" class="spacer">outerEl</h4>
-
-<p>The view's or <code>layout</code>'s outer most DOM element. If you specify a <code>layout</code> then <code>view.outerEl</code> will refer to the <code>layout.el</code>. When you attach a view to the DOM you should use <code>outerEl</code> in case it has a layout view. You should attach your view's to the document like this <code>document.querySelector('body').appendChild(new MyView().outerEl)</code>. Then if <code>MyView</code> has set <code>layout: LayoutView</code> it will be <code>LayoutView.el</code> that is attached to the DOM.</p>
-
 <h4 id="contentPlaceholder" class="spacer">contentPlaceholder</h4>
 
 <p>If a view is going to be used as a <code>layout</code> it needs to have a content placeholder element in its HTML and set <code>view.contentPlaceholder</code>. This is the CSS selector of the content placeholder element in the HTML. When you call <code>render()</code> on the child view it will automatically call <code>render()</code> on the layout view and use the <code>layout.contentPlaceholder</code> to attach the child view to the layout.</p>
 
 <p>Note: If a view has a <code>contentPlaceholder</code> it is considered a layout and will not be rendered when a new instance is constructed. Instead it will wait to be rendered until the child view is rendered.</p>
+
+<h4 id="on" class="spacer">on</h4>
+
+<p>Event handlers. These are delegate events. They are bound once to the view's root element so you don't have to bind events every time you call <code>render()</code>. Events are slightly different than jQuery delegate events since there aren't native ECMAScript delegate events. <code>event.target</code> and <code>event.currentTarget</code> are swapped from the way jQuery does it. jQuery got these backwards and the native events have them set correctly. Here is an example event and event handler.</p>
+
+<pre class="prettyprint"><code>var MyView = Nex.View.extend({
+  on: {
+    'click span a': function(event) {
+      this; // will reference your instance of `MyView`
+      event.target; // will reference the DOM element the action took place on. This is `a` in this example.
+      event.currentTarget; // will reference `this.el` which is the root element that all events are bound to.
+    }
+  }
+});</code></pre>
 
 <h4 id="components" class="spacer">components</h4>
 
@@ -174,9 +159,20 @@ An instance of <code>MyView</code> will have this HTML.
   &lt;div&gt;I'm a widget!&lt;/div&gt;
 &lt;/div&gt;</code></pre>
 
-<h4 id="remove" class="spacer">remove()</h4>
+<h4 id="render" class="spacer">render()</h4>
 
-<p>Removes <code>view.el</code> from the DOM.</p>
+<p>Render populates the contents of <code>view.el</code> with the template HTML. This is called when you create a new instance of a view. When your model changes you call <code>render()</code> to update the DOM. Every view has a default <code>render()</code> method that looks like this.</p>
+
+<pre class="prettyprint"><code>function render() {
+  this.html(this.template({model: this.model}));
+  return this;
+}</code></pre>
+
+<p>You can override this to add your own functionality. <code>render()</code> will also handle rendering the <code>layout</code> if it has one. Overriding <code>view.render()</code> will still render the <code>layout</code> but will let you change how the current view is rendered.</p>
+
+<h4 id="html" class="spacer">html(htmlString)</h4>
+
+<p>Converts the HTML string to DOM elements and replaces the contents of <code>view.el</code>. This is like setting <code>view.el.innerHTML</code> but works better in IE8. This is used by the default <code>render()</code> method.</p>
 
 <h4 id="initialize" class="spacer">initialize</h4>
 
@@ -195,6 +191,10 @@ var myView = new MyView("Nex");
 document.querySelector('body').appendChild(myView.outerEl); // Will display "Hello Nex!"</code></pre>
 
 <p>The <code>initialize()</code> method is the last step before the instance is returned so everything else is set up at this point.</p>
+
+<h4 id="remove" class="spacer">remove()</h4>
+
+<p>Removes <code>view.el</code> from the DOM.</p>
 
 <h4 id="tagName" class="spacer">tagName</h4>
 

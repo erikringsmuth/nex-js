@@ -23,8 +23,6 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 // OR OTHER DEALINGS IN THE SOFTWARE.
 
-/*global console*/
-/*jshint proto:true*/
 (function(root, factory) {
   'use strict';
 
@@ -108,9 +106,6 @@
           if (typeof(view.contentPlaceholder) !== 'undefined' && typeof(view.contentPlaceholder) !== 'string' ) {
             throw 'The `contentPlaceholder` must be a string.';
           }
-
-          // view.childView - the child view is attached to the layout if it needs to be re-rendered without re-rendering the child view
-          if (typeof(view.childView) !== 'undefined') throw 'You can\'t specify `view.childView`. This is set automatically on the layout when a view specifies `view.layout`.';
 
           // view.outerEl - the view's or layout view's outer most element
           if (typeof(view.outerEl) !== 'undefined') throw '`view.outerEl` is a read only property that is automatically populated.';

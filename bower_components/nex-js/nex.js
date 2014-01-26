@@ -1,6 +1,6 @@
 // {nex.js} - Unleashing the power of AMD for web applications.
 //
-// Version: 0.4.0
+// Version: 0.5.0
 // 
 // The MIT License (MIT)
 // Copyright (c) 2014 Erik Ringsmuth
@@ -65,6 +65,26 @@
           // view.el - the view's DOM element
           if (typeof(view.el) === 'undefined') view.el = document.createElement(view.tagName);
 
+          // view.components - views that are automatically created, rendered, and attached to this view
+          if (typeof(view.components) !== 'object') view.components = {};
+          for (var componentSelector in view.components) {
+            if(view.components.hasOwnProperty(componentSelector)) {
+              // Create an instance of the component if it's a constructor function
+              if (typeof view.components[componentSelector] === 'function') {
+                var currentArguments = arguments;
+                var WrappedComponent = function() {
+                  view.components[componentSelector].apply(this, currentArguments);
+                  this.__proto__ = view.components[componentSelector].prototype;
+                  return this;
+                };
+                view.components[componentSelector] = new WrappedComponent();
+              }
+              if (!view.components[componentSelector] instanceof View) {
+                throw 'components must be a View constructors or instances of Views.';
+              }
+            }
+          }
+
           // view.layout - the layout view contains your site's layout (header, footer, etc.)
           if (typeof(view.layout) !== 'undefined') {
             // If the layout view is a constructor function create an instance
@@ -74,16 +94,16 @@
             if (!view.layout instanceof View) {
               throw 'The `view.layout` must be a View constructor or an instance of a View.';
             }
-            if (typeof(view.layout.contentPlaceholderId) !== 'string') {
-              throw 'The layout view must have `view.contentPlaceholderId` specified.';
+            if (typeof(view.layout.contentPlaceholder) !== 'string') {
+              throw 'The layout view must have `view.contentPlaceholder` specified.';
             }
             // Give the layout view a reference to the child view in case it needs to modify its render method
-            view.layout.childView = view;
+            view.layout.components[view.layout.contentPlaceholder] = view;
           }
 
-          // view.contentPlaceholderId - the ID of a layout view's content placeholder element
-          if (typeof(view.contentPlaceholderId) !== 'undefined' && typeof(view.contentPlaceholderId) !== 'string' ) {
-            throw 'The `contentPlaceholderId` must be a string.';
+          // view.contentPlaceholder - the layout view's content placeholder selector for the child view
+          if (typeof(view.contentPlaceholder) !== 'undefined' && typeof(view.contentPlaceholder) !== 'string' ) {
+            throw 'The `contentPlaceholder` must be a string.';
           }
 
           // view.childView - the child view is attached to the layout if it needs to be re-rendered without re-rendering the child view
@@ -137,7 +157,6 @@
           };
           // `innerRender()` is actually overridden by specifying a `view.render()` method
           if (typeof(view.render) !== 'undefined') innerRender = view.render;
-
           var shouldRenderLayout = view.layout ? true : false;
           view.render = function render() {
             // Walk up the view chain rendering layout views on the initial render
@@ -149,12 +168,15 @@
             // Call the method that renders this view
             var innerRenderReturnValue = innerRender.call(this, arguments);
 
-            // When a layout view is rendered it should attach it's child to it's content placeholder
-            if (view.childView) {
-              var contentPlaceholder = view.el.querySelector('#' + view.contentPlaceholderId);
-              // IE8 workaround since el.innerHTML fails when an event is currently being triggered on it
-              while (contentPlaceholder.firstChild) contentPlaceholder.removeChild(contentPlaceholder.firstChild);
-              contentPlaceholder.appendChild(view.childView.el);
+            // When a view is rendered it should attach it's components
+            for (var componentSelector in view.components) {
+              if(view.components.hasOwnProperty(componentSelector)) {
+                var componentPlaceholderElement = view.el.querySelector(componentSelector);
+                // Remove any existing children from the placeholder element
+                // IE8 workaround since el.innerHTML fails when an event is currently being triggered on it
+                while (componentPlaceholderElement.firstChild) componentPlaceholderElement.removeChild(componentPlaceholderElement.firstChild);
+                componentPlaceholderElement.appendChild(view.components[componentSelector].el);
+              }
             }
 
             // Return the value from the original render method

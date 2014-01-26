@@ -10,7 +10,7 @@ define([
   return Nex.View.extend({
     template: Handlebars.compile(layoutTemplate),
 
-    contentPlaceholderId: 'content-placeholder',
+    contentPlaceholder: '#content-placeholder',
 
     model: {
       routes: router.routes,

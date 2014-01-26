@@ -75,7 +75,7 @@ define([
       });
       var TestView = Nex.View.extend({
         template: 'Hello Erik Ringsmuth',
-        layoutView: new LayoutView()
+        layout: new LayoutView()
       });
 
       // Act
@@ -106,7 +106,7 @@ define([
       });
       var TestView = Nex.View.extend({
         render: function() { this.el.innerHTML = 'Hello Erik Ringsmuth'; },
-        layoutView: new LayoutView()
+        layout: new LayoutView()
       });
 
       // Act
@@ -163,17 +163,16 @@ define([
     });
   });
 
-  describe('view.events', function() {
+  describe('view.on', function() {
     it('should attach delegate events to view.el and call the event handlers when the events are intercepted', function() {
       // Arrange
       var extendingObject = {
-        events: {
-          'click span button#button1': 'buttonEventHandler'
+        on: {
+          'click span button#button1': function() {}
         },
-        template: '<span><button id="button1">Click Me!</button></span>',
-        buttonEventHandler: function() {}
+        template: '<span><button id="button1">Click Me!</button></span>'
       };
-      spyOn(extendingObject, 'buttonEventHandler');
+      spyOn(extendingObject.on, 'click span button#button1');
 
       var TestView = Nex.View.extend(extendingObject);
       var testView = new TestView();
@@ -185,11 +184,11 @@ define([
       });
 
       // Assert
-      expect(testView.buttonEventHandler).toHaveBeenCalled();
+      expect(testView.on['click span button#button1']).toHaveBeenCalled();
     });
   });
 
-  describe('view.layoutView', function() {
+  describe('view.layout', function() {
     it('should be defined and an instance of View', function() {
       // Arrange
       var LayoutView = Nex.View.extend({
@@ -197,53 +196,53 @@ define([
         contentPlaceholderId: 'content'
       });
       var TestView = Nex.View.extend({
-        layoutView: LayoutView
+        layout: LayoutView
       });
 
       // Act
       var testView = new TestView();
 
       // Assert
-      expect(testView.layoutView).toBeDefined();
-      expect(testView.layoutView instanceof LayoutView).toBeTruthy();
+      expect(testView.layout).toBeDefined();
+      expect(testView.layout instanceof LayoutView).toBeTruthy();
     });
 
-    it('should throw an exception if the layoutView itn\'t of type View', function() {
+    it('should throw an exception if the layout itn\'t of type View', function() {
       // Arrange
       var TestView = Nex.View.extend({
-        layoutView: {}
+        layout: {}
       });
 
       // Act, Assert
       expect(function() { new TestView(); }).toThrow();
     });
 
-    it('should throw an exception if the layoutView doesn\'t have a contentPlaceholderId', function() {
+    it('should throw an exception if the layout doesn\'t have a contentPlaceholderId', function() {
       // Arrange
       var LayoutView = Nex.View.extend();
       var TestView = Nex.View.extend({
-        layoutView: new LayoutView()
+        layout: new LayoutView()
       });
 
       // Act, Assert
       expect(function() { new TestView(); }).toThrow();
     });
 
-    it('should give the layout view a reference to the child view as layoutView.childView', function() {
+    it('should give the layout view a reference to the child view as layout.childView', function() {
       // Arrange
       var LayoutView = Nex.View.extend({
         template: '<div id="content"></div>',
         contentPlaceholderId: 'content'
       });
       var TestView = Nex.View.extend({
-        layoutView: new LayoutView()
+        layout: new LayoutView()
       });
 
       // Act
       var testView = new TestView();
 
       // Assert
-      expect(testView.layoutView.childView).toEqual(testView);
+      expect(testView.layout.childView).toEqual(testView);
     });
   });
 
@@ -259,21 +258,21 @@ define([
       expect(testView.outerEl).toEqual(testView.el);
     });
 
-    it('should be layoutView.el if a layout view is defined', function() {
+    it('should be layout.el if a layout view is defined', function() {
       // Arrange
       var LayoutView = Nex.View.extend({
         template: '<div id="content"></div>',
         contentPlaceholderId: 'content'
       });
       var TestView = Nex.View.extend({
-        layoutView: new LayoutView()
+        layout: new LayoutView()
       });
 
       // Act
       var testView = new TestView();
 
       // Assert
-      expect(testView.outerEl).toEqual(testView.layoutView.el);
+      expect(testView.outerEl).toEqual(testView.layout.el);
     });
   });
 
@@ -413,13 +412,12 @@ define([
     it('should trigger a mock event that is handled by the event handlers', function() {
       // Arrange
       var extendingObject = {
-        events: {
-          'click span button#button1': 'buttonEventHandler'
+        on: {
+          'click span button#button1': function() {}
         },
-        template: '<span><button id="button1">Click Me!</button></span>',
-        buttonEventHandler: function() {}
+        template: '<span><button id="button1">Click Me!</button></span>'
       };
-      spyOn(extendingObject, 'buttonEventHandler');
+      spyOn(extendingObject.on, 'click span button#button1');
 
       var TestView = Nex.View.extend(extendingObject);
       var testView = new TestView();
@@ -431,19 +429,17 @@ define([
       });
 
       // Assert
-      expect(testView.buttonEventHandler).toHaveBeenCalled();
+      expect(testView.on['click span button#button1']).toHaveBeenCalled();
     });
 
     it('should throw an exception when no mockEvent.type is specified', function() {
       // Arrange
       var extendingObject = {
-        events: {
-          'click span button#button1': 'buttonEventHandler'
+        on: {
+          'click span button#button1': function() {}
         },
-        template: '<span><button id="button1">Click Me!</button></span>',
-        buttonEventHandler: function() {}
+        template: '<span><button id="button1">Click Me!</button></span>'
       };
-      spyOn(extendingObject, 'buttonEventHandler');
 
       var TestView = Nex.View.extend(extendingObject);
       var testView = new TestView();
@@ -461,13 +457,11 @@ define([
     it('should throw an exception when no mockEvent.target is specified', function() {
       // Arrange
       var extendingObject = {
-        events: {
-          'click span button#button1': 'buttonEventHandler'
+        on: {
+          'click span button#button1': function() {}
         },
-        template: '<span><button id="button1">Click Me!</button></span>',
-        buttonEventHandler: function() {}
+        template: '<span><button id="button1">Click Me!</button></span>'
       };
-      spyOn(extendingObject, 'buttonEventHandler');
 
       var TestView = Nex.View.extend(extendingObject);
       var testView = new TestView();
@@ -485,14 +479,12 @@ define([
     it('should throw an exception when there aren\'t any event handlers for that type', function() {
       // Arrange
       var extendingObject = {
-        events: {
-          'click span button#button1': 'buttonEventHandler'
+        on: {
+          'click span button#button1': function() {}
         },
-        template: '<span><button id="button1">Click Me!</button></span>',
-        buttonEventHandler: function() {}
+        template: '<span><button id="button1">Click Me!</button></span>'
       };
-      spyOn(extendingObject, 'buttonEventHandler');
-
+      
       var TestView = Nex.View.extend(extendingObject);
       var testView = new TestView();
       testView.render();

@@ -276,8 +276,9 @@
             view.initialize.apply(view, arguments);
           }
 
-          // Do the initial render of the view
-          if (view.autoRender !== false) {
+          // Do the initial render of the view, only if it's not a layout view. The initial render of the content view will render the
+          // layout when it's ready.
+          if (view.autoRender !== false && typeof(view.contentPlaceholder) === 'undefined') {
             view.render.call(view);
           }
         };

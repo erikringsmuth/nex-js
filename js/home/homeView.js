@@ -17,7 +17,7 @@ define([
       this.model = routeArguments;
     },
 
-    layoutView: new LayoutView(),
+    layoutView: LayoutView,
 
     render: function render() {
       this.html(this.template({model: this.model}));

@@ -32,7 +32,7 @@
 
 <div class="row">
   <div class="col-md-8">
-<pre class="prettyprint"><code>Nex.View.extend({
+<pre class="prettyprint"><code>var LayoutView = Nex.View.extend({
   template: Handlebars.compile(layoutTemplate),
   model: { home: true, examples: false },
   contentPlaceholderId: 'content'
@@ -51,9 +51,9 @@
 
 <div class="row spacer">
   <div class="col-md-8">
-<pre class="prettyprint"><code>Nex.View.extend({
+<pre class="prettyprint"><code>var HomeView = Nex.View.extend({
   template: Handlebars.compile(homeTemplate),
-  layoutView: new LayoutView()
+  layoutView: LayoutView
 });</code></pre>
 <pre class="prettyprint"><code>&lt;h1&gt;Hello World!&lt;/h1&gt;</code></pre>
   </div>

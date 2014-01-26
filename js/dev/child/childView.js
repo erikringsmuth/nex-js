@@ -25,7 +25,7 @@ define([
       inputText: 'Child input text'
     },
     
-    layoutView: new ParentView(),
+    layoutView: ParentView,
 
     render: function render() {
       this.html(this.template({model: this.model}));

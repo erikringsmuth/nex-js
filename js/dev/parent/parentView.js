@@ -21,7 +21,7 @@ define([
     
     contentPlaceholderId: 'parent-content-placeholder',
     
-    layoutView: new LayoutView(),
+    layoutView: LayoutView,
 
     updateInputText: function updateInputText() {
       this.model.inputText = this.el.querySelector('#parent-input-text').value;

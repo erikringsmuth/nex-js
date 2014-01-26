@@ -1,6 +1,6 @@
 // {nex.js} - Unleashing the power of AMD for web applications.
 //
-// Version: 0.2.2
+// Version: 0.2.3
 // 
 // The MIT License (MIT)
 // Copyright (c) 2014 Erik Ringsmuth
@@ -67,8 +67,12 @@
 
           // view.layoutView - the layout view contains your site's layout (header, footer, etc.)
           if (typeof(view.layoutView) !== 'undefined') {
+            // If the layout view is a constructor function create an instance
+            if (typeof view.layoutView === 'function') {
+              view.layoutView = new view.layoutView();
+            }
             if (!view.layoutView instanceof View) {
-              throw 'The `view.layoutView` must be an instance of a View.';
+              throw 'The `view.layoutView` must be a View constructor or an instance of a View.';
             }
             if (typeof(view.layoutView.contentPlaceholderId) !== 'string') {
               throw 'The layout view must have `view.contentPlaceholderId` specified.';

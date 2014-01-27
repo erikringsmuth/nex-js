@@ -444,6 +444,25 @@ define([
       // Assert
       expect(testView.el.innerHTML).toEqual('<div>Some components will go in the placeholder</div><div id="widget"><div>A component</div></div>');
     });
+
+    it('should throw an exception when rendering if a selector doesn\'t match any elements', function() {
+      // Arrange
+      var TestComponent = Nex.View.extend({
+        template: 'A component'
+      });
+      var TestView = Nex.View.extend({
+        template: '<div>Some components will go in the placeholder</div><div id="widget"></div>',
+        components: {
+          'bad-selector': TestComponent
+        }
+      });
+
+      // Act
+      var testFunction = function() { new TestView(); };
+
+      // Assert
+      expect(testFunction).toThrow();
+    });
   });
 
   describe('view.autoRender', function() {

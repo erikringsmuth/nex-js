@@ -330,6 +330,39 @@ define([
     });
   });
 
+  describe('view.attachTo(selector)', function() {
+    it('should attach the view to the element', function() {
+      // Arrange
+      var OuterView = Nex.View.extend({
+        template: '<div id="placeholder"></div>'
+      });
+      var InnerView = Nex.View.extend({
+        template: 'inner text'
+      });
+      var outerView = new OuterView();
+
+      // Act
+      new InnerView().attachTo(outerView.el.querySelector('#placeholder'));
+
+      // Assert
+      expect(outerView.el.innerHTML).toEqual('<div id="placeholder"><div>inner text</div></div>');
+    });
+
+    it('should throw an exception when the argument isn\'t a selector or element', function() {
+      // Arrange
+      var TestView = Nex.View.extend({
+        template: 'inner text'
+      });
+      var testView = new TestView();
+      var testFunction = function() {
+        testView.attachTo({ prop: 'this isn\'t a selector or element' });
+      };
+
+      // Act, Assert
+      expect(testFunction).toThrow();
+    });
+  });
+
   describe('view.initialize()', function() {
     it('should be called when creating an instance of a view', function() {
       // Arrange

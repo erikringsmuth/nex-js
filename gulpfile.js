@@ -30,3 +30,8 @@ gulp.task('default', function(){
     gulp.run('lint');
   });
 });
+
+// Travis CI
+gulp.task('travis', function(){
+  gulp.run('lint');
+});

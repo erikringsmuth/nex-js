@@ -1,6 +1,6 @@
 // {nex.js} - Unleashing the power of AMD for web applications.
 //
-// Version: 0.5.0
+// Version: 0.6.0
 // 
 // The MIT License (MIT)
 // Copyright (c) 2014 Erik Ringsmuth
@@ -173,6 +173,7 @@
             for (var componentSelector in view._initializedComponents) {
               if(view._initializedComponents.hasOwnProperty(componentSelector)) {
                 var placeholderElement = view.el.querySelector(componentSelector);
+                if (!placeholderElement) throw 'Invalid component selector or layout contentPlaceholder: ' + componentSelector;
                 // Remove any existing children from the placeholder element
                 // IE8 workaround since el.innerHTML fails when an event is currently being triggered on it
                 while (placeholderElement.firstChild) placeholderElement.removeChild(placeholderElement.firstChild);

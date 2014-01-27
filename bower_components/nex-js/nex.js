@@ -64,6 +64,12 @@
           // view.el - the view's DOM element
           if (typeof(view.el) === 'undefined') view.el = document.createElement(view.tagName);
 
+          // view.id - the ID of the view's DOM element
+          if (typeof(view.id) !== 'undefined') view.el.id = view.id;
+
+          // view.className - the class name(s) of the view's DOM element
+          if (typeof(view.className) !== 'undefined') view.el.className = view.className;
+
           // view.components - views that are automatically created, rendered, and attached to this view
           if (typeof(view.components) !== 'object') view.components = {};
           view._initializedComponents = {};
@@ -72,16 +78,17 @@
               view._initializedComponents[componentSelector] = view.components[componentSelector];
               // Create an instance of the component if it's a constructor function
               if (typeof view._initializedComponents[componentSelector] === 'function') {
+                // Workaround to pass the current arguments to the component constructor function
                 var currentArguments = arguments;
-                var WrappedComponent = function() {
+                var Component = function() {
                   view._initializedComponents[componentSelector].apply(this, currentArguments);
                   this.__proto__ = view._initializedComponents[componentSelector].prototype;
                   return this;
                 };
-                view._initializedComponents[componentSelector] = new WrappedComponent();
+                view._initializedComponents[componentSelector] = new Component();
               }
               if (!view._initializedComponents[componentSelector] instanceof View) {
-                throw 'components must be a View constructors or instances of Views.';
+                throw 'Every component must be a View constructor or an instance of a View.';
               }
             }
           }
@@ -96,26 +103,20 @@
               throw 'The `view.layout` must be a View constructor or an instance of a View.';
             }
             if (typeof(view.layout.contentPlaceholder) !== 'string') {
-              throw 'The layout view must have `view.contentPlaceholder` specified.';
+              throw 'The layout view must have contentPlaceholder.';
             }
-            // Give the layout view a reference to the child view in case it needs to modify its render method
+            // Set this view as a component of the layout view. That's all it is in the end.
             view.layout._initializedComponents[view.layout.contentPlaceholder] = view;
           }
 
           // view.contentPlaceholder - the layout view's content placeholder selector for the child view
           if (typeof(view.contentPlaceholder) !== 'undefined' && typeof(view.contentPlaceholder) !== 'string' ) {
-            throw 'The `contentPlaceholder` must be a string.';
+            throw 'The contentPlaceholder must be a string.';
           }
 
           // view.outerEl - the view's or layout view's outer most element
           if (typeof(view.outerEl) !== 'undefined') throw '`view.outerEl` is a read only property that is automatically populated.';
           view.outerEl = view.layout ? view.layout.outerEl : view.el;
-
-          // view.id - the ID of the view's DOM element
-          if (typeof(view.id) !== 'undefined') view.el.id = view.id;
-
-          // view.className - the class name(s) of the view's DOM element
-          if (typeof(view.className) !== 'undefined') view.el.className = view.className;
 
           // view.model - the model that gets passed to the template
           if (typeof(view.model) === 'undefined') view.model = {};
@@ -129,12 +130,12 @@
             };
           }
 
-          // view.render() - call the template with the view's model and replace view's HTML
-          //
-          // We wrap the original render method so that rendering this view will also render it's layout view.
+          // view.render(), actually view.innerRender() - call the template with the view's model and replace the
+          // view's HTML. We wrap the original render method so that rendering this view will also render it's
+          // layout view and attach components.
           var innerRender = function innerRender() {
-            // Allow the model to be defined as a constructor function so that variables don't need to be
-            // evaluated until render time
+            // Allow the model to be defined as a constructor function so that variables don't need to be evaluated
+            // until render time
             var model;
             if (typeof(view.model) === 'function') {
               model = new view.model();
@@ -153,8 +154,10 @@
             
             return view;
           };
-          // `innerRender()` is actually overridden by specifying a `view.render()` method
+
+          // innerRender() is actually overridden by specifying a view.render() method
           if (typeof(view.render) !== 'undefined') innerRender = view.render;
+
           var shouldRenderLayout = view.layout ? true : false;
           view.render = function render() {
             // Walk up the view chain rendering layout views on the initial render
@@ -166,14 +169,14 @@
             // Call the method that renders this view
             var innerRenderReturnValue = innerRender.call(this, arguments);
 
-            // When a view is rendered it should attach it's components
+            // Attach it's components (this is how the layout attaches the child view)
             for (var componentSelector in view._initializedComponents) {
               if(view._initializedComponents.hasOwnProperty(componentSelector)) {
-                var componentPlaceholderElement = view.el.querySelector(componentSelector);
+                var placeholderElement = view.el.querySelector(componentSelector);
                 // Remove any existing children from the placeholder element
                 // IE8 workaround since el.innerHTML fails when an event is currently being triggered on it
-                while (componentPlaceholderElement.firstChild) componentPlaceholderElement.removeChild(componentPlaceholderElement.firstChild);
-                componentPlaceholderElement.appendChild(view._initializedComponents[componentSelector].el);
+                while (placeholderElement.firstChild) placeholderElement.removeChild(placeholderElement.firstChild);
+                placeholderElement.appendChild(view._initializedComponents[componentSelector].el);
               }
             }
 
@@ -181,14 +184,14 @@
             return innerRenderReturnValue;
           };
 
-          // view.html() -  replace `view.el`'s HTML with the htmlString
+          // view.html() - replace view.el's HTML with the htmlString
           view.html = function html(htmlString) {
             if (html5) {
               view.el.innerHTML = htmlString;
             } else {
-              // IE8 workaround since el.innerHTML and el.insertAdjacentHTML fail when an event is currently being triggered on
-              // the element. Create a new element and set it's innerHTML which will work since no event is occurring on this
-              // temp element.
+              // IE8 workaround since el.innerHTML and el.insertAdjacentHTML fail when an event is currently being
+              // triggered on the element. Create a new element and set it's innerHTML which will work since no event
+              // is occurring on this temp element.
               var tempEl = document.createElement('div');
               tempEl.innerHTML = htmlString;
 
@@ -196,6 +199,24 @@
               while (view.el.firstChild) view.el.removeChild(view.el.firstChild);
               while (tempEl.firstChild) view.el.appendChild(tempEl.firstChild);
             }
+          };
+
+          // view.attachTo(selector|element) - attach this view to the element
+          view.attachTo = function attachTo(selector) {
+            var element;
+            if (typeof(selector) === 'string') {
+              element = document.querySelector(selector);
+            } else if (selector.appendChild) {
+              element = selector;
+            } else {
+              throw 'You can\'t attach the view to ' + selector;
+            }
+            if (html5) {
+              element.innerHTML = '';
+            } else {
+              while (element.firstChild) element.removeChild(element.firstChild);
+            }
+            element.appendChild(view.outerEl);
           };
 
           // view.remove() - remove the view from the DOM
@@ -207,10 +228,9 @@
             };
           }
 
-          // view.on - delegate events that are bound once to the root object so subsequent calls to view.render() don't need to re-bind events.
-          //
-          // Events work differently than jQuery delegate events since there aren't native ECMAScript delegate events. jQuery swapped
-          // event.target and event.currentTarget. Who knows why...
+          // view.on - delegate events. These are bound once to the root object so subsequent calls to view.render()
+          // don't need to re-bind events. Events work differently than jQuery delegate events since there aren't
+          // native ECMAScript delegate events. jQuery swapped event.target and event.currentTarget. Who knows why...
           //
           // var MyView = View.extend({
           //   this.on: {
@@ -221,10 +241,11 @@
           //    }
           // })
           if (typeof(view.on) === 'undefined') view.on = {};
+          // Keep a reference to all of the event listeners for testing
           var eventListeners = {};
           for (var callbackName in view.on) {
             if (view.on.hasOwnProperty(callbackName)) {
-              // 'anchorEventHandler' from example
+              // ['click', 'span', 'a'] from example
               var eventParts = callbackName.split(' ');
 
               // 'click' from example
@@ -274,8 +295,8 @@
             view.initialize.apply(view, arguments);
           }
 
-          // Do the initial render of the view, only if it's not a layout view. The initial render of the content view will render the
-          // layout when it's ready.
+          // Do the initial render of the view. Don't do an initial render if it's a layout view. The initial render
+          // of the content view will render the layout when it's ready.
           if (view.autoRender !== false && typeof(view.contentPlaceholder) === 'undefined') {
             view.render.call(view);
           }

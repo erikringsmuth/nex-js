@@ -36,7 +36,7 @@
 
 <p>Create an instance of your view, render it, and attach it to the document.</p>
 
-<pre class="prettyprint"><code>document.querySelector('body').appendChild(new MyView().outerEl);</code></pre>
+<pre class="prettyprint"><code>new MyView().attachTo('body');</code></pre>
 
 <h4 id="properties" class="spacer">View Properties</h4>
 
@@ -53,6 +53,7 @@
   <li><code>view.components</code> - sub-views or widgets that are automatically created and attached to the view</li>
   <li><code>view.render()</code> - renders the view which populates <code>view.el</code> with the template HTML</li>
   <li><code>view.html(htmlString)</code> - replaces the contents of <code>view.el</code> with the HTML string</li>
+  <li><code>view.attachTo(selector|element)</code> - attaches <code>view.outerEl</code> to the element</li>
   <li><code>view.initialize()</code> - a hook to add additional logic when creating an instance of the view</li>
   <li><code>view.remove()</code> - remove the view from the DOM</li>
   <li><code>view.tagName</code> - the type of DOM element</li>
@@ -70,7 +71,7 @@
 
 <h4 id="outerEl" class="spacer">outerEl</h4>
 
-<p>The view's or <code>layout</code>'s outer most DOM element. If you specify a <code>layout</code> then <code>view.outerEl</code> will refer to the <code>layout.el</code>. When you attach a view to the DOM you should use <code>outerEl</code> in case it has a layout view. You should attach your view's to the document like this <code>document.querySelector('body').appendChild(new MyView().outerEl)</code>. Then if <code>MyView</code> has set <code>layout: LayoutView</code> it will be <code>LayoutView.el</code> that is attached to the DOM.</p>
+<p>The view's or <code>layout</code>'s outer most DOM element. If you specify a <code>layout</code> then <code>view.outerEl</code> will refer to the <code>layout.el</code>. When you attach a view to the DOM you should use <code>outerEl</code>. Calling <code>view.attachTo('body')</code> will attach <code>view.outerEl</code> to the body.</p>
 
 <h4 id="template" class="spacer">template()</h4>
 
@@ -108,7 +109,7 @@ var MyView = Nex.View.extend({
   layout: LayoutView
 });
 
-document.querySelector('body').appendChild(new MyView().outerEl);</code></pre>
+new MyView().attachTo('body');</code></pre>
 
 The <code>body</code> HTML will be.
 <pre class="prettyprint"><code>&lt;div&gt; &lt;!-- layoutView.el, homeView.outerEl --&gt;
@@ -176,6 +177,10 @@ An instance of <code>MyView</code> will have this HTML.
 
 <p>Converts the HTML string to DOM elements and replaces the contents of <code>view.el</code>. This is like setting <code>view.el.innerHTML</code> but works better in IE8. This is used by the default <code>render()</code> method.</p>
 
+<h4 id="attachTo" class="spacer">attachTo(selector|element)</h4>
+
+<p>Attaches <code>view.outerEl</code> to the element. This clears the contents of the element then appends the view.</p>
+
 <h4 id="initialize" class="spacer">initialize</h4>
 
 <p>You can use the initialize method to add custom logic when creating a new instance of your view. In this example the <code>view.model.name</code> is passed in as an argument in the constructor.</p>
@@ -188,9 +193,7 @@ An instance of <code>MyView</code> will have this HTML.
   }
 });
 
-var myView = new MyView("Nex");
-
-document.querySelector('body').appendChild(myView.outerEl); // Will display "Hello Nex!"</code></pre>
+new MyView("Nex").attachTo('body'); // Will display "Hello Nex!"</code></pre>
 
 <p>The <code>initialize()</code> method is the last step before the instance is returned so everything else is set up at this point.</p>
 

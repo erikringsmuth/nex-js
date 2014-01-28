@@ -15,6 +15,6 @@
     "jshint-stylish": "~0.1.5"
   },
   "scripts": {
-    "test": "sudo gulp ci"
+    "test": "gulp ci"
   }
 }

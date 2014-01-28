@@ -16,7 +16,7 @@ Last, [nex-js](http://erikringsmuth.github.io/nex-js/) views. Other frameworks r
 
 The combination of AMD, a lazy loading router, and layout views gives you an awesome framework to build your application. This is the next step in web application design.
 
-## Build
+## Build [![Build Status](https://travis-ci.org/erikringsmuth/nex-js.png?branch=master)](https://travis-ci.org/erikringsmuth/nex-js)
 - In node.js
 - Run `npm install` to install dependencies
 - Run `gulp` to lint and minify your code. This will also watch for changes.

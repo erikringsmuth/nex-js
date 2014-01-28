@@ -31,7 +31,7 @@ gulp.task('default', function(){
   });
 });
 
-// Travis CI
+// CI build
 gulp.task('ci', function(){
   gulp.run('lint');
 });

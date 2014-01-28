@@ -1,7 +1,11 @@
 {
+  "name": "nex-js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/erikringsmuth/nex-js.git"
+  },
   "devDependencies": {
     "requirejs": "2.1.10",
-    "jasmine": "2.0.0",
     "gulp": "~3.4.0",
     "gulp-rename": "~0.2.2",
     "gulp-concat": "~2.1.7",

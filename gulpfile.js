@@ -17,3 +17,8 @@ gulp.task('default', function(){
     gulp.run('lint');
   });
 });
+
+// CI build
+gulp.task('ci', function(){
+  gulp.run('lint');
+});

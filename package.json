@@ -1,4 +1,9 @@
 {
+  "name": "nex-js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/erikringsmuth/nex-js.git"
+  },
   "devDependencies": {
     "gulp": "~3.4.0",
     "gulp-rename": "~0.2.2",
@@ -7,5 +12,8 @@
     "gulp-jshint": "~1.3.4",
     "gulp-jasmine": "~0.1.2",
     "jshint-stylish": "~0.1.5"
+  },
+  "scripts": {
+    "test": "node node_modules/gulp/bin/gulp.js ci"
   }
 }

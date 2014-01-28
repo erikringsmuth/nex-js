@@ -5,7 +5,7 @@
 
 - Info [http://erikringsmuth.github.io/nex-js/](http://erikringsmuth.github.io/nex-js/)
 - API [http://erikringsmuth.github.io/nex-js/#/api](http://erikringsmuth.github.io/nex-js/#/api)
-- Tutorial [http://erikringsmuth.github.io/nex-js/#/example](http://erikringsmuth.github.io/nex-js/#/example)
+- Tutorial [http://erikringsmuth.github.io/nex-js/#/examples](http://erikringsmuth.github.io/nex-js/#/examples)
 
 ## Why Nex
 First, [why AMD](http://requirejs.org/docs/whyamd.html). AMD is the future of Javascript dependency injection. [require.js](http://requirejs.org/) is the only script tag you need to include. The rest of your scripts are injected using AMD. No more globals!

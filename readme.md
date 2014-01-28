@@ -1,11 +1,11 @@
 ## {nex.js}
-Unleashing the power of AMD for web applications.
+> Unleashing the power of AMD for web applications.
 
-Info [http://erikringsmuth.github.io/nex-js/](http://erikringsmuth.github.io/nex-js/)
+[Nex.js](http://erikringsmuth.github.io/nex-js/) and the [RequireJS Router](https://github.com/erikringsmuth/requirejs-router) give you a powerful IoC pattern for routing and loading views. The router lazy loads views. Nex renders the view and it's layout. Rendering the layout is now completely decoupled from the router. It's fully AMD compatible plus it's built on vanilla JS.
 
-API [http://erikringsmuth.github.io/nex-js/#/api](http://erikringsmuth.github.io/nex-js/#/api)
-
-Examples [http://erikringsmuth.github.io/nex-js/#/example](http://erikringsmuth.github.io/nex-js/#/example)
+- Info [http://erikringsmuth.github.io/nex-js/](http://erikringsmuth.github.io/nex-js/)
+- API [http://erikringsmuth.github.io/nex-js/#/api](http://erikringsmuth.github.io/nex-js/#/api)
+- Tutorial [http://erikringsmuth.github.io/nex-js/#/example](http://erikringsmuth.github.io/nex-js/#/example)
 
 ## Why Nex
 First, [why AMD](http://requirejs.org/docs/whyamd.html). AMD is the future of Javascript dependency injection. [require.js](http://requirejs.org/) is the only script tag you need to include. The rest of your scripts are injected using AMD. No more globals!

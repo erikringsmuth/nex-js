@@ -32,6 +32,6 @@ gulp.task('default', function(){
 });
 
 // Travis CI
-gulp.task('travis', function(){
+gulp.task('ci', function(){
   gulp.run('lint');
 });

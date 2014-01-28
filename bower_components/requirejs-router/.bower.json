@@ -1,6 +1,6 @@
 {
   "name": "requirejs-router",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "homepage": "https://github.com/erikringsmuth/requirejs-router",
   "authors": [
     "Erik Ringsmuth <erik.ringsmuth@gmail.com>"
@@ -13,10 +13,6 @@
     "AMD"
   ],
   "license": "MIT",
-  "dependencies": {
-    "requirejs": "2.1.10",
-    "jasmine": "2.0.0"
-  },
   "ignore": [
     "**/.*",
     "bower_components",
@@ -28,13 +24,13 @@
     "license.md",
     "readme.md"
   ],
-  "_release": "0.4.0",
+  "_release": "0.4.1",
   "_resolution": {
     "type": "version",
-    "tag": "v0.4.0",
-    "commit": "b178c237fa0ce16ecc8d3ac5df671351563510c7"
+    "tag": "v0.4.1",
+    "commit": "bf4342d4dd80fbe785e3f777f785b2cee6db4ee8"
   },
   "_source": "git://github.com/erikringsmuth/requirejs-router.git",
-  "_target": "~0.4.0",
+  "_target": "~0.4.1",
   "_originalSource": "requirejs-router"
 }

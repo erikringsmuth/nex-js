@@ -15,6 +15,6 @@
     "jshint-stylish": "~0.1.5"
   },
   "scripts": {
-    "test": "gulp ci"
+    "test": "node gulpfile.js ci"
   }
 }

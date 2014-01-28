@@ -21,7 +21,7 @@ define([
         notes: {path: '/notes', moduleId: 'js/notes/notesView'},
         download: {path: '/download', moduleId: 'js/download/downloadView'},
         dev: {path: '/dev', moduleId: 'js/dev/child/childView'},
-        notFound: {path: '*', moduleId: 'js/notFound/NotFoundView'}
+        notFound: {path: '*', moduleId: 'js/notFound/notFoundView'}
       },
 
       // When a route loads, render the view and attach it to the document

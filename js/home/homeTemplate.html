@@ -4,19 +4,19 @@
 
     <p class="lead">Unleashing the power of AMD for web applications.</p>
 
-    <p>Nex.js and the <a href="https://github.com/erikringsmuth/requirejs-router">RequireJS Router</a> give you a powerful IoC pattern for routing and loading views. The router lazy loads views. Nex renders the view and it's layout. Rendering the layout is now completely decoupled from the router. It's fully AMD compatible plus it's built on vanilla JS.</p>
+    <p>Nex.js and the <a href="https://github.com/erikringsmuth/requirejs-router">RequireJS Router</a> give you a powerful IoC pattern for routing and loading views. The router lazy loads views. Nex renders the view and injects the layout. The layout is now completely decoupled from the router. It's fully AMD compatible plus it's built on vanilla JS.</p>
 
     <p>Check out the <a href="#/examples">examples</a> to see how it works. This site's source is a great example of a <a href="https://github.com/erikringsmuth/nex-js">nex-js</a> and <a href="https://github.com/erikringsmuth/requirejs-router">RequireJS Router</a> setup. It's available in the <a href="https://github.com/erikringsmuth/nex-js/tree/gh-pages">gh-pages branch</a> of nex-js. Licensed under <a href="https://github.com/erikringsmuth/nex-js/blob/master/license.md">MIT</a>.</p>
 
     <h2>Why Nex</h2>
 
-    <p>First, <a href="http://requirejs.org/docs/whyamd.html">why AMD</a>. AMD is the future of Javascript dependency injection. <a href="http://requirejs.org/">require.js</a> is the only script tag you need to include. The rest of your scripts are injected using AMD. No more globals!</p>
+    <p>First, <a href="http://requirejs.org/docs/whyamd.html">why AMD</a>. AMD is the future of Javascript dependency injection. Modules clearly define their dependencies. <a href="http://requirejs.org/">require.js</a> is the only script tag you include. The rest of your scripts are loaded using AMD. No more globals!</p>
 
-    <p>The router comes next. Other frameworks load all of your app's Javascript up front. You can optimize your site by compiling it down to one file but that still doesn't solve the problem. The <a href="https://github.com/erikringsmuth/requirejs-router">RequireJS Router</a> lazy loads modules as you navigate to each page. You're site could contain 10MB of Javascript and HTML templates and it would only load the 10KB needed for the current page.</p>
+    <p>The router comes next. Other frameworks load all of your app's Javascript up front. You can optimize your site by compiling it down to one file but that doesn't scale. The <a href="https://github.com/erikringsmuth/requirejs-router">RequireJS Router</a> lazy loads modules as you navigate to each page. You're site could contain 10MB of Javascript and HTML templates and it would only load the 10KB for the current page.</p>
 
-    <p>Last, nex-js views. Other frameworks render the layout (header, footer, etc.) then use the router to load the content. With nex-js the router loads your view and your view injects the layout. You attach your <code>view.outerEl</code> to the document with everything rendered.</p>
+    <p>Last, nex-js views. Other frameworks render the layout (header, footer, etc.) then use the router to load the content. With nex-js the router loads your view and your view injects the layout. You attach <code>view.outerEl</code> to the document with everything rendered.</p>
 
-    <p>The combination of AMD, a lazy loading router, and layout views gives you an awesome framework to build your application. This is the next step in web application design.</p>
+    <p>The combination of AMD, a lazy loading router, and layout views gives you an awesome toolset to build your application. This is the next step in web application design.</p>
   </div>
 
   <div class="col-md-5">

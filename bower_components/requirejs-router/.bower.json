@@ -1,6 +1,6 @@
 {
   "name": "requirejs-router",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "homepage": "https://github.com/erikringsmuth/requirejs-router",
   "authors": [
     "Erik Ringsmuth <erik.ringsmuth@gmail.com>"
@@ -24,13 +24,13 @@
     "license.md",
     "readme.md"
   ],
-  "_release": "0.4.1",
+  "_release": "0.5.0",
   "_resolution": {
     "type": "version",
-    "tag": "v0.4.1",
-    "commit": "bf4342d4dd80fbe785e3f777f785b2cee6db4ee8"
+    "tag": "v0.5.0",
+    "commit": "5d4a4ab5c0ddde7969ef1f07f5ec12a912e3c02c"
   },
   "_source": "git://github.com/erikringsmuth/requirejs-router.git",
-  "_target": "~0.4.1",
+  "_target": "~0.5.0",
   "_originalSource": "requirejs-router"
 }

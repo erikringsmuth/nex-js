@@ -13,8 +13,8 @@ define([
     router.config({
       // Define all of your routes here
       routes: {
-        // root matches path = '/' or '/nex-js/'
-        root: {testRoute: function() { return router.testRoute({path: '/'}) || router.testRoute({path: '/nex-js/'}); }, moduleId: 'js/home/homeView'},
+        // home matches path = '/' or '/nex-js/'
+        home: {path: /^\/(nex-js\/)?$/i, moduleId: 'js/home/homeView'},
         api: {path: '/api', moduleId: 'js/api/apiView'},
         examples: {path: '/examples', moduleId: 'js/examples/examplesView'},
         tdd: {path: '/tdd', moduleId: 'js/tdd/tddView'},

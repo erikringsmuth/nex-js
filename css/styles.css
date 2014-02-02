@@ -43,6 +43,7 @@ code, pre {
   color: #48484C;
   background-color: #F7F7F9;
   border-color: rgb(225, 225, 232);
+  border-radius: 3px;
 }
 
 /* Adds spacing on top of anything */

@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-md-7">
+  <div class="col-sm-7">
     <h1 id="viewjs"><span class="brand">{</span>nex<span class="brand">.</span>js<span class="brand">}</span></h1>
 
     <p class="lead">Unleashing the power of AMD for web applications.</p>
@@ -19,7 +19,7 @@
     <p>The combination of AMD, a lazy loading router, and layout views gives you an awesome toolset to build your application. This is the next step in web application design.</p>
   </div>
 
-  <div class="col-md-5">
+  <div class="col-sm-5">
     <div class="todo-mvc-container"></div>
   </div>
 </div>
@@ -31,7 +31,11 @@
 </div>
 
 <div class="row">
-  <div class="col-md-8">
+  <div class="col-md-4 col-md-push-8">
+    <p><code>LayoutView</code> and <code>layoutTemplate.html</code></p>
+    <p>The layout contains your site's header, footer, etc. This will get rendered on every page.</p>
+  </div>
+  <div class="col-md-8 col-md-pull-4">
 <pre class="prettyprint"><code>var LayoutView = Nex.View.extend({
   template: Handlebars.compile(layoutTemplate),
   model: { home: true, examples: false },
@@ -43,28 +47,27 @@
 &lt;/header&gt;
 &lt;main id="content"&gt;&lt;/main&gt;</code></pre>
   </div>
-  <div class="col-md-4">
-    <p><code>LayoutView</code> and <code>layoutTemplate.html</code></p>
-    <p>The layout contains your site's header, footer, etc. This will get rendered on every page.</p>
-  </div>
 </div>
 
 <div class="row spacer">
-  <div class="col-md-8">
+  <div class="col-md-4 col-md-push-8">
+    <p><code>HomeView</code> and <code>homeTemplate.html</code></p>
+    <p>Route directly to your home view. The home view specifies a layout.</p>
+  </div>
+  <div class="col-md-8 col-md-pull-4">
 <pre class="prettyprint"><code>var HomeView = Nex.View.extend({
   template: Handlebars.compile(homeTemplate),
   layout: LayoutView
 });</code></pre>
 <pre class="prettyprint"><code>&lt;h1&gt;Hello World!&lt;/h1&gt;</code></pre>
   </div>
-  <div class="col-md-4">
-    <p><code>HomeView</code> and <code>homeTemplate.html</code></p>
-    <p>Route directly to your home view. The home view specifies a layout.</p>
-  </div>
 </div>
 
 <div class="row spacer">
-  <div class="col-md-8">
+  <div class="col-md-4 col-md-push-8">
+    <p>Creating a <code>new HomeView()</code> will render the home view and layout.</p>
+  </div>
+  <div class="col-md-8 col-md-pull-4">
 <pre class="prettyprint"><code>&lt;div&gt; &lt;!-- layoutView.el, homeView.outerEl --&gt;
   &lt;header&gt;
     &lt;a href="#/" class="active"&gt;Home&lt;/a&gt;
@@ -76,9 +79,6 @@
     &lt;/div&gt;
   &lt;/main&gt;
 &lt;div&gt;</code></pre>
-  </div>
-  <div class="col-md-4">
-    <p>Creating a <code>new HomeView()</code> will render the home view and layout.</p>
   </div>
 </div>
 

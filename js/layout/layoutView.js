@@ -13,8 +13,7 @@ define([
     contentPlaceholder: '#content-placeholder',
 
     model: {
-      routes: router.routes,
-      devMode: window.location.hostname === 'localhost'
+      routes: router.routes
     }
   });
 });

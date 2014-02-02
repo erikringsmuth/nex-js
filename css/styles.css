@@ -69,9 +69,16 @@ code, pre {
   }
 }
 
-/* make the footer taller to fit 3 lines of text when viewed on a phone */
+/* Make the footer taller to fit 3 lines of text when viewed on a phone */
 @media (max-width: 480px) {
   #footer {
     height: 95px;
+  }
+}
+
+/* Make the header font smaller on a tablet in portrait mode to keep it from wrapping to 2 lines */
+@media (min-width: 768px) and (max-width: 991px) {
+  header.navbar {
+    font-size: .89em;
   }
 }

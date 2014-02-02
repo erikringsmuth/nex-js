@@ -1,32 +1,40 @@
 <a class="sr-only" href="#content">Skip to main content</a>
 
-<header class="navbar navbar-default navbar-fixed-top" role="banner">
-  <div class="container">
-    <div class="navbar-header">
-      <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".navbar-collapse">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a href="#/" class="navbar-brand">{nex.js}</a>
+<div id="wrap">
+  <header class="navbar navbar-default navbar-fixed-top" role="banner">
+    <div class="container">
+      <div class="navbar-header">
+        <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a href="#/" class="navbar-brand">{nex.js}</a>
+      </div>
+      <nav class="collapse navbar-collapse" role="navigation">
+        <ul class="nav navbar-nav">
+          <li {{#if model.routes.api.active}}class="active"{{/if}}><a href="#/api">API</a></li>
+          <li {{#if model.routes.examples.active}}class="active"{{/if}}><a href="#/examples">Examples</a></li>
+          <li {{#if model.routes.tdd.active}}class="active"{{/if}}><a href="#/tdd">TDD</a></li>
+          <li {{#if model.routes.notes.active}}class="active"{{/if}}><a href="#/notes">Notes</a></li>
+          <li><a href="https://github.com/erikringsmuth/requirejs-router">RequireJS Router</a></li>
+          {{#if model.devMode}}<li {{#if model.routes.dev.active}}class="active"{{/if}}><a href="#/dev">Dev</a></li>{{/if}}
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li {{#if model.routes.download.active}}class="active"{{/if}}><a href="#/download">Download</a></li>
+          <li><a href="https://github.com/erikringsmuth/nex-js">View on GitHub <i class="fa fa-github fa-lg"></i></a></li>
+        </ul>
+      </nav>
     </div>
-    <nav class="collapse navbar-collapse" role="navigation">
-      <ul class="nav navbar-nav">
-        <li {{#if model.routes.api.active}}class="active"{{/if}}><a href="#/api">API</a></li>
-        <li {{#if model.routes.examples.active}}class="active"{{/if}}><a href="#/examples">Examples</a></li>
-        <li {{#if model.routes.tdd.active}}class="active"{{/if}}><a href="#/tdd">TDD</a></li>
-        <li {{#if model.routes.notes.active}}class="active"{{/if}}><a href="#/notes">Notes</a></li>
-        <li><a href="https://github.com/erikringsmuth/requirejs-router">RequireJS Router</a></li>
-        {{#if model.devMode}}<li {{#if model.routes.dev.active}}class="active"{{/if}}><a href="#/dev">Dev</a></li>{{/if}}
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li {{#if model.routes.download.active}}class="active"{{/if}}><a href="#/download">Download</a></li>
-        <li><a href="https://github.com/erikringsmuth/nex-js">View on GitHub <i class="fa fa-github fa-lg"></i></a></li>
-      </ul>
-    </nav>
-  </div>
-</header>
+  </header>
 
-<main id="content-placeholder" class="container" role="main">
-</main>
+  <main id="content-placeholder" class="container" role="main">
+  </main>
+</div>
+
+<div id="footer">
+  <div class="container">
+    <p class="text-muted text-center">Designed and created by <a href="https://github.com/erikringsmuth">Erik Ringsmuth</a>. <a href="https://github.com/erikringsmuth/nex-js">Nex</a> and the <a href="https://github.com/erikringsmuth/requirejs-router">RequireJS Router</a> are licensed under <a href="https://github.com/erikringsmuth/nex-js/blob/master/license.mdhttps://github.com/erikringsmuth/nex-js/blob/master/license.md">MIT</a>.</p>
+  </div>
+</div>

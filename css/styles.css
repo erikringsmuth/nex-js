@@ -1,20 +1,51 @@
 /* The fixed header takes up 40px */
 body {
   padding-top: 60px;
-  margin-bottom: 2em;
+}
+header.navbar {
+  box-shadow: 0 0 2px;
 }
 
+/* Sticky footer styles
+ *
+ * Make the html, body, and layoutView.el (div) all be 100% tall
+ */
+html, body, body > div {
+  height: 100%;
+}
+/* Wrapper for page content to push down footer */
+#wrap {
+  min-height: 100%;
+  height: auto;
+  /* Negative indent footer by its height */
+  margin: 0 auto -80px;
+  /* Pad bottom by footer height + 25px for some white space before the footer */
+  padding: 0 0 115px;
+}
+/* Set the fixed height of the footer here */
+#footer {
+  height: 80px;
+  background-color: #F7F7F9;
+  border-top: 1px solid #E1E1E8;
+}
+#footer > .container {
+  /* Pad the text in the footer */
+  padding-top: 20px;
+}
+
+/* {nex.js} home page colors */
 span.brand {
   color: #93A1A1;
 }
 
-/* make un-prettified code and preformatted text match google-code-prettify */
+/* Make un-prettified code and preformatted text match google-code-prettify */
 code, pre {
   color: #48484C;
   background-color: #F7F7F9;
   border-color: rgb(225, 225, 232);
 }
 
+/* Adds spacing on top of anything */
 .spacer {
   margin-top: 2em;
 }
@@ -35,5 +66,12 @@ code, pre {
   .navbar-fixed-top {
     position: relative;
     top: auto;
+  }
+}
+
+/* make the footer taller to fit 3 lines of text when viewed on a phone */
+@media (max-width: 480px) {
+  #footer {
+    height: 95px;
   }
 }

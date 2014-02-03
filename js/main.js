@@ -25,7 +25,7 @@ define([
       },
 
       // When a route loads, render the view and attach it to the document
-      routeLoadedCallback: function routeLoadedCallback(View, routeArguments) {
+      onRouteLoad: function onRouteLoad(View, routeArguments) {
         new View(routeArguments).attachTo('body');
         
         // Scroll back to the top of the page since we aren't reloading the entire page

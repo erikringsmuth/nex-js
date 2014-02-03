@@ -85,7 +85,7 @@
       },
 
       // When a route loads, render the view and attach it to the document
-      routeLoadedCallback: function routeLoadedCallback(View, routeArguments) {
+      onRouteLoad: function(View, routeArguments) {
         new View(routeArguments).attachTo('body');
       }
     });
@@ -158,7 +158,7 @@
   <li><code>main.js</code> configures <code>require.js</code> and the <code>requirejs-router</code></li>
   <li>The <code>requirejs-router</code> loads the current route <code>/</code> which is <code>homeView.js</code></li>
   <li><code>homeView.js</code> uses <code>layoutView.js</code> as it's layout</li>
-  <li>The home view and layout are rendered and attached to the document in the router's <code>routeLoadedCallback()</code></li>
+  <li>The home view and layout are rendered and attached to the document in the router's <code>onRouteLoad()</code></li>
 </ul>
 
 <p class="spacer">The resulting HTML has the home view rendered with the layout.</p>

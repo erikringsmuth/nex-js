@@ -23,12 +23,12 @@ html, body, body > div {
   padding: 0 0 115px;
 }
 /* Set the fixed height of the footer here */
-#footer {
+#main-footer {
   height: 80px;
   background-color: #fdfdfd;
   border-top: 1px solid #e1e1e8;
 }
-#footer > .container {
+#main-footer > .container {
   /* Pad the text in the footer */
   padding-top: 20px;
 }

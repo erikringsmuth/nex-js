@@ -49,9 +49,11 @@ code {
   background-color: #fdfdfd;
   border: #f1f1f1 1px solid;
   border-radius: 3px;
+  line-height: 1.75em;
 }
 pre code {
   border: none;
+  line-height: 1.4em;
 }
 
 /* Adds spacing on top of anything */

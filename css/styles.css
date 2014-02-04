@@ -25,8 +25,8 @@ html, body, body > div {
 /* Set the fixed height of the footer here */
 #footer {
   height: 80px;
-  background-color: #F7F7F9;
-  border-top: 1px solid #E1E1E8;
+  background-color: #fdfdfd;
+  border-top: 1px solid #e1e1e8;
 }
 #footer > .container {
   /* Pad the text in the footer */
@@ -38,12 +38,20 @@ span.brand {
   color: #93A1A1;
 }
 
-/* Make un-prettified code and preformatted text match google-code-prettify */
-code, pre {
-  color: #48484C;
-  background-color: #F7F7F9;
-  border-color: rgb(225, 225, 232);
+/* Code blocks */
+pre, pre.prettyprint {
+  background-color: #fdfdfd;
+  border: #e1e1e8 1px solid;
   border-radius: 3px;
+}
+code {
+  color: #48484C;
+  background-color: #fdfdfd;
+  border: #f1f1f1 1px solid;
+  border-radius: 3px;
+}
+pre code {
+  border: none;
 }
 
 /* Adds spacing on top of anything */

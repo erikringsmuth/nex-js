@@ -291,6 +291,36 @@
             });
           };
 
+
+
+
+          // New events
+          var eventHandler = function eventHandler(event) {
+            // We already know the event type is event.type
+            if (!event._outOfOriginatingViewScope) {
+              var attrs = event.target.attributes;
+              for (var i = 0; i < attrs.length; i++) {
+                if (attrs[i].name.substring(0, 3) === 'on-' && attrs[i].name.substring(3) === event.type && typeof(view.on[attrs[i].value]) === 'function') {
+                  view.on[attrs[i].value].call(view, event);
+                }
+              }
+              event._outOfOriginatingViewScope = true;
+            }
+          };
+
+          // What types of events do we need to listen to?
+          var eventTypes = ['click', 'dblclick', 'keypress', 'keydown', 'blur'];
+          for (var eventType in eventTypes) {
+            (function(eventType) {
+              // Must happen on the bubble phase or the _outOfOriginatingViewScope check will have the opposite effect and be set by the outer-most view
+              view.el.addEventListener(eventType, eventHandler, false);
+            })(eventTypes[eventType]);
+          }
+
+
+
+
+
           // view.initialize() - a hook to add additional logic when creating an instance of the view
           if (typeof(view.initialize) === 'function') {
             view.initialize.apply(view, arguments);

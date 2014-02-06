@@ -1,21 +1,21 @@
 <section id="todoapp">
   <header id="header">
     <h1>todos</h1>
-    <input id="new-todo" placeholder="What needs to be done?" {{#unless model.editing}}autofocus{{/unless}} />
+    <input id="new-todo" on-keypress="createNewTodoOnEnter" placeholder="What needs to be done?" {{#unless model.editing}}autofocus{{/unless}} />
   </header>
   {{#if model.todos}}
   <section id="main">
     <label for="toggle-all">Mark all as complete</label>
-    <input id="toggle-all" type="checkbox" {{#unless model.itemsRemaining}}checked{{/unless}} />
+    <input id="toggle-all" on-click="toggleAllCompleteTodos" type="checkbox" {{#unless model.itemsRemaining}}checked{{/unless}} />
     <ul id="todo-list">
       {{#each model.filteredTodos}}
       <li data-id="{{this.id}}" class="{{#if this.completed}}completed{{/if}}{{#if this.editing}} editing{{/if}}">
         <div class="view">
-          <input class="toggle" type="checkbox" {{#if this.completed}}checked{{/if}} />
-          <label>{{this.title}}</label>
-          <button class="destroy"></button>
+          <input class="toggle" on-click="toggleCompletedTodo" type="checkbox" {{#if this.completed}}checked{{/if}} />
+          <label on-dblclick="editTodo">{{this.title}}</label>
+          <button class="destroy" on-click="deleteTodo"></button>
         </div>
-        <input class="edit" value="{{this.title}}" {{#if this.editing}}autofocus{{/if}} />
+        <input class="edit" on-keypress="updateTodoOnEnter" on-keydown="revertTodoOnEscape" on-blur="leaveEditMode" value="{{this.title}}" {{#if this.editing}}autofocus{{/if}} />
       </li>
       {{/each}}
     </ul>
@@ -28,7 +28,7 @@
       <li><a {{#if model.routes.todoCompleted}}class="selected"{{/if}} href="#/?todoFilter=completed">Completed</a></li>
     </ul>
     {{#if model.itemsCompleted}}
-    <button id="clear-completed">Clear completed ({{model.itemsCompleted}})</button>
+    <button id="clear-completed" on-click="clearCompletedTodos">Clear completed ({{model.itemsCompleted}})</button>
     {{/if}}
   </footer>
   {{/if}}

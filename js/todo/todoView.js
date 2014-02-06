@@ -20,7 +20,7 @@ define([
     // Delegate events bound to the root element of this view
     on: {
       // Create a new todo
-      'keypress #new-todo': function createNewTodoOnEnter(event) {
+      createNewTodoOnEnter: function createNewTodoOnEnter(event) {
         if (event.keyCode === common.ENTER_KEY && event.target.value.trim()) {
           var todo = {
             id: common.guid(),
@@ -34,48 +34,48 @@ define([
       },
 
       // Clear all completed todos
-      'click #clear-completed': function clearCompletedTodos() {
+      clearCompletedTodos: function clearCompletedTodos() {
         this.model.todos = this.model.todos.filter(function(todo) { return !todo.completed; });
         this.model.save();
         this.render();
       },
 
       // Toggle all todos to completed or back to active if all are already completed
-      'click #toggle-all': function toggleAllCompleteTodos(event) {
+      toggleAllCompleteTodos: function toggleAllCompleteTodos(event) {
         this.model.todos.forEach(function(todo) { todo.completed = event.target.checked; });
         this.model.save();
         this.render();
       },
 
       // Toggles a todo to completed or active
-      'click .toggle': function toggleCompletedTodo(event) {
+      toggleCompletedTodo: function toggleCompletedTodo(event) {
         this.getTodo(event.target).completed = event.target.checked;
         this.model.save();
         this.render();
       },
 
       // Switches a todo to edit mode
-      'dblclick label': function editTodo(event) {
+      editTodo: function editTodo(event) {
         this.getTodo(event.target).editing = true;
         this.render();
       },
 
       // Remove a todo
-      'click .destroy': function deleteTodo(event) {
+      deleteTodo: function deleteTodo(event) {
         this.model.todos.splice(this.model.todos.indexOf(this.getTodo(event.target)), 1);
         this.model.save();
         this.render();
       },
 
       // Update the todo if the enter was pressed and delete if empty
-      'keypress .edit': function updateTodoOnEnter(event) {
+      updateTodoOnEnter: function updateTodoOnEnter(event) {
         if (event.keyCode === common.ENTER_KEY) {
           this.updateTodo(event);
         }
       },
 
       // Discard changes if escape was pressed
-      'keydown .edit': function revertTodoOnEscape(event) {
+      revertTodoOnEscape: function revertTodoOnEscape(event) {
         if (event.keyCode === common.ESCAPE_KEY) {
           var todo = this.getTodo(event.target);
           todo.editing = false;
@@ -85,7 +85,7 @@ define([
       },
 
       // Exit edit mode on a todo
-      'blur .edit': function leaveEditMode(event) {
+      leaveEditMode: function leaveEditMode(event) {
         this.updateTodo(event);
       }
     },

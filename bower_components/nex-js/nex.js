@@ -307,14 +307,13 @@
               event._outOfOriginatingViewScope = true;
             }
           };
-
-          // What types of events do we need to listen to?
-          var eventTypes = ['click', 'dblclick', 'keypress', 'keydown', 'blur'];
-          for (var eventType in eventTypes) {
-            (function(eventType) {
-              // Must happen on the bubble phase or the _outOfOriginatingViewScope check will have the opposite effect and be set by the outer-most view
-              view.el.addEventListener(eventType, eventHandler, false);
-            })(eventTypes[eventType]);
+          for (var eventType in window.Event) {
+            if (window.Event.hasOwnProperty(eventType)) {
+              (function(eventType) {
+                // Must happen on the bubble phase or the _outOfOriginatingViewScope check will have the opposite effect and be set by the outer-most view
+                view.el.addEventListener(eventType, eventHandler, false);
+              })(eventType.toLowerCase());
+            }
           }
 
 

@@ -37,6 +37,9 @@
 }(this, function() {
   'use strict';
 
+  // Private static variables
+  var captureOnlyEventTypes = ['blur', 'focus', 'mouseenter', 'mouseleave', 'resize', 'scroll'];
+
   var Nex = {
     // Utility methods and properties
     utilities: {
@@ -290,13 +293,18 @@
           };
           var eventListeners = {};
           var addEventListeners = function addEventListeners(eventTypes) {
-            // Make sure we have a delegate event listener for every eventType
             for (var i = 0; i < eventTypes.length; i++) {
               var eventType = eventTypes[i];
+              // We only need to set up one event listener for each type
               if (!eventListeners[eventType]) {
                 if (window.addEventListener) {
-                  // Must happen on the bubble phase or the _outOfOriginatingViewScope check will have the opposite effect and be set by the outer-most view
-                  view.el.addEventListener(eventType, delegateEventListener, false);
+                  if (captureOnlyEventTypes.indexOf(eventType) === -1) {
+                    // Must happen on the bubble phase or the _outOfOriginatingViewScope check will have the opposite effect and be set by the outer-most view
+                    view.el.addEventListener(eventType, delegateEventListener, false);
+                  } else {
+                    // Listen in the capture phase
+                    view.el.addEventListener(eventType, delegateEventListener, true);
+                  }
                 } else {
                   // IE 8 and older, events are prefixed with 'on'
                   view.el.attachEvent('on' + eventType, delegateEventListener);

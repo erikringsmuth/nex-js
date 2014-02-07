@@ -18,17 +18,15 @@ define([
     
     layout: LayoutView,
 
-    on: {
-      'click button#parent-input-text-button': function updateInputText() {
-        this.model.inputText = this.el.querySelector('#parent-input-text').value;
-        this.render();
-      },
+    updateInputText: function updateInputText() {
+      this.model.inputText = this.el.querySelector('#parent-input-text').value;
+      this.render();
+    },
 
-      'keypress #parent-input-text': function updateInputTextOnEnter(event) {
-        if (event.keyCode === 13) {
-          this.model.inputText = event.target.value;
-          this.render();
-        }
+    updateInputTextOnEnter: function updateInputTextOnEnter(event) {
+      if (event.keyCode === 13) {
+        this.model.inputText = event.target.value;
+        this.render();
       }
     }
   });

@@ -28,17 +28,15 @@ define([
       return this;
     },
 
-    on: {
-      'click button#child-input-text-button': function updateInputText() {
-        this.model.inputText = this.el.querySelector('#child-input-text').value;
-        this.render();
-      },
+    updateInputText: function updateInputText() {
+      this.model.inputText = this.el.querySelector('#child-input-text').value;
+      this.render();
+    },
 
-      'keypress #child-input-text': function updateInputTextOnEnter(event) {
-        if (event.keyCode === 13) {
-          this.model.inputText = event.target.value;
-          this.render();
-        }
+    updateInputTextOnEnter: function updateInputTextOnEnter(event) {
+      if (event.keyCode === 13) {
+        this.model.inputText = event.target.value;
+        this.render();
       }
     }
   });

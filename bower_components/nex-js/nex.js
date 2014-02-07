@@ -38,23 +38,26 @@
   'use strict';
 
   var Nex = {
-    // Utility methods
+    // Utility methods and properties
     utilities: {
       // Check for html5 support
       html5: 'querySelector' in document && 'localStorage' in window && 'addEventListener' in window,
 
-      // Get the on-* attributes from the HTML. This is used to set up event handlers. The check won't
-      // guarantee it's an attribute, it's built for speed. It doesn't hurt to have an occasional event
-      // handler listening to a non-existent type. Also, that will rarely happen.
+      // Parse the HTML string to get 'on-eventtype' attributes. This is used to set up event handlers.
+      // This is built for speed, not accuracy. The check won't guarantee it's an attribute. It doesn't
+      // hurt to listen to non-existent types and that rarely happens even with the simple regex matcher.
       parseEventTypes: function parseEventTypes(htmlString) {
+        // Matches a string like ' on-click="' and returns [' on-click'] which we will split on the '-'
+        // later. JavaScript regex doesn't have lookbehind support to clean this up ahead of time.
         var matches = htmlString.match(/\son-\w+(?==")/g);
-        var result = [];
-        if (!matches) return result;
-        for (var i = 0; i < matches.length; i++) {
-          var eventType = matches[i].split('-')[1];
-          if (result.indexOf(eventType) === -1) result.push(eventType);
+        var eventTypes = [];
+        if (matches) {
+          for (var i = 0; i < matches.length; i++) {
+            var eventType = matches[i].split('-')[1];
+            if (eventTypes.indexOf(eventType) === -1) eventTypes.push(eventType);
+          }
         }
-        return result;
+        return eventTypes;
       }
     },
 
@@ -267,14 +270,18 @@
           //     event.currentTarget; // will reference `this.el` which is the root element that all events are bound to.
           //   }
           // })
-          var eventListener = function eventListener(event) {
+          var delegateEventListener = function delegateEventListener(event) {
             // Check if the event was triggered in a nested view
             if (!event._outOfOriginatingViewScope) {
               if (!event.target) event.target = event.srcElement; // IE8
               var attrs = event.target.attributes;
               // Not an array, it's an object { 'length': 1, '0': { 'name': 'on-click', value: 'sendForm' } }
               for (var i = 0; i < attrs.length; i++) {
-                if (attrs[i].name.substring(0, 3) === 'on-' && attrs[i].name.substring(3) === event.type && typeof(view[attrs[i].value]) === 'function') {
+                // Check if the element has a on-eventtype attribute that matches this event listener's event type. We could
+                // have a click event listener for one element and click on a different element that doesn't have an on-click
+                // attribute.
+                if (attrs[i].name.substring(0, 3) === 'on-' && attrs[i].name.substring(3) === event.type) {
+                  // The example would call myView.sendForm(event)
                   view[attrs[i].value].call(view, event);
                 }
               }
@@ -283,15 +290,16 @@
           };
           var eventListeners = {};
           var addEventListeners = function addEventListeners(eventTypes) {
+            // Make sure we have a delegate event listener for every eventType
             for (var i = 0; i < eventTypes.length; i++) {
               var eventType = eventTypes[i];
               if (!eventListeners[eventType]) {
                 if (window.addEventListener) {
                   // Must happen on the bubble phase or the _outOfOriginatingViewScope check will have the opposite effect and be set by the outer-most view
-                  view.el.addEventListener(eventType, eventListener, false);
+                  view.el.addEventListener(eventType, delegateEventListener, false);
                 } else {
                   // IE 8 and older, events are prefixed with 'on'
-                  view.el.attachEvent('on' + eventType, eventListener);
+                  view.el.attachEvent('on' + eventType, delegateEventListener);
                 }
                 eventListeners[eventType] = true;
               }

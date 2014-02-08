@@ -15,7 +15,7 @@ define([
     layout: LayoutView,
 
     components: {
-      '.todo-mvc-container': TodoView
+      '#todo-component': TodoView
     },
 
     render: function render() {

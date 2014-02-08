@@ -26,46 +26,58 @@
 
 <div class="row">
   <div class="col-md-12">
-    <h2>Layout Views</h2>
+    <h2>Views</h2>
   </div>
 </div>
 
 <div class="row">
   <div class="col-md-4 col-md-push-8">
-    <p><code>LayoutView</code> and <code>layoutTemplate.html</code></p>
-    <p>The layout contains your site's header, footer, etc. This will get rendered on every page.</p>
+    <p><code>homeTemplate.html</code> and <code>homeView.js</code></p>
+    <p>Route directly to your home view. The home view has a layout and components. Events are declared in the template and are scoped to this view.</p>
   </div>
   <div class="col-md-8 col-md-pull-4">
-<pre class="prettyprint"><code>var LayoutView = Nex.View.extend({
-  template: Handlebars.compile(layoutTemplate),
-  model: { home: true, examples: false },
-  contentPlaceholder: '#content'
+<pre class="prettyprint"><code>&lt;h1&gt;Hello \{{model.name}}!&lt;/h1&gt;
+&lt;input type="text" on-keypress="updateNameOnEnter"&gt;
+&lt;div id="todo-widget"&gt;&lt;/div&gt;</code></pre>
+<pre class="prettyprint"><code>var HomeView = Nex.View.extend({
+  template: Handlebars.compile(homeTemplate),
+  layout: LayoutView,
+  model: { name: 'Nex' },
+  updateNameOnEnter: function(event) {
+    if (event.keyCode === 13) {
+      this.model.name = event.target.value;
+      this.render();
+    }
+  },
+  components: {
+    '#todo-widget': TodoWidget
+  }
 });</code></pre>
+  </div>
+</div>
+
+<div class="row spacer">
+  <div class="col-md-4 col-md-push-8">
+    <p><code>layoutTemplate.html</code> and <code>layoutView.js</code></p>
+    <p>The layout contains your site's header, footer, etc. This will get rendered on every page that has this layout.</p>
+  </div>
+  <div class="col-md-8 col-md-pull-4">
 <pre class="prettyprint"><code>&lt;header&gt;
   &lt;a href="#/" \{{#if model.home}}class="active"\{{/if}}&gt;Home&lt;/a&gt;
   &lt;a href="#/examples" \{{#if model.examples}}class="active"\{{/if}}&gt;Examples&lt;/a&gt;
 &lt;/header&gt;
 &lt;main id="content"&gt;&lt;/main&gt;</code></pre>
-  </div>
-</div>
-
-<div class="row spacer">
-  <div class="col-md-4 col-md-push-8">
-    <p><code>HomeView</code> and <code>homeTemplate.html</code></p>
-    <p>Route directly to your home view. The home view specifies a layout.</p>
-  </div>
-  <div class="col-md-8 col-md-pull-4">
-<pre class="prettyprint"><code>var HomeView = Nex.View.extend({
-  template: Handlebars.compile(homeTemplate),
-  layout: LayoutView
+<pre class="prettyprint"><code>var LayoutView = Nex.View.extend({
+  template: Handlebars.compile(layoutTemplate),
+  model: { home: true, examples: false },
+  contentPlaceholder: '#content'
 });</code></pre>
-<pre class="prettyprint"><code>&lt;h1&gt;Hello World!&lt;/h1&gt;</code></pre>
   </div>
 </div>
 
 <div class="row spacer">
   <div class="col-md-4 col-md-push-8">
-    <p>Creating a <code>new HomeView()</code> will render the home view and layout.</p>
+    <p>Creating a <code>new HomeView()</code> will render the home view, its layout, and components. You attach it to the document with <code>homeView.outerEl</code>.</p>
   </div>
   <div class="col-md-8 col-md-pull-4">
 <pre class="prettyprint"><code>&lt;div&gt; &lt;!-- layoutView.el, homeView.outerEl --&gt;
@@ -75,7 +87,11 @@
   &lt;/header&gt;
   &lt;main id="content"&gt;
     &lt;div&gt; &lt;!-- homeView.el --&gt;
-      &lt;h1&gt;Hello World!&lt;/h1&gt;
+      &lt;h1&gt;Hello Nex!&lt;/h1&gt;
+      &lt;input type="text" on-keypress="updateNameOnEnter"&gt;
+      &lt;div id="todo-widget"&gt;
+        &lt;!-- The Todo MVC widget will be attached here --&gt;
+      &lt;/div&gt;
     &lt;/div&gt;
   &lt;/main&gt;
 &lt;div&gt;</code></pre>

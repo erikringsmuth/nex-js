@@ -133,7 +133,7 @@
 <p>The <code>layout</code> is a constructor or instance of a special view that contains your site's header, footer, etc. The layout is like a .NET master page or Razor layout. This makes routing easy since you don't need an intermediate step to render the layout. Calling <code>render()</code> on the view will automatically call <code>render()</code> on the layout. The view is attached to the layout using the layout's <code>contentPlaceholder</code> selector. Once the views are done rendering <code>view.outerEl</code> will contain both the view and the layout. Here's an example view and layout view.</p>
 
 <pre class="prettyprint"><code>var LayoutView = Nex.View.extend({
-  template: Handlebars.compile('&lt;header&gt;Header&lt;/header&gt;&lt;div id="content"&gt;&lt;/div&gt;'),
+  template: Handlebars.compile('&lt;header&gt;Header&lt;/header&gt;&lt;main id="content"&gt;&lt;/main&gt;'),
   contentPlaceholder: '#content'
 });
 
@@ -147,9 +147,9 @@ new MyView().attachTo('body');</code></pre>
 The <code>body</code> HTML will be.
 <pre class="prettyprint"><code>&lt;div&gt; &lt;!-- layoutView.el, homeView.outerEl --&gt;
   &lt;header&gt;Header&lt;/header&gt;
-  &lt;div id="content"&gt;
+  &lt;main id="content"&gt;
     &lt;div&gt;MyView HTML&lt;/div&gt; &lt;!-- homeView.el --&gt;
-  &lt;/div&gt;
+  &lt;/main&gt;
 &lt;/div&gt;</code></pre>
 
 <h4 id="contentPlaceholder" class="spacer">contentPlaceholder</h4>

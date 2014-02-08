@@ -6,16 +6,16 @@
   {{#if model.todos}}
   <section id="main">
     <label for="toggle-all">Mark all as complete</label>
-    <input id="toggle-all" on-click="toggleAllCompleteTodos" type="checkbox" {{#unless model.itemsRemaining}}checked{{/unless}} />
+    <input id="toggle-all" type="checkbox" on-click="toggleAllCompleteTodos" {{#unless model.itemsRemaining}}checked{{/unless}} />
     <ul id="todo-list">
       {{#each model.filteredTodos}}
       <li data-id="{{this.id}}" class="{{#if this.completed}}completed{{/if}}{{#if this.editing}} editing{{/if}}">
         <div class="view">
-          <input class="toggle" on-click="toggleCompletedTodo" type="checkbox" {{#if this.completed}}checked{{/if}} />
+          <input class="toggle" type="checkbox" on-click="toggleCompletedTodo" {{#if this.completed}}checked{{/if}} />
           <label on-dblclick="editTodo">{{this.title}}</label>
           <button class="destroy" on-click="deleteTodo"></button>
         </div>
-        <input class="edit" on-keypress="updateTodoOnEnter" on-keydown="revertTodoOnEscape" on-blur="leaveEditMode" value="{{this.title}}" {{#if this.editing}}autofocus{{/if}} />
+        <input class="edit" value="{{this.title}}" on-keypress="updateTodoOnEnter" on-keydown="revertTodoOnEscape" on-blur="leaveEditMode" {{#if this.editing}}autofocus{{/if}} />
       </li>
       {{/each}}
     </ul>

@@ -1,13 +1,22 @@
 <h2>API</h2>
 
-<h4 id="extend">Nex.View.extend()</h4>
+<h4 id="extend">Example template</h4>
 
-<p>Create a view by extending the base view.</p>
+<p>This is your view's HTML. Choose any template engine! Handlebars is just an example.</p>
 
 <pre class="prettyprint"><code>&lt;!-- myTemplate.html --&gt;
 &lt;div&gt;Hello \{{model.name}}!&lt;/div&gt;
-&lt;input type="text" placeholder="enter your name"&gt;
-&lt;div id="todo-widget"&gt;&lt;/div&gt;</code></pre>
+
+&lt;!-- on-eventtype attributes call the event handler and are scoped to this view --&gt;
+&lt;input type="text" placeholder="Enter your name" on-keypress="updateNameOnEnter"&gt;
+
+&lt;div id="todo-widget"&gt;
+  &lt;!-- A Todo MVC widget will be attached here --&gt;
+&lt;/div&gt;</code></pre>
+
+<h4 id="extend" class="spacer">Nex.View.extend()</h4>
+
+<p>Create a view by extending the base view.</p>
 
 <pre class="prettyprint"><code>var MyView = Nex.View.extend({
   // The view's HTML template
@@ -19,16 +28,17 @@
   // The layout contains your site's header, footer, etc.
   layout: LayoutView,
 
-  // Event handlers
-  on: {
-    // Change the view to display your name
-    'keypress input': function(event) {
+  // This event handler gets called when a keypress event is triggered on the input
+  updateNameOnEnter: function(event) {
+    this; // will reference the instance of `MyView`
+    event.target; // will reference the DOM element the action took place on. This is the `input` in this example.
+    if (event.keyCode === 13) {
       this.model.name = event.target.value;
       this.render();
     }
   },
 
-  // Components are other views that are automatically created and attached to this view
+  // Components are sub-views that are automatically created and attached to this view
   components: {
     '#todo-widget': TodoView
   }
@@ -49,7 +59,6 @@
   <li><code>view.model</code> - the model that gets passed to the template</li>
   <li><code>view.layout</code> - the layout contains your site's layout (header, footer, etc.)</li>
   <li><code>view.contentPlaceholder</code> - the CSS selector to the content placeholder element (only for layout views)</li>
-  <li><code>view.on</code> - event handlers</li>
   <li><code>view.components</code> - sub-views or widgets that are automatically created and attached to the view</li>
   <li><code>view.render()</code> - renders the view which populates <code>view.el</code> with the template HTML</li>
   <li><code>view.html(htmlString)</code> - replaces the contents of <code>view.el</code> with the HTML string</li>
@@ -60,7 +69,7 @@
   <li><code>view.id</code> - the ID of the view's DOM element</li>
   <li><code>view.className</code> - the class name(s) of the view's DOM element</li>
   <li><code>view.autoRender</code> - defaults to <code>true</code>, set to <code>false</code> to manually trigger the first render</li>
-  <li><code>view.dispatchMockEvent(mockEvent)</code> - triggers a mock event for integration testing event handlers</li>
+  <li><code>view.dispatchEvent(event)</code> - dispatches a delegate event to the correct event handler</li>
 </ul>
 
 <h4 id="el" class="spacer">el</h4>
@@ -124,20 +133,6 @@ The <code>body</code> HTML will be.
 <p>If a view is going to be used as a <code>layout</code> it needs to have a content placeholder element in its HTML and set <code>view.contentPlaceholder</code>. This is the CSS selector of the content placeholder element in the HTML. When you call <code>render()</code> on the child view it will automatically call <code>render()</code> on the layout view and use the <code>layout.contentPlaceholder</code> to attach the child view to the layout.</p>
 
 <p>Note: If a view has a <code>contentPlaceholder</code> it is considered a layout and will not be rendered when a new instance is constructed. Instead it will wait to be rendered until the child view is rendered.</p>
-
-<h4 id="on" class="spacer">on</h4>
-
-<p>Event handlers. These are delegate events. They are bound once to the view's root element so you don't have to bind events every time you call <code>render()</code>. Events are slightly different than jQuery delegate events since there aren't native ECMAScript delegate events. <code>event.target</code> and <code>event.currentTarget</code> are swapped from the way jQuery does it. jQuery got these backwards and the native events have them set correctly. Here is an example event and event handler.</p>
-
-<pre class="prettyprint"><code>var MyView = Nex.View.extend({
-  on: {
-    'click span a': function(event) {
-      this; // will reference your instance of `MyView`
-      event.target; // will reference the DOM element the action took place on. This is `a` in this example.
-      event.currentTarget; // will reference `this.el` which is the root element that all events are bound to.
-    }
-  }
-});</code></pre>
 
 <h4 id="components" class="spacer">components</h4>
 
@@ -217,24 +212,51 @@ new MyView("Nex").attachTo('body'); // Will display "Hello Nex!"</code></pre>
 
 <p>Defaults to <code>true</code>, set to <code>false</code> to manually trigger the first render.</p>
 
-<h4 id="dispatchMockEvent" class="spacer">dispatchMockEvent(mockEvent)</h4>
+<h4 id="dispatchMockEvent" class="spacer">dispatchEvent(event)</h4>
 
-<p>Triggers a mock event for integration testing event handlers. If you just want to unit test your event handlers you can call the functions directly with a mock object. The benefit of dispatching an event is that it might trigger multiple event handlers.</p>
-
-<p>The <code>mockEvent</code> must contain a <code>type</code> and <code>target</code>. The <code>type</code> is a click, keypress, etc. The <code>target</code> is the DOM element you're performing the action on. You can add any other properties your event handlers expect. Here's an example test that verifies that entering a new item and hitting enter saves the item to the view's model.</p>
+<p>Dispatches a delegate event to the correct event handler. You can also call this with a mock event for unit testing. Here's an example test.</p>
 
 <pre class="prettyprint"><code>// Arrange
 var myView = new MyView();
 
 // Act
-var textInput = myView.el.querySelector('input.new');
-textInput.value = 'my first item!';
-myView.dispatchMockEvent({
+var input = myView.el.querySelector('input');
+input.value = 'my first item!';
+myView.dispatchEvent({
   type: 'keypress',
-  target: textInput,
+  target: input,
   keyCode: 13
 });
 
 // Assert
 expect(myView.model.items.length).toEqual(1);
 expect(myView.model.items[0].title).toEqual('my first item!');</code></pre>
+
+<h4 id="events" class="spacer">Events</h4>
+
+<p>Events are defined on an element using a hyphenated <code>on-eventtype</code> attribute.</p>
+
+<pre class="prettyprint"><code>&lt;input type="text" on-keypress="updateNameOnEnter"&gt;</code></pre>
+
+<p>This differs from regular JavaScript event handlers that are not hyphenated. This will call the global <code>window.updateNameOnEnter()</code>.</p>
+
+<pre class="prettyprint"><code>&lt;input type="text" onkeypress="updateNameOnEnter()"&gt;</code></pre>
+
+<p>Nex events are scoped to the current view. The <code>on-keypress="updateNameOnEnter"</code> attribute tells the view to call the <code>updateNameOnEnter(event)</code> event handler.</p>
+
+<pre class="prettyprint"><code>var MyView = Nex.View.extend({
+  template: Handlebars.compile(myTemplate),
+
+  updateNameOnEnter: function(event) {
+    this; // will reference the instance of `MyView`
+    event.target; // will reference the DOM element the action took place on. This is the `input` in this example.
+
+    // 13 is the enter key
+    if (event.keyCode === 13) {
+      this.model.name = event.target.value;
+      this.render();
+    }
+  }
+});</code></pre>
+
+<p>Using attributes is declarative and easy to understand. They're even more efficient than regular delegate events because there's only one event listener per event type.</p>

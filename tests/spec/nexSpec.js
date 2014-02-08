@@ -163,31 +163,6 @@ define([
     });
   });
 
-  describe('view.on', function() {
-    it('should attach delegate events to view.el and call the event handlers when the events are intercepted', function() {
-      // Arrange
-      var extendingObject = {
-        on: {
-          'click span button#button1': function() {}
-        },
-        template: '<span><button id="button1">Click Me!</button></span>'
-      };
-      spyOn(extendingObject.on, 'click span button#button1');
-
-      var TestView = Nex.View.extend(extendingObject);
-      var testView = new TestView();
-
-      // Act
-      testView.dispatchMockEvent({
-        type: 'click',
-        target: testView.el.querySelector('#button1')
-      });
-
-      // Assert
-      expect(testView.on['click span button#button1']).toHaveBeenCalled();
-    });
-  });
-
   describe('view.layout', function() {
     it('should be defined and an instance of View', function() {
       // Arrange
@@ -327,6 +302,19 @@ define([
 
       // Assert
       expect(testView.el.querySelector('#main-content').innerHTML).toEqual('<div>New content</div>');
+    });
+
+    it('should parse the HTML for event attributes', function() {
+      // Arrange
+      var TestView = Nex.View.extend();
+      var testView = new TestView();
+      spyOn(Nex.utilities, 'parseEventTypes').and.returnValue([]);
+
+      // Act
+      testView.html('<input type="text" on-keypress="keypressCallback">');
+
+      // Assert
+      expect(Nex.utilities.parseEventTypes).toHaveBeenCalled();
     });
   });
 
@@ -481,96 +469,43 @@ define([
     });
   });
 
-  describe('view.dispatchMockEvent(mockEvent)', function() {
-    it('should trigger a mock event that is handled by the event handlers', function() {
+  describe('view.dispatchEvent(event)', function() {
+    it('should delegate the event to it\'s event handler', function() {
       // Arrange
       var extendingObject = {
-        on: {
-          'click span button#button1': function() {}
-        },
-        template: '<span><button id="button1">Click Me!</button></span>'
+        template: '<span><button on-click="clickHandler" id="button1">Click Me!</button></span>',
+        clickHandler: function() {}
       };
-      spyOn(extendingObject.on, 'click span button#button1');
+      spyOn(extendingObject, 'clickHandler');
 
       var TestView = Nex.View.extend(extendingObject);
       var testView = new TestView();
 
       // Act
-      testView.dispatchMockEvent({
+      testView.dispatchEvent({
         type: 'click',
         target: testView.el.querySelector('#button1')
       });
 
       // Assert
-      expect(testView.on['click span button#button1']).toHaveBeenCalled();
+      expect(testView.clickHandler).toHaveBeenCalled();
     });
+  });
 
-    it('should throw an exception when no mockEvent.type is specified', function() {
+  describe('utilities.parseEventTypes(htmlString)', function() {
+    it('should return an array of the on-eventtype attributes in the HTML string', function() {
       // Arrange
-      var extendingObject = {
-        on: {
-          'click span button#button1': function() {}
-        },
-        template: '<span><button id="button1">Click Me!</button></span>'
-      };
+      var htmlString = '<div><input on-change="changeHandler" on-focus="inputFocused" on-blur="inputLostFocus"><button on-click="clickHandler">Send</button></div>';
 
-      var TestView = Nex.View.extend(extendingObject);
-      var testView = new TestView();
+      // Act
+      var eventTypes = Nex.utilities.parseEventTypes(htmlString);
 
-      var testFunction = function() {
-        testView.dispatchMockEvent({
-          target: testView.el.querySelector('#button1')
-        });
-      };
-
-      // Act, Assert
-      expect(testFunction).toThrow();
-    });
-
-    it('should throw an exception when no mockEvent.target is specified', function() {
-      // Arrange
-      var extendingObject = {
-        on: {
-          'click span button#button1': function() {}
-        },
-        template: '<span><button id="button1">Click Me!</button></span>'
-      };
-
-      var TestView = Nex.View.extend(extendingObject);
-      var testView = new TestView();
-
-      var testFunction = function() {
-        testView.dispatchMockEvent({
-          type: 'click'
-        });
-      };
-
-      // Act, Assert
-      expect(testFunction).toThrow();
-    });
-
-    it('should throw an exception when there aren\'t any event handlers for that type', function() {
-      // Arrange
-      var extendingObject = {
-        on: {
-          'click span button#button1': function() {}
-        },
-        template: '<span><button id="button1">Click Me!</button></span>'
-      };
-      
-      var TestView = Nex.View.extend(extendingObject);
-      var testView = new TestView();
-      testView.render();
-
-      var testFunction = function() {
-        testView.dispatchMockEvent({
-          type: 'hover',
-          target: testView.el.querySelector('#button1')
-        });
-      };
-
-      // Act, Assert
-      expect(testFunction).toThrow();
+      // Assert
+      expect(eventTypes.indexOf('click') !== -1).toBe(true);
+      expect(eventTypes.indexOf('blur') !== -1).toBe(true);
+      expect(eventTypes.indexOf('focus') !== -1).toBe(true);
+      expect(eventTypes.indexOf('change') !== -1).toBe(true);
+      expect(eventTypes.indexOf('dblclick') !== -1).toBe(false);
     });
   });
 

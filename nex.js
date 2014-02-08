@@ -1,6 +1,6 @@
 // {nex.js} - Unleashing the power of AMD for web applications.
 //
-// Version: 0.6.2
+// Version: 0.7.0
 // 
 // The MIT License (MIT)
 // Copyright (c) 2014 Erik Ringsmuth
@@ -37,10 +37,34 @@
 }(this, function() {
   'use strict';
 
-  // Check for html5 support
-  var html5 = ('querySelector' in document && 'localStorage' in window && 'addEventListener' in window);
+  // Private static variables
+  var captureOnlyEventTypes = { 'blur': true, 'focus': true, 'mouseenter': true, 'mouseleave': true, 'resize': true, 'scroll': true };
 
   var Nex = {
+    // Utility methods and properties
+    utilities: {
+      // Check for html5 support
+      html5: 'querySelector' in document && 'localStorage' in window && 'addEventListener' in window,
+
+      // Parse the HTML string to get 'on-eventtype' attributes. This is used to set up event handlers.
+      // This is built for speed, not accuracy. The check won't guarantee it's an attribute. It doesn't
+      // hurt to listen to non-existent types and that rarely happens even with the simple regex matcher.
+      parseEventTypes: function parseEventTypes(htmlString) {
+        // Matches a string like '<button on-click="eventCallback">Send</button>' and returns [' on-click'].
+        // We split on the '-' later. JavaScript regex doesn't have lookbehind support to clean this up ahead
+        // of time.
+        var matches = htmlString.match(/\son-\w+(?==")/g);
+        var eventTypes = [];
+        if (matches) {
+          for (var i = 0; i < matches.length; i++) {
+            var eventType = matches[i].split('-')[1];
+            if (eventTypes.indexOf(eventType) === -1) eventTypes.push(eventType);
+          }
+        }
+        return eventTypes;
+      }
+    },
+
     // Nex.View
     View: {
       // Extend the base view like this `var MyView = Nex.View.extend(extendingView);`
@@ -186,8 +210,10 @@
           };
 
           // view.html() - replace view.el's HTML with the htmlString
+          //
+          // This also sets up event listeners defined in the htmlString.
           view.html = function html(htmlString) {
-            if (html5) {
+            if (Nex.utilities.html5) {
               view.el.innerHTML = htmlString;
             } else {
               // IE8 workaround since el.innerHTML and el.insertAdjacentHTML fail when an event is currently being
@@ -200,6 +226,7 @@
               while (view.el.firstChild) view.el.removeChild(view.el.firstChild);
               while (tempEl.firstChild) view.el.appendChild(tempEl.firstChild);
             }
+            addEventListeners(Nex.utilities.parseEventTypes(htmlString));
           };
 
           // view.attachTo(selector|element) - attach this view to the element
@@ -212,7 +239,7 @@
             } else {
               throw 'You can\'t attach the view to ' + selector;
             }
-            if (html5) {
+            if (Nex.utilities.html5) {
               element.innerHTML = '';
             } else {
               while (element.firstChild) element.removeChild(element.firstChild);
@@ -229,66 +256,63 @@
             };
           }
 
-          // view.on - delegate events. These are bound once to the root object so subsequent calls to view.render()
-          // don't need to re-bind events. Events work differently than jQuery delegate events since there aren't
-          // native ECMAScript delegate events. jQuery swapped event.target and event.currentTarget. Who knows why...
+          // view.dispatchEvent(event) - dispatch an event and call the event handler in it's target's
+          // `on-eventtype="eventHandler"'` attribute
+          view.dispatchEvent = function dispatchEvent(event) {
+            // Check if the event was triggered in a nested view
+            if (!event._outOfOriginatingViewScope) {
+              if (!event.target) event.target = event.srcElement; // IE8
+              var attrs = event.target.attributes;
+              // Not an array, it's a NamedNodeMap object {'length': 1, '0': {'name': 'on-click', value: 'eventHandlerName'}}
+              for (var i = 0; i < attrs.length; i++) {
+                // Check if the element has a on-eventtype attribute that matches this event listener's event type
+                if (attrs[i].name.substring(0, 3) === 'on-' && attrs[i].name.substring(3) === event.type) {
+                  view[attrs[i].value].call(view, event);
+                }
+              }
+              event._outOfOriginatingViewScope = true;
+            }
+          };
+
+          // Set up the view's event listeners. These are defined in the template and parsed in view.html(htmlString). The
+          // event listeners are bound to view.el. Typically all event types will have event listeners bound after the first
+          // render. There is only one event listener per type. This even listener delegates calling the correct event
+          // handler.
+          //
+          // Example:
+          // <!-- myTemplate.html -->
+          // <div> <!-- myView.el is the element the event listeners are bound to -->
+          //   <input name="first-name" placeholder="Enter your name" />
+          //   <button on-click="sendForm">Send</button>
+          // </div>
           //
           // var MyView = View.extend({
-          //   this.on: {
-          //    'click span a': function(event) {
-          //       this; // will reference your instance of `MyView`
-          //       event.target; // will reference the DOM element the action took place on. This is `a` in this example.
-          //       event.currentTarget; // will reference `this.el` which is the root element that all events are bound to.
-          //    }
+          //   template: Handlebars.compile(myTemplate),
+          //   sendForm: function (event) {
+          //     this; // will reference your instance of `MyView`
+          //     event.target; // will reference the DOM element the action took place on. This is the button in this example.
+          //     event.currentTarget; // will reference `this.el` which is the root element that all events are bound to.
+          //   }
           // })
-          if (typeof(view.on) === 'undefined') view.on = {};
-          // Keep a reference to all of the event listeners for testing
           var eventListeners = {};
-          for (var callbackName in view.on) {
-            if (view.on.hasOwnProperty(callbackName)) {
-              // ['click', 'span', 'a'] from example
-              var eventParts = callbackName.split(' ');
-
-              // 'click' from example
-              var action = eventParts[0];
-
-              // 'span a' from example
-              var selector = eventParts.splice(1, eventParts.length - 1).join(' ');
-
-              // Bind all events to the root element
-              (function(action, selector, callbackName) {
-                var eventListener = function eventListener(event) {
-                  // Check if the event was triggered on an element that matches the query selector
-                  var matchingElements = view.el.querySelectorAll(selector);
-                  for (var i in matchingElements) {
-                    if (!event.target) event.target = event.srcElement; // IE8
-                    if (event.target === matchingElements[i]) {
-                      view.on[callbackName].call(view, event);
-                      break;
-                    }
-                  }
-                };
+          var addEventListeners = function addEventListeners(eventTypes) {
+            for (var i = 0; i < eventTypes.length; i++) {
+              var eventType = eventTypes[i];
+              // We only need to set up one event listener for each type
+              if (!eventListeners[eventType]) {
                 if (window.addEventListener) {
-                  view.el.addEventListener(action, eventListener, true);
+                  if (captureOnlyEventTypes[eventType]) {
+                    view.el.addEventListener(eventType, view.dispatchEvent, true);
+                  } else {
+                    view.el.addEventListener(eventType, view.dispatchEvent, false);
+                  }
                 } else {
                   // IE 8 and older, events are prefixed with 'on'
-                  view.el.attachEvent('on' + action, eventListener);
+                  view.el.attachEvent('on' + eventType, view.dispatchEvent);
                 }
-                if (typeof(eventListeners[action]) === 'undefined') eventListeners[action] = [];
-                eventListeners[action].push(eventListener);
-              })(action, selector, callbackName);
+                eventListeners[eventType] = true;
+              }
             }
-          }
-
-          // view.displatchMockEvent() - triggers a mock event for integration testing event handlers
-          view.dispatchMockEvent = function dispatchMockEvent(mockEvent) {
-            if (typeof(mockEvent) === 'undefined') throw 'You must pass a mock event';
-            if (typeof(mockEvent.type) === 'undefined') throw 'You specify an event type';
-            if (typeof(mockEvent.target) === 'undefined') throw 'You specify an event target';
-            if (typeof(eventListeners[mockEvent.type]) === 'undefined') throw 'There are no event handlers set up for ' + mockEvent.type + 'events';
-            eventListeners[mockEvent.type].forEach(function(eventListener) {
-              eventListener(mockEvent);
-            });
           };
 
           // view.initialize() - a hook to add additional logic when creating an instance of the view

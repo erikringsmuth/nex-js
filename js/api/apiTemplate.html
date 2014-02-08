@@ -30,8 +30,6 @@
 
   // This event handler gets called when a keypress event is triggered on the input
   updateNameOnEnter: function(event) {
-    this; // will reference the instance of `MyView`
-    event.target; // will reference the DOM element the action took place on. This is the `input` in this example.
     if (event.keyCode === 13) {
       this.model.name = event.target.value;
       this.render();
@@ -47,6 +45,32 @@
 <p>Create an instance of your view, render it, and attach it to the document.</p>
 
 <pre class="prettyprint"><code>new MyView().attachTo('body');</code></pre>
+
+<h4 id="events" class="spacer">Events</h4>
+
+<p>Events are defined in the template using hyphenated <code>on-eventtype</code> attributes.</p>
+
+<pre class="prettyprint"><code>&lt;input type="text" on-keypress="updateNameOnEnter"&gt;</code></pre>
+
+<p>This differs from regular JavaScript event handlers that are not hyphenated. This will call the global <code>window.updateNameOnEnter()</code>.</p>
+
+<pre class="prettyprint"><code>&lt;input type="text" onkeypress="updateNameOnEnter()"&gt;</code></pre>
+
+<p>Nex events are scoped to the current view. The <code>on-keypress="updateNameOnEnter"</code> attribute tells the view to call the <code>updateNameOnEnter(event)</code> event handler.</p>
+
+<pre class="prettyprint"><code>var MyView = Nex.View.extend({
+  template: Handlebars.compile('&lt;input type="text" on-keypress="updateNameOnEnter"&gt;'),
+
+  updateNameOnEnter: function(event) {
+    // 13 is the enter key
+    if (event.keyCode === 13) {
+      this.model.name = event.target.value;
+      this.render();
+    }
+  }
+});</code></pre>
+
+<p>In the event handler <code>this</code> will reference the instance of the view. <code>event.target</code> will reference the element the event was triggered on (the <code>input</code> in this example).</p>
 
 <h4 id="properties" class="spacer">View Properties</h4>
 
@@ -231,32 +255,3 @@ myView.dispatchEvent({
 // Assert
 expect(myView.model.items.length).toEqual(1);
 expect(myView.model.items[0].title).toEqual('my first item!');</code></pre>
-
-<h4 id="events" class="spacer">Events</h4>
-
-<p>Events are defined on an element using a hyphenated <code>on-eventtype</code> attribute.</p>
-
-<pre class="prettyprint"><code>&lt;input type="text" on-keypress="updateNameOnEnter"&gt;</code></pre>
-
-<p>This differs from regular JavaScript event handlers that are not hyphenated. This will call the global <code>window.updateNameOnEnter()</code>.</p>
-
-<pre class="prettyprint"><code>&lt;input type="text" onkeypress="updateNameOnEnter()"&gt;</code></pre>
-
-<p>Nex events are scoped to the current view. The <code>on-keypress="updateNameOnEnter"</code> attribute tells the view to call the <code>updateNameOnEnter(event)</code> event handler.</p>
-
-<pre class="prettyprint"><code>var MyView = Nex.View.extend({
-  template: Handlebars.compile(myTemplate),
-
-  updateNameOnEnter: function(event) {
-    this; // will reference the instance of `MyView`
-    event.target; // will reference the DOM element the action took place on. This is the `input` in this example.
-
-    // 13 is the enter key
-    if (event.keyCode === 13) {
-      this.model.name = event.target.value;
-      this.render();
-    }
-  }
-});</code></pre>
-
-<p>Using attributes is declarative and easy to understand. They're even more efficient than regular delegate events because there's only one event listener per event type.</p>

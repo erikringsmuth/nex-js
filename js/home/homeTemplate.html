@@ -20,7 +20,7 @@
   </div>
 
   <div class="col-sm-5">
-    <div id="todo-component"></div>
+    <component id="todo-component"></component>
   </div>
 </div>
 
@@ -38,7 +38,7 @@
   <div class="col-md-8 col-md-pull-4">
 <pre class="prettyprint"><code>&lt;h1&gt;Hello \{{model.name}}!&lt;/h1&gt;
 &lt;input type="text" on-keypress="updateNameOnEnter"&gt;
-&lt;div id="todo-widget"&gt;&lt;/div&gt;</code></pre>
+&lt;component id="todo-app"&gt;&lt;/component&gt;</code></pre>
 <pre class="prettyprint"><code>var HomeView = Nex.View.extend({
   template: Handlebars.compile(homeTemplate),
   layout: LayoutView,
@@ -50,7 +50,7 @@
     }
   },
   components: {
-    '#todo-widget': TodoWidget
+    '#todo-app': TodoView
   }
 });</code></pre>
   </div>
@@ -89,9 +89,9 @@
     &lt;div&gt; &lt;!-- homeView.el --&gt;
       &lt;h1&gt;Hello Nex!&lt;/h1&gt;
       &lt;input type="text" on-keypress="updateNameOnEnter"&gt;
-      &lt;div id="todo-widget"&gt;
-        &lt;!-- The Todo MVC widget will be attached here --&gt;
-      &lt;/div&gt;
+      &lt;component id="todo-app"&gt;
+        &lt;!-- The Todo MVC app will be attached here --&gt;
+      &lt;/component&gt;
     &lt;/div&gt;
   &lt;/main&gt;
 &lt;div&gt;</code></pre>

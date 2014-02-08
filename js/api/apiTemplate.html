@@ -10,9 +10,9 @@
 &lt;!-- on-eventtype attributes call the event handler and are scoped to this view --&gt;
 &lt;input type="text" placeholder="Enter your name" on-keypress="updateNameOnEnter"&gt;
 
-&lt;div id="todo-widget"&gt;
-  &lt;!-- A Todo MVC widget will be attached here --&gt;
-&lt;/div&gt;</code></pre>
+&lt;component id="todo-app"&gt;
+  &lt;!-- The Todo MVC app will be attached here --&gt;
+&lt;/component&gt;</code></pre>
 
 <h4 id="extend" class="spacer">Nex.View.extend()</h4>
 
@@ -38,7 +38,7 @@
 
   // Components are sub-views that are automatically created and attached to this view
   components: {
-    '#todo-widget': TodoView
+    '#todo-app': TodoView
   }
 });</code></pre>
 
@@ -160,24 +160,24 @@ The <code>body</code> HTML will be.
 
 <h4 id="components" class="spacer">components</h4>
 
-<p>These are views or widgets that are automatically created and attached to the view. When an instance of the view is created it creates instances of the components and attaches them to their selectors.</p>
+<p>These are views or widgets that are automatically created and attached to this view. When an instance of this view is created it creates instances of the components and attaches them to their selectors.</p>
 
-<pre class="prettyprint"><code>var Widget = Nex.View.extend({
-  template: Handlebars.compile('I\'m a widget!')
+<pre class="prettyprint"><code>var MyComponent = Nex.View.extend({
+  template: Handlebars.compile('I\'m a component!')
 });
 
 var MyView = Nex.View.extend({
-  template: Handlebars.compile('&lt;div&gt;Example component below.&lt;/div&gt;&lt;div id="widget1"&gt;&lt;/div&gt;'),
+  template: Handlebars.compile('&lt;div&gt;Example component below.&lt;/div&gt;&lt;component id="my-component"&gt;&lt;/component&gt;'),
   components: {
-    '#widget1': Widget
+    '#my-component': MyComponent
   }
 });</code></pre>
 
 An instance of <code>MyView</code> will have this HTML.
 <pre class="prettyprint"><code>&lt;div&gt;Example component below.&lt;/div&gt;
-&lt;div id="widget1"&gt;
-  &lt;div&gt;I'm a widget!&lt;/div&gt;
-&lt;/div&gt;</code></pre>
+&lt;component id="my-component"&gt;
+  &lt;div&gt;I'm a component!&lt;/div&gt;
+&lt;/component&gt;</code></pre>
 
 <p>The cool thing about components is if you re-render this view it doesn't have to re-render the components. This view already has references to the rendered components so it just attaches them again when the view finishes re-rendering. The same thing goes for re-rendering a layout view. Underneath it takes the <code>contentPlaceholder</code> and turns it into a component. When you re-render the layout it just attaches this view again using the <code>contentPlaceholder</code>.</p>
 

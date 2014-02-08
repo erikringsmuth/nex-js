@@ -72,7 +72,7 @@ define([
             // Act
             var newTodoInput = todoView.el.querySelector('#new-todo');
             newTodoInput.value = 'my first todo!';
-            todoView.dispatchMockEvent({
+            todoView.dispatchEvent({
               type: 'keypress',
               target: todoView.el.querySelector('#new-todo'),
               keyCode: 13
@@ -110,7 +110,7 @@ define([
             // Act
             var newTodoInput = todoView.el.querySelector('#new-todo');
             newTodoInput.value = 'my first todo!  ';
-            todoView.dispatchMockEvent({
+            todoView.dispatchEvent({
               type: 'keypress',
               target: todoView.el.querySelector('#new-todo'),
               keyCode: 13
@@ -148,7 +148,7 @@ define([
             // Act
             var newTodoInput = todoView.el.querySelector('#new-todo');
             newTodoInput.value = '  ';
-            todoView.dispatchMockEvent({
+            todoView.dispatchEvent({
               type: 'keypress',
               target: todoView.el.querySelector('#new-todo'),
               keyCode: 13
@@ -187,7 +187,7 @@ define([
             var todoView = new TodoView();
 
             // Act
-            todoView.dispatchMockEvent({
+            todoView.dispatchEvent({
               type: 'click',
               target: todoView.el.querySelector('button#clear-completed')
             });
@@ -227,7 +227,7 @@ define([
             // Act
             var toggleCheckbox = todoView.el.querySelector('input#toggle-all');
             toggleCheckbox.checked = true;
-            todoView.dispatchMockEvent({
+            todoView.dispatchEvent({
               type: 'click',
               target: toggleCheckbox
             });
@@ -267,7 +267,7 @@ define([
             // Act
             var toggleCheckbox = todoView.el.querySelector('#todo-list li[data-id="2"] input.toggle');
             toggleCheckbox.checked = true;
-            todoView.dispatchMockEvent({
+            todoView.dispatchEvent({
               type: 'click',
               target: toggleCheckbox
             });
@@ -305,7 +305,7 @@ define([
             var todoView = new TodoView();
 
             // Act
-            todoView.dispatchMockEvent({
+            todoView.dispatchEvent({
               type: 'dblclick',
               target: todoView.el.querySelector('#todo-list li[data-id="2"] label')
             });
@@ -345,7 +345,7 @@ define([
             // Act
             var todoInput = todoView.el.querySelector('#todo-list li[data-id="2"] input.edit');
             todoInput.value = 'changed item';
-            todoView.dispatchMockEvent({
+            todoView.dispatchEvent({
               type: 'keypress',
               target: todoInput,
               keyCode: 13
@@ -386,7 +386,7 @@ define([
             // Act
             var todoInput = todoView.el.querySelector('#todo-list li[data-id="2"] input.edit');
             todoInput.value = 'changed item';
-            todoView.dispatchMockEvent({
+            todoView.dispatchEvent({
               type: 'blur',
               target: todoInput
             });
@@ -426,7 +426,7 @@ define([
             // Act
             var todoInput = todoView.el.querySelector('#todo-list li[data-id="2"] input.edit');
             todoInput.value = 'changed item';
-            todoView.dispatchMockEvent({
+            todoView.dispatchEvent({
               type: 'keydown',
               target: todoInput,
               keyCode: 27
@@ -467,7 +467,7 @@ define([
             // Act
             var todoInput = todoView.el.querySelector('#todo-list li[data-id="2"] input.edit');
             todoInput.value = ' ';
-            todoView.dispatchMockEvent({
+            todoView.dispatchEvent({
               type: 'keypress',
               target: todoInput,
               keyCode: 13
@@ -507,7 +507,7 @@ define([
             var todoView = new TodoView();
 
             // Act
-            todoView.dispatchMockEvent({
+            todoView.dispatchEvent({
               type: 'click',
               target: todoView.el.querySelector('#todo-list li[data-id="2"] button.destroy')
             });

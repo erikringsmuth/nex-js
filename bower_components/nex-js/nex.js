@@ -38,7 +38,7 @@
   'use strict';
 
   // Private static variables
-  var captureOnlyEventTypes = ['blur', 'focus', 'mouseenter', 'mouseleave', 'resize', 'scroll'];
+  var captureOnlyEventTypes = { 'blur': true, 'focus': true, 'mouseenter': true, 'mouseleave': true, 'resize': true, 'scroll': true };
 
   var Nex = {
     // Utility methods and properties
@@ -209,6 +209,8 @@
           };
 
           // view.html() - replace view.el's HTML with the htmlString
+          //
+          // This also sets up event listeners defined in the htmlString.
           view.html = function html(htmlString) {
             if (Nex.utilities.html5) {
               view.el.innerHTML = htmlString;
@@ -253,10 +255,31 @@
             };
           }
 
-          // Template <tag on-eventtype="eventHandlerName"/> delegate events. This sets up event listeners for the event
-          // types used in the template. It checks for additional event types any time view.html(htmlString) is called.
-          // The event listeners are bound to view.el. Typically all event types will have event listeners bound after the
-          // first render. There is only 1 event listener per type. This even listener delegates calling the event handlers.
+          // view.dispatchEvent(event) - dispatch an event and call the event handler in it's target's
+          // `on-eventtype="eventHandler"'` attribute
+          view.dispatchEvent = function dispatchEvent(event) {
+            // Check if the event was triggered in a nested view
+            if (!event._outOfOriginatingViewScope) {
+              if (!event.target) event.target = event.srcElement; // IE8
+              var attrs = event.target.attributes;
+              // Not an array, it's a NamedNodeMap object { 'length': 1, '0': { 'name': 'on-click', value: 'sendForm' } }
+              for (var i = 0; i < attrs.length; i++) {
+                // Check if the element has a on-eventtype attribute that matches this event listener's event type. We could
+                // have a click event listener for one element and click on a different element that doesn't have an on-click
+                // attribute.
+                if (attrs[i].name.substring(0, 3) === 'on-' && attrs[i].name.substring(3) === event.type) {
+                  // The example would call myView.sendForm(event)
+                  view[attrs[i].value].call(view, event);
+                }
+              }
+              event._outOfOriginatingViewScope = true;
+            }
+          };
+
+          // Set up the view's event listeners. These are defined in the template and parsed in view.html(htmlString). The
+          // event listeners are bound to view.el. Typically all event types will have event listeners bound after the first
+          // render. There is only one event listener per type. This even listener delegates calling the correct event
+          // handler.
           //
           // Example:
           // <!-- myTemplate.html -->
@@ -273,24 +296,6 @@
           //     event.currentTarget; // will reference `this.el` which is the root element that all events are bound to.
           //   }
           // })
-          var delegateEventListener = function delegateEventListener(event) {
-            // Check if the event was triggered in a nested view
-            if (!event._outOfOriginatingViewScope) {
-              if (!event.target) event.target = event.srcElement; // IE8
-              var attrs = event.target.attributes;
-              // Not an array, it's an object { 'length': 1, '0': { 'name': 'on-click', value: 'sendForm' } }
-              for (var i = 0; i < attrs.length; i++) {
-                // Check if the element has a on-eventtype attribute that matches this event listener's event type. We could
-                // have a click event listener for one element and click on a different element that doesn't have an on-click
-                // attribute.
-                if (attrs[i].name.substring(0, 3) === 'on-' && attrs[i].name.substring(3) === event.type) {
-                  // The example would call myView.sendForm(event)
-                  view[attrs[i].value].call(view, event);
-                }
-              }
-              event._outOfOriginatingViewScope = true;
-            }
-          };
           var eventListeners = {};
           var addEventListeners = function addEventListeners(eventTypes) {
             for (var i = 0; i < eventTypes.length; i++) {
@@ -298,16 +303,14 @@
               // We only need to set up one event listener for each type
               if (!eventListeners[eventType]) {
                 if (window.addEventListener) {
-                  if (captureOnlyEventTypes.indexOf(eventType) === -1) {
-                    // Must happen on the bubble phase or the _outOfOriginatingViewScope check will have the opposite effect and be set by the outer-most view
-                    view.el.addEventListener(eventType, delegateEventListener, false);
+                  if (captureOnlyEventTypes[eventType]) {
+                    view.el.addEventListener(eventType, view.dispatchEvent, true);
                   } else {
-                    // Listen in the capture phase
-                    view.el.addEventListener(eventType, delegateEventListener, true);
+                    view.el.addEventListener(eventType, view.dispatchEvent, false);
                   }
                 } else {
                   // IE 8 and older, events are prefixed with 'on'
-                  view.el.attachEvent('on' + eventType, delegateEventListener);
+                  view.el.attachEvent('on' + eventType, view.dispatchEvent);
                 }
                 eventListeners[eventType] = true;
               }

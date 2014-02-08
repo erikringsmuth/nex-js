@@ -1,6 +1,6 @@
 // {nex.js} - Unleashing the power of AMD for web applications.
 //
-// Version: 0.6.2
+// Version: 0.7.0
 // 
 // The MIT License (MIT)
 // Copyright (c) 2014 Erik Ringsmuth
@@ -50,8 +50,9 @@
       // This is built for speed, not accuracy. The check won't guarantee it's an attribute. It doesn't
       // hurt to listen to non-existent types and that rarely happens even with the simple regex matcher.
       parseEventTypes: function parseEventTypes(htmlString) {
-        // Matches a string like ' on-click="' and returns [' on-click'] which we will split on the '-'
-        // later. JavaScript regex doesn't have lookbehind support to clean this up ahead of time.
+        // Matches a string like '<button on-click="eventCallback">Send</button>' and returns [' on-click'].
+        // We split on the '-' later. JavaScript regex doesn't have lookbehind support to clean this up ahead
+        // of time.
         var matches = htmlString.match(/\son-\w+(?==")/g);
         var eventTypes = [];
         if (matches) {
@@ -262,13 +263,10 @@
             if (!event._outOfOriginatingViewScope) {
               if (!event.target) event.target = event.srcElement; // IE8
               var attrs = event.target.attributes;
-              // Not an array, it's a NamedNodeMap object { 'length': 1, '0': { 'name': 'on-click', value: 'sendForm' } }
+              // Not an array, it's a NamedNodeMap object {'length': 1, '0': {'name': 'on-click', value: 'eventHandlerName'}}
               for (var i = 0; i < attrs.length; i++) {
-                // Check if the element has a on-eventtype attribute that matches this event listener's event type. We could
-                // have a click event listener for one element and click on a different element that doesn't have an on-click
-                // attribute.
+                // Check if the element has a on-eventtype attribute that matches this event listener's event type
                 if (attrs[i].name.substring(0, 3) === 'on-' && attrs[i].name.substring(3) === event.type) {
-                  // The example would call myView.sendForm(event)
                   view[attrs[i].value].call(view, event);
                 }
               }

@@ -7,7 +7,7 @@ define([
 ], function(Nex, Handlebars, layoutTemplate, router) {
   'use strict';
 
-  return Nex.View.extend({
+  return Nex.defineComponent('layout', {
     template: Handlebars.compile(layoutTemplate),
 
     contentPlaceholder: '#content-placeholder',

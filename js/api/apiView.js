@@ -8,14 +8,14 @@ define([
 ], function(Nex, Handlebars, apiTemplate, LayoutView, utilities) {
   'use strict';
 
-  return Nex.View.extend({
+  return Nex.defineComponent('api-page', {
     template: Handlebars.compile(apiTemplate),
     
     layout: LayoutView,
 
     render: function render() {
       this.html(this.template({model: this.model}));
-      utilities.formatCode(this.el);
+      utilities.formatCode(this);
       return this;
     }
   });

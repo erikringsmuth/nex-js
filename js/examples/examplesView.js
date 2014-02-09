@@ -8,7 +8,7 @@ define([
 ], function(Nex, Handlebars, examplesTemplate, LayoutView, utilities) {
   'use strict';
 
-  return Nex.View.extend({
+  return Nex.defineComponent('examples-page', {
     template: Handlebars.compile(examplesTemplate),
     
     layout: LayoutView,

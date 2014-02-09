@@ -61,6 +61,14 @@ pre code {
   margin-top: 2em;
 }
 
+/* Alerts */
+.notification {
+  background-color: #43ac6a;
+  color: #ffffff;
+  padding: 15px;
+  border: 1px solid #3c9a5f;
+}
+
 /* Jasine Spec Runner */
 .spec-runner {
   width: 100%;

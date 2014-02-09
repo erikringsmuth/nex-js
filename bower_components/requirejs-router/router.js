@@ -179,7 +179,11 @@ define([], function() {
     },
 
     // router.routeArguments(route, url) - parse the url to get the route arguments
+    //
+    // Both parameters are optional.
     routeArguments: function routeArguments(route, url) {
+      if (!route) route = router.activeRoute;
+      if (!url) url = router.currentUrl();
       var args = {};
       var path = router.urlPath(url);
 

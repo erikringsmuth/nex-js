@@ -14,9 +14,7 @@ define([
 
     layout: LayoutView,
 
-    components: {
-      '#todo-component': TodoView
-    },
+    components: [TodoView],
 
     render: function render() {
       this.html(this.template({model: this.model}));

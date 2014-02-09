@@ -178,7 +178,7 @@ define([], function() {
       return true;
     },
 
-    // router.routeArguments(route, url) - parse the url to get the route arguments
+    // router.routeArguments([route, [url]]) - parse the url to get the route arguments
     //
     // Both parameters are optional.
     routeArguments: function routeArguments(route, url) {

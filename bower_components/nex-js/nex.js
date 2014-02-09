@@ -39,7 +39,7 @@
 
   var Nex = {
     // Define a nex component by calling `var MyComponent = Nex.defineComponent('my-component', { template: ... })`
-    defineComponent: function defineComponent(name, componentProperties) {
+    defineComponent: function defineComponent(componentName, componentProperties) {
       if (typeof(componentProperties) === 'undefined') componentProperties = {};
 
       // Your component's constructor function. Create a component like this `var myComponent = new MyComponent()`.
@@ -50,7 +50,9 @@
         // Example:
         // <component name="my-component"></component>
         var component = document.createElement(componentProperties.tagName || 'component');
-        component.setAttribute('name', name);
+        component.componentName = componentName;
+        component.setAttribute('name', componentName);
+        var hasBeenRendered = false;
 
         // Extend the component with the componentProperties
         // This is used to set className, id, etc.
@@ -61,16 +63,27 @@
         }
 
         // component.components - sub-components that are automatically created, rendered, and attached to this component
-        if (typeof(component.components) !== 'object') component.components = {};
-        component._initializedComponents = {};
-        for (var componentSelector in component.components) {
-          if(component.components.hasOwnProperty(componentSelector)) {
-            component._initializedComponents[componentSelector] = component.components[componentSelector];
-            // Create an instance of the component if it's a constructor function
-            if (typeof component._initializedComponents[componentSelector] === 'function') {
-              component._initializedComponents[componentSelector] = new component._initializedComponents[componentSelector]();
-            }
-          }
+        if (typeof(component.components) !== 'object') component.components = [];
+        var registeredComponents = {};
+
+        // Attach components to this component
+        var attachComponent = function attachComponent(subComponent, componentName) {
+          var placeholderElement = component.querySelector('component [name=' + componentName + ']');
+          if (!placeholderElement) throw 'The template doesn\'t have a component "' + componentName + '" to attach to.';
+          placeholderElement.parentElement.replaceChild(subComponent, placeholderElement);
+        };
+
+        // component.registerComponent(component, [componentName]) - register a component and optionally set or override it's name
+        component.registerComponent = function registerComponent(Component, componentName) {
+          if (typeof(componentName) === 'undefined') componentName = Component.componentName;
+          if (typeof(Component) === 'function') Component = new Component();
+          registeredComponents[componentName] = Component;
+          if (hasBeenRendered) attachComponent(Component, componentName);
+        };
+
+        // Register all of the components
+        for (var i in component.components) {
+          component.registerComponent(component.components[i]);
         }
 
         // component.layout - the layout contains your site's layout (header, footer, etc.)
@@ -82,8 +95,8 @@
           if (typeof(component.layout.contentPlaceholder) !== 'string') {
             throw 'The layout must have contentPlaceholder.';
           }
-          // Set this element as a component of the layout. That's all it is in the end.
-          component.layout._initializedComponents[component.layout.contentPlaceholder] = component;
+          // Register this component with the layout. That's all it is in the end.
+          component.layout.registerComponent(component, component.layout.contentPlaceholder);
         }
 
         // component.contentPlaceholder - the layout's content placeholder selector for the child component
@@ -135,25 +148,18 @@
         // innerRender() is actually overridden by specifying a component.render() method
         if (typeof(component.render) !== 'undefined') innerRender = component.render;
 
-        var shouldRenderLayout = component.layout ? true : false;
         component.render = function render() {
-          // Walk up the component chain rendering layouts on the initial render
-          if(shouldRenderLayout) {
-            component.layout.render();
-            shouldRenderLayout = false;
-          }
-
           // Call the method that renders this component
           var innerRenderReturnValue = innerRender.call(component, arguments);
 
           // Attach it's components (this is how the layout attaches the child elements)
-          for (var componentSelector in component._initializedComponents) {
-            if(component._initializedComponents.hasOwnProperty(componentSelector)) {
-              var placeholderElement = component.querySelector(componentSelector);
-              if (!placeholderElement) throw 'Invalid component selector or layout contentPlaceholder: ' + componentSelector;
-              placeholderElement.parentElement.replaceChild(component._initializedComponents[componentSelector], placeholderElement);
+          for (var componentName in registeredComponents) {
+            if(registeredComponents.hasOwnProperty(componentName)) {
+              attachComponent(registeredComponents[componentName], componentName);
             }
           }
+
+          hasBeenRendered = true;
 
           // Return the value from the original render method
           return innerRenderReturnValue;
@@ -268,9 +274,8 @@
           component.ready.apply(component, arguments);
         }
 
-        // Do the initial render of the component. Don't do an initial render if it's a layout. The initial render
-        // of the content will render the layout when it's ready.
-        if (component.autoRender !== false && typeof(component.contentPlaceholder) === 'undefined') {
+        // Do the initial render of the component
+        if (component.autoRender !== false) {
           component.render.call(component);
         }
 
@@ -278,7 +283,7 @@
       };
 
       // Set the component name
-      Component.name = name;
+      Component.componentName = componentName;
 
       return Component;
     },

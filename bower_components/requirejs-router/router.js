@@ -62,14 +62,14 @@ define([], function() {
         }
       }
 
-      // Allow the user to override automatically calling loadCurrentRoute on every statechange event
+      // Call loadCurrentRoute on every statechange event
       if (options.loadCurrentRouteOnStateChange !== false) {
         router.on('statechange', function() {
           router.loadCurrentRoute();
         });
       }
 
-      // Trigger the initial statechange. This will load the current route.
+      // Trigger the initial statechange event
       if (options.triggerInitialStateChange !== false) {
         router.fire('statechange');
       }
@@ -103,7 +103,7 @@ define([], function() {
     // router.activeRoute - the active route
     activeRoute: {},
 
-    // router.on(eventName, eventHandler([arg1, [arg2]]) {}) - Register a callback with router.on() to listen for events
+    // router.on(eventName, eventHandler([arg1, [arg2]]) {}) - Register an event handler
     on: function on(eventName, eventHandler) {
       if (eventName === 'statechange') {
         eventHandlers.statechange.push(eventHandler);
@@ -113,12 +113,22 @@ define([], function() {
       return router;
     },
 
-    // router.fire(eventName, [arg1, [arg2]])
+    // router.fire(eventName, [arg1, [arg2]]) - Fire an event
     fire: function fire(eventName) {
       if (eventHandlers[eventName]) {
         var eventArguments = Array.prototype.slice.call(arguments, 1);
         for (var i = 0; i < eventHandlers[eventName].length; i++) {
           eventHandlers[eventName][i].apply(router, eventArguments);
+        }
+      }
+    },
+
+    // router.off(eventName, eventHandler) - Remove an event handler
+    off: function off(eventName, eventHandler) {
+      if (eventHandlers[eventName]) {
+        var eventHandlerIndex = eventHandlers[eventName].indexOf(eventHandler);
+        if (eventHandlerIndex !== -1) {
+          eventHandlers[eventName].splice(eventHandlerIndex, 1);
         }
       }
     },

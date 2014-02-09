@@ -4,8 +4,9 @@ define([
   'handlebars',
   './todoModel',
   'text!./todoTemplate.html',
-  './common'
-], function(Nex, Handlebars, TodoModel, todoTemplate, common) {
+  './common',
+  'router'
+], function(Nex, Handlebars, TodoModel, todoTemplate, common, router) {
   'use strict';
 
   return Nex.defineComponent('todo-app', {
@@ -13,7 +14,15 @@ define([
     template: Handlebars.compile(todoTemplate),
 
     // Get the model during initialization
-    model: new TodoModel().fetch(),
+    model: new TodoModel(router.routeArguments().todoFilter).fetch(),
+
+    ready: function ready() {
+      var self = this;
+      router.on('routeload', function(model, routeArguments) {
+        self.model.filter = routeArguments.todoFilter;
+        self.render();
+      });
+    },
 
     // Create a new todo
     createNewTodoOnEnter: function createNewTodoOnEnter(event) {

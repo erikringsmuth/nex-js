@@ -4,24 +4,20 @@ define([
 ], function(common) {
   'use strict';
 
-  return function TodoModel(routeArguments) {
+  return function TodoModel() {
     var model = this;
-    if (typeof(routeArguments) === 'undefined') {
-      routeArguments = {};
-    }
 
-    // Fields
     model.todos = [];
 
-    // Properties
+    model.filter = 'all';
 
     model.routes = {
-      todoAll: function() { return routeArguments.todoFilter === 'all'; },
-      todoActive: function() { return typeof(routeArguments.todoFilter) === 'undefined' || routeArguments.todoFilter === 'active'; },
-      todoCompleted: function() { return routeArguments.todoFilter === 'completed'; }
+      todoAll: function() { return model.filter === 'all'; },
+      todoActive: function() { return typeof(model.filter) === 'undefined' || model.filter === 'active'; },
+      todoCompleted: function() { return model.filter === 'completed'; }
     };
 
-    // Filter the displayed todos based on the route
+    // Filter the displayed todos
     model.filteredTodos = function() {
       if (model.routes.todoAll()) return model.todos;
       if (model.routes.todoActive()) return model.todos.filter(function(todo) { return !todo.completed; });

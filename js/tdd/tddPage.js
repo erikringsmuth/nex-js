@@ -3,19 +3,19 @@ define([
   'nex',
   'handlebars',
   'text!./tddTemplate.html',
-  'js/layout/layoutView',
+  'js/layout/layout',
   'js/util/utilities'
-], function(Nex, Handlebars, tddTemplate, LayoutView, utilities) {
+], function(Nex, Handlebars, tddTemplate, Layout, utilities) {
   'use strict';
 
-  return Nex.View.extend({
+  return Nex.defineComponent('tdd-page', {
     template: Handlebars.compile(tddTemplate),
     
-    layout: LayoutView,
+    layout: Layout,
 
     render: function render() {
-      this.html(this.template({model: this.model}));
-      utilities.formatCode(this.el);
+      this.html(this.template(this));
+      utilities.formatCode(this);
       return this;
     }
   });

@@ -14,14 +14,14 @@ define([
       // Define all of your routes here
       routes: {
         // home matches path = '/' or '/nex-js/'
-        home: {path: /^\/(nex-js\/)?$/i, moduleId: 'js/home/homeView'},
-        api: {path: '/api', moduleId: 'js/api/apiView'},
-        examples: {path: '/examples', moduleId: 'js/examples/examplesView'},
-        tdd: {path: '/tdd', moduleId: 'js/tdd/tddView'},
-        notes: {path: '/notes', moduleId: 'js/notes/notesView'},
-        download: {path: '/download', moduleId: 'js/download/downloadView'},
-        dev: {path: '/dev', moduleId: 'js/dev/child/childView'},
-        notFound: {path: '*', moduleId: 'js/notFound/notFoundView'}
+        home: {path: /^\/(nex-js\/)?$/i, moduleId: 'js/home/homePage'},
+        api: {path: '/api', moduleId: 'js/api/apiPage'},
+        examples: {path: '/examples', moduleId: 'js/examples/examplesPage'},
+        tdd: {path: '/tdd', moduleId: 'js/tdd/tddPage'},
+        notes: {path: '/notes', moduleId: 'js/notes/notesPage'},
+        download: {path: '/download', moduleId: 'js/download/downloadPage'},
+        dev: {path: '/dev', moduleId: 'js/dev/child/childPage'},
+        notFound: {path: '*', moduleId: 'js/notFound/notFoundPage'}
       },
 
       // When a route loads, render the view and attach it to the document

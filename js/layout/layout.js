@@ -9,9 +9,6 @@ define([
 
   return Nex.defineComponent('layout', {
     template: Handlebars.compile(layoutTemplate),
-
-    contentPlaceholder: 'content-placeholder',
-
     model: {
       routes: router.routes
     }

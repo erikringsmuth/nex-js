@@ -3,19 +3,19 @@ define([
   'nex',
   'handlebars',
   'text!./notesTemplate.html',
-  'js/layout/layoutView',
+  'js/layout/layout',
   'js/util/utilities'
-], function(Nex, Handlebars, notesTemplate, LayoutView, utilities) {
+], function(Nex, Handlebars, notesTemplate, Layout, utilities) {
   'use strict';
 
-  return Nex.View.extend({
+  return Nex.defineComponent('notes-page', {
     template: Handlebars.compile(notesTemplate),
     
-    layout: LayoutView,
+    layout: Layout,
 
     render: function render() {
-      this.html(this.template({model: this.model}));
-      utilities.formatCode(this.el);
+      this.html(this.template(this));
+      utilities.formatCode(this);
       return this;
     }
   });

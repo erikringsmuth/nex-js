@@ -3,12 +3,12 @@ define([
   'nex',
   'handlebars',
   'text!./notFoundTemplate.html',
-  'js/layout/layoutView'
-], function(Nex, Handlebars, notFoundTemplate, LayoutView) {
+  'js/layout/layout'
+], function(Nex, Handlebars, notFoundTemplate, Layout) {
   'use strict';
 
-  return Nex.View.extend({
+  return Nex.defineComponent('not-found-page', {
     template: Handlebars.compile(notFoundTemplate),
-    layout: LayoutView
+    layout: Layout
   });
 });

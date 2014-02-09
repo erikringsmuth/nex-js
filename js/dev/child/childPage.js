@@ -3,12 +3,12 @@ define([
   'nex',
   'handlebars',
   'text!./childTemplate.html',
-  'js/dev/parent/parentView',
+  'js/dev/parent/parentPage',
   'js/util/utilities'
-], function(Nex, Handlebars, childTemplate, ParentView, utilities) {
+], function(Nex, Handlebars, childTemplate, ParentPage, utilities) {
   'use strict';
 
-  return Nex.View.extend({
+  return Nex.defineComponent('child-dev-page', {
     initialize: function initialize(routeArguments) {
       // Store the route arguments during initialization
       this.model.routeArguments = JSON.stringify(routeArguments, null, 2);
@@ -20,11 +20,11 @@ define([
       inputText: 'Child input text'
     },
     
-    layout: ParentView,
+    layout: ParentPage,
 
     render: function render() {
-      this.html(this.template({model: this.model}));
-      utilities.formatCode(this.el);
+      this.html(this.template(this));
+      utilities.formatCode(this);
       return this;
     },
 

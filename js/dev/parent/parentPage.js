@@ -7,7 +7,7 @@ define([
 ], function(Nex, Handlebars, parentTemplate, LayoutView) {
   'use strict';
 
-  return Nex.View.extend({
+  return Nex.defineComponent('parent-dev-page', {
     template: Handlebars.compile(parentTemplate),
 
     model: {

@@ -45,9 +45,10 @@
       // Your component's constructor function. Create a component like this `var myComponent = new MyComponent()`.
       var Component = function Component() {
 
-        // The DOM element. This defaults to a component tag but you can override it.
+        // The DOM element. This defaults to a component tag but you can override it by setting the tagName property.
         //
         // Example:
+        // Nex.defineComponent('my-component');
         // <component name="my-component"></component>
         var component = document.createElement(componentProperties.tagName || 'component');
         component.componentName = componentName;
@@ -68,9 +69,8 @@
 
         // Attach components to this component
         var attachComponent = function attachComponent(subComponent, componentName) {
-          var placeholderElement = component.querySelector('component [name=' + componentName + ']');
-          if (!placeholderElement) throw 'The template doesn\'t have a component "' + componentName + '" to attach to.';
-          placeholderElement.parentElement.replaceChild(subComponent, placeholderElement);
+          var placeholderElement = component.querySelector('component [name="' + componentName + '"]');
+          if (placeholderElement) placeholderElement.parentElement.replaceChild(subComponent, placeholderElement);
         };
 
         // component.registerComponent(component, [componentName]) - register a component and optionally set or override it's name
@@ -82,7 +82,7 @@
         };
 
         // Register all of the components
-        for (var i in component.components) {
+        for (var i = 0; i < component.components.length; i++) {
           component.registerComponent(component.components[i]);
         }
 
@@ -92,16 +92,9 @@
           if (typeof component.layout === 'function') {
             component.layout = new component.layout();
           }
-          if (typeof(component.layout.contentPlaceholder) !== 'string') {
-            throw 'The layout must have contentPlaceholder.';
-          }
-          // Register this component with the layout. That's all it is in the end.
-          component.layout.registerComponent(component, component.layout.contentPlaceholder);
-        }
-
-        // component.contentPlaceholder - the layout's content placeholder selector for the child component
-        if (typeof(component.contentPlaceholder) !== 'undefined' && typeof(component.contentPlaceholder) !== 'string' ) {
-          throw 'The contentPlaceholder must be a string.';
+          // Register this component with the layout. This will attach it to the layout. It uses a reserved component name
+          // 'content-placeholder'. Every layout must have this element <component name="content-placeholder"></component>.
+          component.layout.registerComponent(component, 'content-placeholder');
         }
 
         // component.outerEl - this refers to the layout component if it exists, otherwise it's a reference to this component
@@ -136,7 +129,7 @@
           // Compile the template and set the elements's HTML
           if (typeof(component.template) === 'function') {
             // Compiled template
-            component.html(component.template({model: model}));
+            component.html(component.template(component));
           } else if (typeof(component.template) === 'string') {
             // Simple, non-dynamic HTML
             component.html(component.template);
@@ -152,7 +145,7 @@
           // Call the method that renders this component
           var innerRenderReturnValue = innerRender.call(component, arguments);
 
-          // Attach it's components (this is how the layout attaches the child elements)
+          // Attach sub-components
           for (var componentName in registeredComponents) {
             if(registeredComponents.hasOwnProperty(componentName)) {
               attachComponent(registeredComponents[componentName], componentName);
@@ -193,7 +186,7 @@
           } else if (selector.appendChild) {
             element = selector;
           } else {
-            throw 'You can\'t attach the nex element to ' + selector;
+            throw 'You can\'t attach the component to ' + selector;
           }
           if (Nex.utilities.html5) {
             element.innerHTML = '';

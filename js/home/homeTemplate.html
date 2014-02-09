@@ -2,7 +2,7 @@
 
 <div class="row">
   <div class="col-sm-7">
-    <h1 id="viewjs"><span class="brand">{</span>nex<span class="brand">.</span>js<span class="brand">}</span></h1>
+    <h1><span class="brand">{</span>nex<span class="brand">.</span>js<span class="brand">}</span></h1>
 
     <p class="lead">Unleashing the power of AMD for web applications.</p>
 
@@ -28,22 +28,22 @@
 
 <div class="row">
   <div class="col-md-12">
-    <h2>Views</h2>
+    <h2>Components</h2>
   </div>
 </div>
 
 <div class="row">
   <div class="col-md-4 col-md-push-8">
-    <p><code>homeTemplate.html</code> and <code>homeView.js</code></p>
-    <p>Route directly to your home view. The home view has a layout and components. Events are declared in the template and are scoped to this view.</p>
+    <p><code>homePage.html</code> and <code>homePage.js</code></p>
+    <p>Route directly to your home page. The home page has a layout and components. Events are declared in the template and are scoped to this view.</p>
   </div>
   <div class="col-md-8 col-md-pull-4">
 <pre class="prettyprint"><code>&lt;h1&gt;Hello \{{model.name}}!&lt;/h1&gt;
 &lt;input type="text" on-keypress="updateNameOnEnter"&gt;
-&lt;component id="todo-app"&gt;&lt;/component&gt;</code></pre>
-<pre class="prettyprint"><code>var HomeView = Nex.View.extend({
-  template: Handlebars.compile(homeTemplate),
-  layout: LayoutView,
+&lt;component name="todo-app"&gt;&lt;/component&gt;</code></pre>
+<pre class="prettyprint"><code>var HomePage = Nex.defineComponent('home-page', {
+  template: Handlebars.compile(homePageTemplate),
+  layout: Layout,
   model: { name: 'Nex' },
   updateNameOnEnter: function(event) {
     if (event.keyCode === 13) {
@@ -51,16 +51,14 @@
       this.render();
     }
   },
-  components: {
-    '#todo-app': TodoView
-  }
+  components: [TodoApp]
 });</code></pre>
   </div>
 </div>
 
 <div class="row spacer">
   <div class="col-md-4 col-md-push-8">
-    <p><code>layoutTemplate.html</code> and <code>layoutView.js</code></p>
+    <p><code>layout.html</code> and <code>layout.js</code></p>
     <p>The layout contains your site's header, footer, etc. This will get rendered on every page that has this layout.</p>
   </div>
   <div class="col-md-8 col-md-pull-4">
@@ -68,35 +66,46 @@
   &lt;a href="#/" \{{#if model.home}}class="active"\{{/if}}&gt;Home&lt;/a&gt;
   &lt;a href="#/examples" \{{#if model.examples}}class="active"\{{/if}}&gt;Examples&lt;/a&gt;
 &lt;/header&gt;
-&lt;main id="content"&gt;&lt;/main&gt;</code></pre>
-<pre class="prettyprint"><code>var LayoutView = Nex.View.extend({
+&lt;component name="content-placeholder"&gt;&lt;/component&gt;</code></pre>
+<pre class="prettyprint"><code>var Layout = Nex.defineComponent('layout', {
   template: Handlebars.compile(layoutTemplate),
-  model: { home: true, examples: false },
-  contentPlaceholder: '#content'
+  model: { home: true, examples: false }
 });</code></pre>
   </div>
 </div>
 
 <div class="row spacer">
   <div class="col-md-4 col-md-push-8">
-    <p>Creating a <code>new HomeView()</code> will render the home view, its layout, and components. You attach it to the document with <code>homeView.outerEl</code>.</p>
+    <p><code>todoApp.html</code> and <code>todoApp.js</code></p>
+    <p>The TodoMVC app is injected into the home page.</p>
   </div>
   <div class="col-md-8 col-md-pull-4">
-<pre class="prettyprint"><code>&lt;div&gt; &lt;!-- layoutView.el, homeView.outerEl --&gt;
+<pre class="prettyprint"><code>&lt;h2&gt;Todo MVC&lt;/h2&gt;</code></pre>
+<pre class="prettyprint"><code>var TodoApp = Nex.defineComponent('todo-app', {
+  template: Handlebars.compile(todoAppTemplate)
+});</code></pre>
+  </div>
+</div>
+
+<div class="row spacer">
+  <div class="col-md-4 col-md-push-8">
+    <p><code>var homePage = new HomePage()</code> will render the home page, its layout, and components. Attach it to the document using <code>homePage.attachTo('body')</code>. This will attach <code>homePage.outerEl</code> which includes the layout.</p>
+  </div>
+  <div class="col-md-8 col-md-pull-4">
+<pre class="prettyprint"><code>&lt;component name="layout"&gt;
   &lt;header&gt;
     &lt;a href="#/" class="active"&gt;Home&lt;/a&gt;
     &lt;a href="#/examples"&gt;Examples&lt;/a&gt;
   &lt;/header&gt;
-  &lt;main id="content"&gt;
-    &lt;div&gt; &lt;!-- homeView.el --&gt;
-      &lt;h1&gt;Hello Nex!&lt;/h1&gt;
-      &lt;input type="text" on-keypress="updateNameOnEnter"&gt;
-      &lt;component id="todo-app"&gt;
-        &lt;!-- The Todo MVC app will be attached here --&gt;
-      &lt;/component&gt;
-    &lt;/div&gt;
-  &lt;/main&gt;
-&lt;div&gt;</code></pre>
+  &lt;!-- the home page injected itself into the layout's `content-placeholder` component --&gt;
+  &lt;component name="home-page"&gt;
+    &lt;h1&gt;Hello Nex!&lt;/h1&gt;
+    &lt;input type="text" on-keypress="updateNameOnEnter"&gt;
+    &lt;component id="todo-app"&gt;
+      &lt;h2&gt;Todo MVC&lt;/h2&gt;
+    &lt;/component&gt;
+  &lt;/component&gt;
+&lt;component&gt;</code></pre>
   </div>
 </div>
 

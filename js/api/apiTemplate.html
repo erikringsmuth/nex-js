@@ -117,7 +117,7 @@
 
   // The default render method processes the template and attaches it to the component's DOM element
   render: function render() {
-    this.html(this.template({model: this.model}));
+    this.html(this.template(this));
     return this;
   }
 });</code></pre>
@@ -183,7 +183,7 @@ An instance of <code>HomePage</code> will have this HTML.
 <p>Render populates the contents of <code>component</code> with the template HTML. This is called when you create a new instance of a component. When your model changes you call <code>render()</code> to update the DOM. Every component has a default <code>render()</code> method that looks like this.</p>
 
 <pre class="prettyprint"><code>function render() {
-  this.html(this.template({model: this.model}));
+  this.html(this.template(this));
   return this;
 }</code></pre>
 

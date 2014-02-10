@@ -6,19 +6,17 @@
 
     <p class="lead">Semantic, declarative, AMD web apps.</p>
 
-    <p>Everything is an element! Nex components are like views but they're built on plain DOM elements. The view is the element!</p>
+    <p>Everything is an element! Nex components are like views but they're built on plain DOM elements. The component's API is on the DOM element!</p>
+
+    <p>Nex.js and the <a href="https://github.com/erikringsmuth/requirejs-router">RequireJS Router</a> give you a powerful IoC pattern for routing and loading views. The router lazy loads component. Nex renders the component and injects the layout. The layout is now completely decoupled from the router. It's fully AMD compatible plus it's built on vanilla JS.</p>
 
     <h2>Why Nex</h2>
 
-    <p>Nex.js and the <a href="https://github.com/erikringsmuth/requirejs-router">RequireJS Router</a> give you a powerful IoC pattern for routing and loading views. The router lazy loads views. Nex renders the view and injects the layout. The layout is now completely decoupled from the router. It's fully AMD compatible plus it's built on vanilla JS.</p>
+    <p><a href="http://requirejs.org/docs/whyamd.html">AMD</a> is the future of Javascript dependency injection. Modules clearly define their dependencies. <a href="http://requirejs.org/">require.js</a> is the only script tag you include. The rest of your scripts are loaded using AMD. No more globals!</p>
 
-    <p>First, <a href="http://requirejs.org/docs/whyamd.html">why AMD</a>. AMD is the future of Javascript dependency injection. Modules clearly define their dependencies. <a href="http://requirejs.org/">require.js</a> is the only script tag you include. The rest of your scripts are loaded using AMD. No more globals!</p>
+    <p>The <a href="https://github.com/erikringsmuth/requirejs-router">RequireJS Router</a> lazy loads modules as you navigate to each page. You're site could contain 10MB of Javascript and HTML templates and it would only load the 10KB for the current page. With Nex the router loads your component and your component injects the layout. You attach <code>component.outerEl</code> to the document with everything rendered.</p>
 
-    <p>The router comes next. Other frameworks load all of your app's Javascript up front. You can optimize your site by compiling it down to one file but that doesn't scale. The <a href="https://github.com/erikringsmuth/requirejs-router">RequireJS Router</a> lazy loads modules as you navigate to each page. You're site could contain 10MB of Javascript and HTML templates and it would only load the 10KB for the current page.</p>
-
-    <p>Last, nex-js views. Other frameworks render the layout (header, footer, etc.) then use the router to load the content. With nex-js the router loads your view and your view injects the layout. You attach <code>view.outerEl</code> to the document with everything rendered.</p>
-
-    <p>The combination of AMD, a lazy loading router, and layout views gives you an awesome toolset to build your application. This is the next step in web application design.</p>
+    <p>The combination of AMD, a lazy loading router, and layouts gives you an awesome toolset to build your application. This is the next step in web application design.</p>
 
     <p>Check out the <a href="#/examples">examples</a> to see how it works. This site's source is a great example of a <a href="https://github.com/erikringsmuth/nex-js">nex-js</a> and <a href="https://github.com/erikringsmuth/requirejs-router">RequireJS Router</a> setup. It's available in the <a href="https://github.com/erikringsmuth/nex-js/tree/gh-pages">gh-pages branch</a> of nex-js. Licensed under <a href="https://github.com/erikringsmuth/nex-js/blob/master/license.md">MIT</a>.</p>
   </div>
@@ -37,7 +35,7 @@
 <div class="row">
   <div class="col-md-4 col-md-push-8">
     <p><code>homePage.html</code> and <code>homePage.js</code></p>
-    <p>Route directly to your home page. The home page has a layout and components. Events are declared in the template and are scoped to this view.</p>
+    <p>Route directly to your home page. The home page has a layout and components. Events are declared in the template and are scoped to this component.</p>
   </div>
   <div class="col-md-8 col-md-pull-4">
 <pre class="prettyprint"><code>&lt;h1&gt;Hello \{{model.name}}!&lt;/h1&gt;
@@ -61,7 +59,7 @@
 <div class="row spacer">
   <div class="col-md-4 col-md-push-8">
     <p><code>layout.html</code> and <code>layout.js</code></p>
-    <p>The layout contains your site's header, footer, etc. This will get rendered on every page that has this layout.</p>
+    <p>The layout contains your site's header, footer, etc. The <code>HomePage</code> will be attached to the content-placeholder.</p>
   </div>
   <div class="col-md-8 col-md-pull-4">
 <pre class="prettyprint"><code>&lt;header&gt;
@@ -79,7 +77,7 @@
 <div class="row spacer">
   <div class="col-md-4 col-md-push-8">
     <p><code>todoApp.html</code> and <code>todoApp.js</code></p>
-    <p>The TodoMVC app is injected into the home page.</p>
+    <p>The home page will inject this TodoMVC app.</p>
   </div>
   <div class="col-md-8 col-md-pull-4">
 <pre class="prettyprint"><code>&lt;h2&gt;Todo MVC&lt;/h2&gt;</code></pre>
@@ -91,7 +89,7 @@
 
 <div class="row spacer">
   <div class="col-md-4 col-md-push-8">
-    <p><code>var homePage = new HomePage()</code> will render the home page, its layout, and components. Attach it to the document using <code>homePage.attachTo('body')</code>. This will attach <code>homePage.outerEl</code> which includes the layout.</p>
+    <p>Calling <code>var homePage = new HomePage()</code> will render the home page, its layout, and components. Attach it to the document using <code>homePage.attachTo('body')</code>. This will attach <code>homePage.outerEl</code> which includes the layout.</p>
   </div>
   <div class="col-md-8 col-md-pull-4">
 <pre class="prettyprint"><code>&lt;component name="layout"&gt; &lt;!-- layout, homePage.outerEl --&gt;

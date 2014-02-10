@@ -53,7 +53,7 @@
   &lt;/component&gt;
 &lt;/component&gt;</code></pre>
 
-<p>The component is the DOM element which has a few nice features. The DOM element exists as soon as you create an instance of the component. It's fully rendered before it's attached to the document. Delegate events are attached to the root <code><component></code> element so they don't need to be re-bound every time you render the component.</p>
+<p>The component is the DOM element which has a few nice features. The DOM element exists as soon as you create an instance of the component. It's fully rendered before it's attached to the document. Delegate events are attached to the root <code>&lt;component&gt;</code> element so they don't need to be re-bound every time you render the component.</p>
 
 <p>To access DOM elements within the component you should scope your selectors using <code>component.querySelector()</code> and <code>component.querySelectorAll()</code>. This allows you to access the component's elements before attaching the component to the document. This makes unit testing much easier. It also keeps the selectors scoped to your component so you don't accidentally select an element outside of your component.</p>
 
@@ -130,7 +130,7 @@
 
 <h4 id="layout" class="spacer">layout</h4>
 
-<p>The <code>layout</code> is a constructor or instance of a special component that contains your site's header, footer, etc. The layout is like a .NET master page or Razor layout. This makes routing easy since you don't need an intermediate step to render the layout. Calling <code>render()</code> on the component will automatically call <code>render()</code> on the layout. The component is attached to the layout using the layout's <code><component name="content-placeholder"></component></code> element. Once the components are done rendering <code>component.outerEl</code> will contain both the component and the layout. Here's an example component and layout component.</p>
+<p>The <code>layout</code> is a constructor or instance of a special component that contains your site's header, footer, etc. The layout is like a .NET master page or Razor layout. This makes routing easy since you don't need an intermediate step to render the layout. Calling <code>render()</code> on the component will automatically call <code>render()</code> on the layout. The component is attached to the layout using the layout's <code>&lt;component name="content-placeholder"&gt;&lt;/component&gt;</code> element. Once the components are done rendering <code>component.outerEl</code> will contain both the component and the layout. Here's an example component and layout component.</p>
 
 <pre class="prettyprint"><code>var Layout = Nex.defineComponent('layout', {
   template: Handlebars.compile('&lt;header&gt;Header&lt;/header&gt;&lt;component name="content-placeholder"&gt;&lt;/component&gt;')
@@ -176,7 +176,7 @@ An instance of <code>HomePage</code> will have this HTML.
   &lt;/component&gt;
 &lt;/component&gt;</code></pre>
 
-<p>The cool thing about components is if you re-render this component it doesn't have to re-render it's sub-components. This component already has references to the rendered sub-components so it just attaches them again when this component finishes re-rendering. The same thing goes for re-rendering a layout. Underneath it takes the <code><component name="content-placeholder"></component></code> and attaches the content component to it.</p>
+<p>The cool thing about components is if you re-render this component it doesn't have to re-render it's sub-components. This component already has references to the rendered sub-components so it just attaches them again when this component finishes re-rendering. The same thing goes for re-rendering a layout. Underneath it takes the <code>&lt;component name="content-placeholder"&gt;&lt;/component&gt;</code> and attaches the content component to it.</p>
 
 <h4 id="render" class="spacer">render()</h4>
 

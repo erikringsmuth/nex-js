@@ -1,4 +1,4 @@
-<div class="notification">Nex is alpha software. It's an experiment to find simple and intuitive UI design patterns. The RequireJS Router is production ready. It's a thin layer on top of RequireJS to provide simple lazy loading routing.</div>
+<div class="notification">Nex is alpha software. It's an experiment to find simple and intuitive UI design patterns. The RequireJS Router is production ready. It's a thin layer on top of RequireJS to provide lazy loading routing.</div>
 
 <div class="row">
   <div class="col-sm-7">
@@ -8,7 +8,7 @@
 
     <p>Everything is an element! Nex components are like views but they're built on plain DOM elements. The component's API is on the DOM element!</p>
 
-    <p>Nex.js and the <a href="https://github.com/erikringsmuth/requirejs-router">RequireJS Router</a> give you a powerful IoC pattern for routing and loading views. The router lazy loads component. Nex renders the component and injects the layout. The layout is now completely decoupled from the router. It's fully AMD compatible plus it's built on vanilla JS.</p>
+    <p>Nex components and the <a href="https://github.com/erikringsmuth/requirejs-router">RequireJS Router</a> give you a powerful IoC pattern for routing and loading views. The router lazy loads components. Nex renders the component and injects the layout. The layout is now completely decoupled from the router. It's fully AMD compatible plus it's built on vanilla JS.</p>
 
     <h2>Why Nex</h2>
 
@@ -97,11 +97,10 @@
     &lt;a href="#/" class="active"&gt;Home&lt;/a&gt;
     &lt;a href="#/examples"&gt;Examples&lt;/a&gt;
   &lt;/header&gt;
-  &lt;!-- the home page injected itself into the layout's `content-placeholder` component --&gt;
-  &lt;component name="home-page"&gt;
+  &lt;component name="home-page"&gt; &lt;!-- the home-page replaced the content-placeholder --&gt;
     &lt;h1&gt;Hello Nex!&lt;/h1&gt;
     &lt;input type="text" on-keypress="updateNameOnEnter"&gt;
-    &lt;component id="todo-app"&gt;
+    &lt;component name="todo-app"&gt;
       &lt;h2&gt;Todo MVC&lt;/h2&gt;
     &lt;/component&gt;
   &lt;/component&gt;

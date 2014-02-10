@@ -92,7 +92,7 @@
   });
 });</code></pre>
 
-<p class="spacer">Create <code class="pln">/js/layout/layoutTemplate.html</code> - This is your app's layout HTML. A layout contains common elements like the header, footer, etc. This will get rendered with every component that has this layout.</p>
+<p class="spacer">Create <code class="pln">/js/layout/layoutTemplate.html</code> - This is your app's layout HTML. A layout contains common elements like the header, footer, etc. This will get rendered with every component that has this layout. You can see the <code>&lt;component name="content-placeholder"&gt;&lt;/component&gt;</code> where the home page will be attached.</p>
 
 <pre class="prettyprint"><code>&lt;header class="navbar navbar-default"&gt;
   &lt;div class="container"&gt;
@@ -107,7 +107,7 @@
   &lt;component name="content-placeholder"&gt;&lt;/component&gt;
 &lt;/main&gt;</code></pre>
 
-<p class="spacer">Create <code class="pln">/js/layout/layout.js</code> - This is the nex-js layout. You can see the <code>contentPlaceholder</code> points to the layout HTML <code>&lt;component name="content-placeholder"&gt;&lt;/component&gt;</code>. This is how your components's are attached to the layout.</p>
+<p class="spacer">Create <code class="pln">/js/layout/layout.js</code> - This is the nex-js layout component.</p>
 
 <pre class="prettyprint"><code>define([
   'nex',

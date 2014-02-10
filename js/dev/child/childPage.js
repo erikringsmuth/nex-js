@@ -9,7 +9,7 @@ define([
   'use strict';
 
   return Nex.defineComponent('child-dev-page', {
-    initialize: function initialize(routeArguments) {
+    ready: function ready(routeArguments) {
       // Store the route arguments during initialization
       this.model.routeArguments = JSON.stringify(routeArguments, null, 2);
     },
@@ -29,7 +29,7 @@ define([
     },
 
     updateInputText: function updateInputText() {
-      this.model.inputText = this.el.querySelector('#child-input-text').value;
+      this.model.inputText = this.querySelector('#child-input-text').value;
       this.render();
     },
 

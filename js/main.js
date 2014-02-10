@@ -22,6 +22,7 @@ define([
       notFound: {path: '*', moduleId: 'js/notFound/notFoundPage'}
     });
 
+    // When a route loads, render the view and attach it to the document
     router.on('routeload', function onRouteLoad(View, routeArguments) {
       new View(routeArguments).attachTo('body');
       
@@ -29,7 +30,7 @@ define([
       scroll(0, 0);
     });
 
-    // Trigger the initial page load
+    // Set up event handlers and trigger the initial page load
     router.init();
   });
 });

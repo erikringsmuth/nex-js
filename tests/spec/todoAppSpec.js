@@ -6,15 +6,15 @@ define([
   'amd/jasmine',
   'amd/spyOn',
   'Squire',
-  'js/todo/todoView',
+  'js/todo/todoApp',
   'js/todo/todoModel'
-], function(describe, it, expect, jasmine, spyOn, Squire, TodoView, TodoModel) {
+], function(describe, it, expect, jasmine, spyOn, Squire, TodoApp, TodoModel) {
   'use strict';
 
   describe('The Todo MVC', function() {
     describe('view', function() {
       it('should load', function() {
-        expect(TodoView).toBeDefined();
+        expect(TodoApp).toBeDefined();
       });
 
       it('should fetch the model when creating a new instance of the view', function(done) {
@@ -37,9 +37,9 @@ define([
             model.fetch = fetchSpy;
             model.save = function() { return model; };
           })
-          .require(['js/todo/todoView'], function(TodoView) {
+          .require(['js/todo/todoApp'], function(TodoApp) {
             // Act
-            new TodoView();
+            new TodoApp();
 
             // Assert
             expect(fetchSpy).toHaveBeenCalled();
@@ -66,21 +66,21 @@ define([
             model.fetch = function() { return model; };
             model.save = function() { return model; };
           })
-          .require(['js/todo/todoView'], function(TodoView) {
-            var todoView = new TodoView();
+          .require(['js/todo/todoApp'], function(TodoApp) {
+            var todoApp = new TodoApp();
 
             // Act
-            var newTodoInput = todoView.el.querySelector('#new-todo');
+            var newTodoInput = todoApp.querySelector('#new-todo');
             newTodoInput.value = 'my first todo!';
-            todoView.dispatchEvent({
+            todoApp.dispatchEvent({
               type: 'keypress',
-              target: todoView.el.querySelector('#new-todo'),
+              target: todoApp.querySelector('#new-todo'),
               keyCode: 13
             });
 
             // Assert
-            expect(todoView.model.todos.length).toEqual(1);
-            expect(todoView.model.todos[0].title).toEqual('my first todo!');
+            expect(todoApp.model.todos.length).toEqual(1);
+            expect(todoApp.model.todos[0].title).toEqual('my first todo!');
             done();
           });
       });
@@ -104,21 +104,21 @@ define([
             model.fetch = function() { return model; };
             model.save = function() { return model; };
           })
-          .require(['js/todo/todoView'], function(TodoView) {
-            var todoView = new TodoView();
+          .require(['js/todo/todoApp'], function(TodoApp) {
+            var todoApp = new TodoApp();
 
             // Act
-            var newTodoInput = todoView.el.querySelector('#new-todo');
+            var newTodoInput = todoApp.querySelector('#new-todo');
             newTodoInput.value = 'my first todo!  ';
-            todoView.dispatchEvent({
+            todoApp.dispatchEvent({
               type: 'keypress',
-              target: todoView.el.querySelector('#new-todo'),
+              target: todoApp.querySelector('#new-todo'),
               keyCode: 13
             });
 
             // Assert
-            expect(todoView.model.todos.length).toEqual(1);
-            expect(todoView.model.todos[0].title).toEqual('my first todo!');
+            expect(todoApp.model.todos.length).toEqual(1);
+            expect(todoApp.model.todos[0].title).toEqual('my first todo!');
             done();
           });
       });
@@ -142,20 +142,20 @@ define([
             model.fetch = function() { return model; };
             model.save = function() { return model; };
           })
-          .require(['js/todo/todoView'], function(TodoView) {
-            var todoView = new TodoView();
+          .require(['js/todo/todoApp'], function(TodoApp) {
+            var todoApp = new TodoApp();
 
             // Act
-            var newTodoInput = todoView.el.querySelector('#new-todo');
+            var newTodoInput = todoApp.querySelector('#new-todo');
             newTodoInput.value = '  ';
-            todoView.dispatchEvent({
+            todoApp.dispatchEvent({
               type: 'keypress',
-              target: todoView.el.querySelector('#new-todo'),
+              target: todoApp.querySelector('#new-todo'),
               keyCode: 13
             });
 
             // Assert
-            expect(todoView.model.todos.length).toEqual(0);
+            expect(todoApp.model.todos.length).toEqual(0);
             done();
           });
       });
@@ -183,17 +183,17 @@ define([
             model.fetch = function() { return model; };
             model.save = function() { return model; };
           })
-          .require(['js/todo/todoView'], function(TodoView) {
-            var todoView = new TodoView();
+          .require(['js/todo/todoApp'], function(TodoApp) {
+            var todoApp = new TodoApp();
 
             // Act
-            todoView.dispatchEvent({
+            todoApp.dispatchEvent({
               type: 'click',
-              target: todoView.el.querySelector('button#clear-completed')
+              target: todoApp.querySelector('button#clear-completed')
             });
 
             // Assert
-            expect(todoView.model.todos.length).toEqual(1);
+            expect(todoApp.model.todos.length).toEqual(1);
             done();
           });
       });
@@ -221,19 +221,19 @@ define([
             model.fetch = function() { return model; };
             model.save = function() { return model; };
           })
-          .require(['js/todo/todoView'], function(TodoView) {
-            var todoView = new TodoView();
+          .require(['js/todo/todoApp'], function(TodoApp) {
+            var todoApp = new TodoApp();
 
             // Act
-            var toggleCheckbox = todoView.el.querySelector('input#toggle-all');
+            var toggleCheckbox = todoApp.querySelector('input#toggle-all');
             toggleCheckbox.checked = true;
-            todoView.dispatchEvent({
+            todoApp.dispatchEvent({
               type: 'click',
               target: toggleCheckbox
             });
 
             // Assert
-            expect(todoView.model.todos.every(function(todo) { return todo.completed === true; })).toBeTruthy();
+            expect(todoApp.model.todos.every(function(todo) { return todo.completed === true; })).toBeTruthy();
             done();
           });
       });
@@ -261,19 +261,19 @@ define([
             model.fetch = function() { return model; };
             model.save = function() { return model; };
           })
-          .require(['js/todo/todoView'], function(TodoView) {
-            var todoView = new TodoView();
+          .require(['js/todo/todoApp'], function(TodoApp) {
+            var todoApp = new TodoApp();
 
             // Act
-            var toggleCheckbox = todoView.el.querySelector('#todo-list li[data-id="2"] input.toggle');
+            var toggleCheckbox = todoApp.querySelector('#todo-list li[data-id="2"] input.toggle');
             toggleCheckbox.checked = true;
-            todoView.dispatchEvent({
+            todoApp.dispatchEvent({
               type: 'click',
               target: toggleCheckbox
             });
 
             // Assert
-            expect(todoView.model.todos[1].completed).toBeTruthy();
+            expect(todoApp.model.todos[1].completed).toBeTruthy();
             done();
           });
       });
@@ -301,17 +301,17 @@ define([
             model.fetch = function() { return model; };
             model.save = function() { return model; };
           })
-          .require(['js/todo/todoView'], function(TodoView) {
-            var todoView = new TodoView();
+          .require(['js/todo/todoApp'], function(TodoApp) {
+            var todoApp = new TodoApp();
 
             // Act
-            todoView.dispatchEvent({
+            todoApp.dispatchEvent({
               type: 'dblclick',
-              target: todoView.el.querySelector('#todo-list li[data-id="2"] label')
+              target: todoApp.querySelector('#todo-list li[data-id="2"] label')
             });
 
             // Assert
-            expect(todoView.model.todos[1].editing).toBeTruthy();
+            expect(todoApp.model.todos[1].editing).toBeTruthy();
             done();
           });
       });
@@ -339,20 +339,20 @@ define([
             model.fetch = function() { return model; };
             model.save = function() { return model; };
           })
-          .require(['js/todo/todoView'], function(TodoView) {
-            var todoView = new TodoView();
+          .require(['js/todo/todoApp'], function(TodoApp) {
+            var todoApp = new TodoApp();
 
             // Act
-            var todoInput = todoView.el.querySelector('#todo-list li[data-id="2"] input.edit');
+            var todoInput = todoApp.querySelector('#todo-list li[data-id="2"] input.edit');
             todoInput.value = 'changed item';
-            todoView.dispatchEvent({
+            todoApp.dispatchEvent({
               type: 'keypress',
               target: todoInput,
               keyCode: 13
             });
 
             // Assert
-            expect(todoView.model.todos[1].title).toEqual('changed item');
+            expect(todoApp.model.todos[1].title).toEqual('changed item');
             done();
           });
       });
@@ -380,19 +380,19 @@ define([
             model.fetch = function() { return model; };
             model.save = function() { return model; };
           })
-          .require(['js/todo/todoView'], function(TodoView) {
-            var todoView = new TodoView();
+          .require(['js/todo/todoApp'], function(TodoApp) {
+            var todoApp = new TodoApp();
 
             // Act
-            var todoInput = todoView.el.querySelector('#todo-list li[data-id="2"] input.edit');
+            var todoInput = todoApp.querySelector('#todo-list li[data-id="2"] input.edit');
             todoInput.value = 'changed item';
-            todoView.dispatchEvent({
+            todoApp.dispatchEvent({
               type: 'blur',
               target: todoInput
             });
 
             // Assert
-            expect(todoView.model.todos[1].title).toEqual('changed item');
+            expect(todoApp.model.todos[1].title).toEqual('changed item');
             done();
           });
       });
@@ -420,20 +420,20 @@ define([
             model.fetch = function() { return model; };
             model.save = function() { return model; };
           })
-          .require(['js/todo/todoView'], function(TodoView) {
-            var todoView = new TodoView();
+          .require(['js/todo/todoApp'], function(TodoApp) {
+            var todoApp = new TodoApp();
 
             // Act
-            var todoInput = todoView.el.querySelector('#todo-list li[data-id="2"] input.edit');
+            var todoInput = todoApp.querySelector('#todo-list li[data-id="2"] input.edit');
             todoInput.value = 'changed item';
-            todoView.dispatchEvent({
+            todoApp.dispatchEvent({
               type: 'keydown',
               target: todoInput,
               keyCode: 27
             });
 
             // Assert
-            expect(todoView.model.todos[1].title).toEqual('code some more');
+            expect(todoApp.model.todos[1].title).toEqual('code some more');
             done();
           });
       });
@@ -461,21 +461,21 @@ define([
             model.fetch = function() { return model; };
             model.save = function() { return model; };
           })
-          .require(['js/todo/todoView'], function(TodoView) {
-            var todoView = new TodoView();
+          .require(['js/todo/todoApp'], function(TodoApp) {
+            var todoApp = new TodoApp();
 
             // Act
-            var todoInput = todoView.el.querySelector('#todo-list li[data-id="2"] input.edit');
+            var todoInput = todoApp.querySelector('#todo-list li[data-id="2"] input.edit');
             todoInput.value = ' ';
-            todoView.dispatchEvent({
+            todoApp.dispatchEvent({
               type: 'keypress',
               target: todoInput,
               keyCode: 13
             });
 
             // Assert
-            expect(todoView.model.todos.length).toEqual(2);
-            expect(todoView.model.todos.some(function(todo) { return todo.id === '2'; })).toBeFalsy();
+            expect(todoApp.model.todos.length).toEqual(2);
+            expect(todoApp.model.todos.some(function(todo) { return todo.id === '2'; })).toBeFalsy();
             done();
           });
       });
@@ -503,19 +503,19 @@ define([
             model.fetch = function() { return model; };
             model.save = function() { return model; };
           })
-          .require(['js/todo/todoView'], function(TodoView) {
-            var todoView = new TodoView();
+          .require(['js/todo/todoApp'], function(TodoApp) {
+            var todoApp = new TodoApp();
 
             // Act
-            todoView.dispatchEvent({
+            todoApp.dispatchEvent({
               type: 'click',
-              target: todoView.el.querySelector('#todo-list li[data-id="2"] button.destroy')
+              target: todoApp.querySelector('#todo-list li[data-id="2"] button.destroy')
             });
 
             // Assert
-            expect(todoView.model.todos.length).toEqual(2);
-            expect(todoView.model.todos[0].id).toEqual('1');
-            expect(todoView.model.todos[1].id).toEqual('3');
+            expect(todoApp.model.todos.length).toEqual(2);
+            expect(todoApp.model.todos[0].id).toEqual('1');
+            expect(todoApp.model.todos[1].id).toEqual('3');
             done();
           });
       });
@@ -541,12 +541,12 @@ define([
             model.fetch = function() { return model; };
             model.save = function() { return model; };
           })
-          .require(['js/todo/todoView'], function(TodoView) {
+          .require(['js/todo/todoApp'], function(TodoApp) {
             // Act
-            var todoView = new TodoView();
+            var todoApp = new TodoApp();
 
             // Assert
-            expect(todoView.el.querySelector('#new-todo').autofocus).toBeTruthy();
+            expect(todoApp.querySelector('#new-todo').autofocus).toBeTruthy();
             done();
           });
       });
@@ -579,12 +579,12 @@ define([
             model.fetch = function() { return model; };
             model.save = function() { return model; };
           })
-          .require(['js/todo/todoView'], function(TodoView) {
+          .require(['js/todo/todoApp'], function(TodoApp) {
             // Act
-            var todoView = new TodoView();
+            var todoApp = new TodoApp();
 
             // Assert
-            expect(todoView.el.querySelectorAll('#toggle-all').checked).toBeFalsy();
+            expect(todoApp.querySelectorAll('#toggle-all').checked).toBeFalsy();
             done();
           });
       });
@@ -608,13 +608,13 @@ define([
             model.fetch = function() { return model; };
             model.save = function() { return model; };
           })
-          .require(['js/todo/todoView'], function(TodoView) {
+          .require(['js/todo/todoApp'], function(TodoApp) {
             // Act
-            var todoView = new TodoView();
+            var todoApp = new TodoApp();
 
             // Assert
-            expect(todoView.el.querySelector('section#main')).toBeFalsy();
-            expect(todoView.el.querySelector('footer#footer')).toBeFalsy();
+            expect(todoApp.querySelector('section#main')).toBeFalsy();
+            expect(todoApp.querySelector('footer#footer')).toBeFalsy();
             done();
           });
       });
@@ -647,12 +647,12 @@ define([
             model.fetch = function() { return model; };
             model.save = function() { return model; };
           })
-          .require(['js/todo/todoView'], function(TodoView) {
+          .require(['js/todo/todoApp'], function(TodoApp) {
             // Act
-            var todoView = new TodoView();
+            var todoApp = new TodoApp();
 
             // Assert
-            expect(todoView.el.querySelectorAll('#todo-list>li').length).toEqual(2);
+            expect(todoApp.querySelectorAll('#todo-list>li').length).toEqual(2);
             done();
           });
       });
@@ -680,12 +680,12 @@ define([
             model.fetch = function() { return model; };
             model.save = function() { return model; };
           })
-          .require(['js/todo/todoView'], function(TodoView) {
+          .require(['js/todo/todoApp'], function(TodoApp) {
             // Act
-            var todoView = new TodoView();
+            var todoApp = new TodoApp();
 
             // Assert
-            var checkedTodos = todoView.el.querySelectorAll('#todo-list li input.toggle');
+            var checkedTodos = todoApp.querySelectorAll('#todo-list li input.toggle');
             expect(checkedTodos[0].checked).toBeTruthy();
             expect(checkedTodos[1].checked).toBeFalsy();
             expect(checkedTodos[2].checked).toBeTruthy();
@@ -716,12 +716,12 @@ define([
             model.fetch = function() { return model; };
             model.save = function() { return model; };
           })
-          .require(['js/todo/todoView'], function(TodoView) {
+          .require(['js/todo/todoApp'], function(TodoApp) {
             // Act
-            var todoView = new TodoView();
+            var todoApp = new TodoApp();
 
             // Assert
-            expect(todoView.el.querySelector('#todo-list li.editing input.edit').autofocus).toBeTruthy();
+            expect(todoApp.querySelector('#todo-list li.editing input.edit').autofocus).toBeTruthy();
             done();
           });
       });
@@ -749,12 +749,12 @@ define([
             model.fetch = function() { return model; };
             model.save = function() { return model; };
           })
-          .require(['js/todo/todoView'], function(TodoView) {
+          .require(['js/todo/todoApp'], function(TodoApp) {
             // Act
-            var todoView = new TodoView();
+            var todoApp = new TodoApp();
 
             // Assert
-            expect(todoView.el.querySelector('#todo-count strong').innerText).toEqual('1');
+            expect(todoApp.querySelector('#todo-count strong').innerText).toEqual('1');
             done();
           });
       });
@@ -782,12 +782,12 @@ define([
             model.fetch = function() { return model; };
             model.save = function() { return model; };
           })
-          .require(['js/todo/todoView'], function(TodoView) {
+          .require(['js/todo/todoApp'], function(TodoApp) {
             // Act
-            var todoView = new TodoView();
+            var todoApp = new TodoApp();
 
             // Assert
-            expect(todoView.el.querySelector('#filters a.selected').innerText).toEqual('All');
+            expect(todoApp.querySelector('#filters a.selected').innerText).toEqual('All');
             done();
           });
       });
@@ -815,12 +815,12 @@ define([
             model.fetch = function() { return model; };
             model.save = function() { return model; };
           })
-          .require(['js/todo/todoView'], function(TodoView) {
+          .require(['js/todo/todoApp'], function(TodoApp) {
             // Act
-            var todoView = new TodoView();
+            var todoApp = new TodoApp();
 
             // Assert
-            expect(todoView.el.querySelector('#clear-completed')).not.toBeNull();
+            expect(todoApp.querySelector('#clear-completed')).not.toBeNull();
             done();
           });
       });
@@ -848,12 +848,12 @@ define([
             model.fetch = function() { return model; };
             model.save = function() { return model; };
           })
-          .require(['js/todo/todoView'], function(TodoView) {
+          .require(['js/todo/todoApp'], function(TodoApp) {
             // Act
-            var todoView = new TodoView();
+            var todoApp = new TodoApp();
 
             // Assert
-            expect(todoView.el.querySelector('#clear-completed')).toBeNull();
+            expect(todoApp.querySelector('#clear-completed')).toBeNull();
             done();
           });
       });
@@ -862,7 +862,8 @@ define([
     describe('model', function() {
       it('filtered todos should return all todos when using the all todos filter', function() {
         // Arrange
-        var model = new TodoModel({todoFilter: 'all'});
+        var model = new TodoModel();
+        model.filter = 'all';
         model.todos = [
           { title: 'code something', completed: true },
           { title: 'code some more', completed: false },
@@ -875,7 +876,8 @@ define([
 
       it('filtered todos should return the completed todos when using the completed filter', function() {
         // Arrange
-        var model = new TodoModel({todoFilter: 'completed'});
+        var model = new TodoModel();
+        model.filter = 'completed';
         model.todos = [
           { title: 'code something', completed: true },
           { title: 'code some more', completed: false },
@@ -888,7 +890,8 @@ define([
 
       it('filtered todos should return the active todos when using the active filter', function() {
         // Arrange
-        var model = new TodoModel({todoFilter: 'active'});
+        var model = new TodoModel();
+        model.filter = 'active';
         model.todos = [
           { title: 'code something', completed: true },
           { title: 'code some more', completed: false },

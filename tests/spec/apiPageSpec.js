@@ -3,18 +3,18 @@ define([
   'amd/describe',
   'amd/it',
   'amd/expect',
-  'js/api/apiView'
-], function(describe, it, expect, ApiView) {
+  'js/api/apiPage'
+], function(describe, it, expect, ApiPage) {
   'use strict';
 
   describe('The API view', function() {
     it('should load', function() {
-      expect(ApiView).toBeDefined();
+      expect(ApiPage).toBeDefined();
     });
 
     it('should have a layout view', function() {
-      var apiView = new ApiView();
-      expect(apiView.outerEl.querySelector('.navbar')).toBeTruthy();
+      var apiPage = new ApiPage();
+      expect(apiPage.outerEl.querySelector('.navbar')).toBeTruthy();
     });
   });
 });

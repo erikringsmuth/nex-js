@@ -36,16 +36,16 @@ define([], function() {
     router.fire('statechange');
   };
 
-  // Public interface
-
-  // There can only be one instance of the router
+  // router public interface
+  //
+  // There can only be one instance of the router.
   var router = {
     // router.init([options]) - initializes the router
     init: function init(options) {
       if (typeof(options) === 'undefined') options = {};
 
-      // Set up the window popstate or hashchange event listeners the first time the router is configured. A hashchange
-      // also triggers a popstate event in modern browsers so we only want to listen to one or the other.
+      // Set up the window popstate or hashchange event listeners. A hashchange also triggers
+      // a popstate event in modern browsers so we only want to listen to one or the other.
       if (window.addEventListener) {
         if (window.history && window.history.pushState) {
           window.addEventListener('popstate', nativeStateEventLisener, false);
@@ -77,9 +77,10 @@ define([], function() {
       return router;
     },
 
-    // router.registerRoutes() - register routes
+    // router.registerRoutes(routes) - register routes
     //
-    // This will add to the existing routes.
+    // This will add the routes to the existing routes. Specifying a route with the same name as
+    // an existing route will overwrite the old route with the new one.
     //
     // Example
     // router.registerRoutes({
@@ -88,7 +89,6 @@ define([], function() {
     //   notFound: {path: '*', moduleId: 'notFound/notFoundView'}
     // })
     registerRoutes: function registerRoutes(routes) {
-      // Add the routes
       for (var route in routes) {
         if (routes.hasOwnProperty(route)) {
           router.routes[route] = routes[route];
@@ -105,15 +105,14 @@ define([], function() {
 
     // router.on(eventName, eventHandler([arg1, [arg2]]) {}) - Register an event handler
     on: function on(eventName, eventHandler) {
-      if (eventName === 'statechange') {
-        eventHandlers.statechange.push(eventHandler);
-      } else if (eventName === 'routeload') {
-        eventHandlers.routeload.push(eventHandler);
-      }
+      if (typeof(eventHandlers[eventName]) === 'undefined') eventHandlers[eventName] = [];
+      eventHandlers[eventName].push(eventHandler);
       return router;
     },
 
     // router.fire(eventName, [arg1, [arg2]]) - Fire an event
+    //
+    // This will call all eventName event handlers with the arguments passed in.
     fire: function fire(eventName) {
       if (eventHandlers[eventName]) {
         var eventArguments = Array.prototype.slice.call(arguments, 1);

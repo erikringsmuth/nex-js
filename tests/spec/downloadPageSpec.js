@@ -3,18 +3,18 @@ define([
   'amd/describe',
   'amd/it',
   'amd/expect',
-  'js/download/downloadView'
-], function(describe, it, expect, DownloadView) {
+  'js/download/downloadPage'
+], function(describe, it, expect, DownloadPage) {
   'use strict';
 
   describe('The download view', function() {
     it('should load', function() {
-      expect(DownloadView).toBeDefined();
+      expect(DownloadPage).toBeDefined();
     });
 
     it('should have a layout view', function() {
-      var downloadView = new DownloadView();
-      expect(downloadView.outerEl.querySelector('.navbar')).toBeTruthy();
+      var downloadPage = new DownloadPage();
+      expect(downloadPage.outerEl.querySelector('.navbar')).toBeTruthy();
     });
   });
 });

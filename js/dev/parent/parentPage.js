@@ -3,8 +3,8 @@ define([
   'nex',
   'handlebars',
   'text!./parentTemplate.html',
-  'js/layout/layoutView'
-], function(Nex, Handlebars, parentTemplate, LayoutView) {
+  'js/layout/layout'
+], function(Nex, Handlebars, parentTemplate, Layout) {
   'use strict';
 
   return Nex.defineComponent('parent-dev-page', {
@@ -16,10 +16,10 @@ define([
     
     contentPlaceholder: '#parent-content-placeholder',
     
-    layout: LayoutView,
+    layout: Layout,
 
     updateInputText: function updateInputText() {
-      this.model.inputText = this.el.querySelector('#parent-input-text').value;
+      this.model.inputText = this.querySelector('#parent-input-text').value;
       this.render();
     },
 

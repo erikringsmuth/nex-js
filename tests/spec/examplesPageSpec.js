@@ -3,18 +3,18 @@ define([
   'amd/describe',
   'amd/it',
   'amd/expect',
-  'js/examples/examplesView'
-], function(describe, it, expect, ExamplesView) {
+  'js/examples/examplesPage'
+], function(describe, it, expect, ExamplesPage) {
   'use strict';
 
   describe('The examples view', function() {
     it('should load', function() {
-      expect(ExamplesView).toBeDefined();
+      expect(ExamplesPage).toBeDefined();
     });
 
     it('should have a layout view', function() {
-      var examplesView = new ExamplesView();
-      expect(examplesView.outerEl.querySelector('.navbar')).toBeTruthy();
+      var examplesPage = new ExamplesPage();
+      expect(examplesPage.outerEl.querySelector('.navbar')).toBeTruthy();
     });
   });
 });

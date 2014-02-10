@@ -2,31 +2,30 @@
 
 <h4 id="extend">Example template</h4>
 
-<p>This is your view's HTML. Choose any template engine! Handlebars is just an example.</p>
+<p>This is your components's HTML. Choose any template engine! Handlebars is just an example.</p>
 
 <pre class="prettyprint"><code>&lt;!-- myTemplate.html --&gt;
 &lt;div&gt;Hello \{{model.name}}!&lt;/div&gt;
 
-&lt;!-- on-eventtype attributes call the event handler and are scoped to this view --&gt;
+&lt;!-- on-eventtype attributes call the event handler and are scoped to this component --&gt;
 &lt;input type="text" placeholder="Enter your name" on-keypress="updateNameOnEnter"&gt;
 
-&lt;component id="todo-app"&gt;
-  &lt;!-- The Todo MVC app will be attached here --&gt;
-&lt;/component&gt;</code></pre>
+&lt;!-- This is a placeholder for a Todo App component to attach to --&gt;
+&lt;component name="todo-app"&gt;&lt;/component&gt;</code></pre>
 
-<h4 id="extend" class="spacer">Nex.View.extend()</h4>
+<h4 id="extend" class="spacer">Nex.defineComponent(componentName, componentProperties)</h4>
 
-<p>Create a view by extending the base view.</p>
+<p>Define a new components.</p>
 
-<pre class="prettyprint"><code>var MyView = Nex.View.extend({
-  // The view's HTML template
+<pre class="prettyprint"><code>var MyComponent = Nex.defineComponent('my-component', {
+  // The component's HTML template
   template: Handlebars.compile(myTemplate),
 
   // The model gets passed to the template
   model: { name: 'Nex' },
 
   // The layout contains your site's header, footer, etc.
-  layout: LayoutView,
+  layout: Layout,
 
   // This event handler gets called when a keypress event is triggered on the input
   updateNameOnEnter: function(event) {
@@ -36,15 +35,27 @@
     }
   },
 
-  // Components are sub-views that are automatically created and attached to this view
-  components: {
-    '#todo-app': TodoView
-  }
+  // Register the components you want to use
+  components: [TodoApp]
 });</code></pre>
 
-<p>Create an instance of your view, render it, and attach it to the document.</p>
+<p>Create an instance of your component, render it, and attach it to the document.</p>
 
-<pre class="prettyprint"><code>new MyView().attachTo('body');</code></pre>
+<pre class="prettyprint"><code>new MyComponent().attachTo('body');</code></pre>
+
+<p>This will create this HTML.</p>
+
+<pre class="prettyprint"><code>&lt;component name="my-component"&gt;
+  &lt;div&gt;Hello \{{model.name}}!&lt;/div&gt;
+  &lt;input type="text" placeholder="Enter your name" on-keypress="updateNameOnEnter"&gt;
+  &lt;component name="todo-app"&gt;
+    &lt;!-- The Todo MVC app will be attached here --&gt;
+  &lt;/component&gt;
+&lt;/component&gt;</code></pre>
+
+<p>The component is the DOM element which has a few nice features. The DOM element exists as soon as you create an instance of the component. It's fully rendered before it's attached to the document. Delegate events are attached to the root <code><component></code> element so they don't need to be re-bound every time you render the component.</p>
+
+<p>To access DOM elements within the component you should scope your selectors using <code>component.querySelector()</code> and <code>component.querySelectorAll()</code>. This allows you to access the component's elements before attaching the component to the document. This makes unit testing much easier. It also keeps the selectors scoped to your component so you don't accidentally select an element outside of your component.</p>
 
 <h4 id="events" class="spacer">Events</h4>
 
@@ -56,9 +67,9 @@
 
 <pre class="prettyprint"><code>&lt;input type="text" onkeypress="updateNameOnEnter()"&gt;</code></pre>
 
-<p>Nex events are scoped to the current view. The <code>on-keypress="updateNameOnEnter"</code> attribute tells the view to call the <code>updateNameOnEnter(event)</code> event handler.</p>
+<p>Nex events are scoped to the current component. The <code>on-keypress="updateNameOnEnter"</code> attribute tells the component to call the <code>updateNameOnEnter(event)</code> event handler.</p>
 
-<pre class="prettyprint"><code>var MyView = Nex.View.extend({
+<pre class="prettyprint"><code>var MyComponent = Nex.defineComponent('my-component', {
   template: Handlebars.compile('&lt;input type="text" on-keypress="updateNameOnEnter"&gt;'),
 
   updateNameOnEnter: function(event) {
@@ -70,155 +81,141 @@
   }
 });</code></pre>
 
-<p>In the event handler <code>this</code> will reference the instance of the view. <code>event.target</code> will reference the element the event was triggered on (the <code>input</code> in this example).</p>
+<p>In the event handler <code>this</code> will reference the component which is also the element. <code>event.target</code> will reference the element the event was triggered on (the <code>input</code> in this example).</p>
 
-<h4 id="properties" class="spacer">View Properties</h4>
+<h4 id="properties" class="spacer">Component Properties</h4>
 
-<p>The view will have these properties.</p>
+<p>The component will have these properties.</p>
 
 <ul>
-  <li><code>view.el</code> - the view's DOM element</li>
-  <li><code>view.outerEl</code> - the <code>view</code>'s or <code>layout</code>'s outer most DOM element</li>
-  <li><code class="pln">view.template()</code> - generates the view's HTML</li>
-  <li><code>view.model</code> - the model that gets passed to the template</li>
-  <li><code>view.layout</code> - the layout contains your site's layout (header, footer, etc.)</li>
-  <li><code>view.contentPlaceholder</code> - the CSS selector to the content placeholder element (only for layout views)</li>
-  <li><code>view.components</code> - sub-views or widgets that are automatically created and attached to the view</li>
-  <li><code>view.render()</code> - renders the view which populates <code>view.el</code> with the template HTML</li>
-  <li><code>view.html(htmlString)</code> - replaces the contents of <code>view.el</code> with the HTML string</li>
-  <li><code>view.attachTo(selector|element)</code> - attaches <code>view.outerEl</code> to the element</li>
-  <li><code>view.initialize()</code> - a hook to add additional logic when creating an instance of the view</li>
-  <li><code>view.remove()</code> - remove the view from the DOM</li>
-  <li><code>view.tagName</code> - the type of DOM element</li>
-  <li><code>view.id</code> - the ID of the view's DOM element</li>
-  <li><code>view.className</code> - the class name(s) of the view's DOM element</li>
-  <li><code>view.autoRender</code> - defaults to <code>true</code>, set to <code>false</code> to manually trigger the first render</li>
-  <li><code>view.dispatchEvent(event)</code> - dispatches a delegate event to the correct event handler</li>
+  <li><code class="pln">component.template()</code> - generates the component's HTML</li>
+  <li><code>component.model</code> - the model that gets passed to the template</li>
+  <li><code>component.layout</code> - the layout contains your site's layout (header, footer, etc.)</li>
+  <li><code>component.outerEl</code> - the <code>component</code>'s or <code>layout</code>'s outer most DOM element</li>
+  <li><code>component.components</code> - sub-components or widgets that are automatically created and attached to the component</li>
+  <li><code>component.render()</code> - renders the component which populates it with the template HTML</li>
+  <li><code>component.html(htmlString)</code> - replaces the contents of the component with the HTML string</li>
+  <li><code>component.attachTo(selector|element)</code> - attaches <code>component.outerEl</code> to the element</li>
+  <li><code>component.ready()</code> - a hook to add additional logic when creating an instance of the component</li>
+  <li><code>component.remove()</code> - remove the component from the DOM</li>
+  <li><code>component.tagName</code> - the type of DOM element</li>
+  <li><code>component.id</code> - the ID of the component's DOM element</li>
+  <li><code>component.className</code> - the class name(s) of the component's DOM element</li>
+  <li><code>component.autoRender</code> - defaults to <code>true</code>, set to <code>false</code> to manually trigger the first render</li>
+  <li><code>component.registerComponent(Component, componentName)</code> - used to register and attach a component if the view has already been rendered</li>
+  <li><code>component.dispatchEvent(event)</code> - dispatches a delegate event to the correct event handler</li>
 </ul>
-
-<h4 id="el" class="spacer">el</h4>
-
-<p>The view's DOM element. It exists as soon as you create an instance of the view. This alows you to render the view before it's attached to the document. Delegate events are attached to <code>view.el</code> so they don't need to be re-bound every time you render your view.</p>
-
-<p>To access DOM elements within the view you should scope your selectors using <code>view.el.querySelector()</code> and <code>view.el.querySelectorAll()</code>. This allows you to access the view's elements before attaching the view to the document. This makes unit testing much easier. It also keeps the selectors scoped to your view so you don't accidentally select an element outside of your view.</p>
-
-<h4 id="outerEl" class="spacer">outerEl</h4>
-
-<p>The view's or <code>layout</code>'s outer most DOM element. If you specify a <code>layout</code> then <code>view.outerEl</code> will refer to the <code>layout.el</code>. When you attach a view to the DOM you should use <code>outerEl</code>. Calling <code>view.attachTo('body')</code> will attach <code>view.outerEl</code> to the body.</p>
 
 <h4 id="template" class="spacer">template()</h4>
 
-<p>The template generates your view's HTML. You can use your choice of templating engines. Typically you would compile your template and set it on the template property.</p>
+<p>The template generates your component's HTML. You can use your choice of templating engines. Typically you would compile your template and set it on the template property.</p>
 
-<pre class="prettyprint"><code>var MyView = Nex.View.extend({
+<pre class="prettyprint"><code>var MyComponent = Nex.defineComponent('my-component', {
   template: Handlebars.compile('&lt;div&gt;Hello \{{model.name}}!&lt;/div&gt;'),
 
   model: {name: 'Nex'},
 
-  // The default render method processes the template and attaches it to the view's DOM element
+  // The default render method processes the template and attaches it to the component's DOM element
   render: function render() {
     this.html(this.template({model: this.model}));
     return this;
   }
 });</code></pre>
 
-<p>The compile step creates a function that takes in a model and returns an HTML string. The <code>render()</code> method passes the model to the compiled template then takes the resulting HTML and attaches it to <code>view.el</code>.</p>
+<p>The compile step creates a function that takes in a model and returns an HTML string. The <code>render()</code> method passes the component and model to the compiled template then takes the resulting HTML and attaches it to the component.</p>
 
 <h4 id="model" class="spacer">model</h4>
 
-<p>The model contains your view's data. It can be an object or a constructor function. For example, if your model is <code>{name: 'Nex'}</code> it will be passed straight to the template. If your model is a constructor function like <code>function MyModel() {this.name = 'Nex'; this.time = new Date();}</code> it will be called with <code>new view.model()</code> before being passed to the template. This allows for variables to be evaluated at render time. This is useful when you need access to a closure variable that changes often.</p>
+<p>The model contains your component's data. It can be an object or a constructor function. For example, if your model is <code>{name: 'Nex'}</code> it will be passed straight to the template. If your model is a constructor function like <code>function MyModel() {this.name = 'Nex'; this.time = new Date();}</code> it will be called with <code>new component.model()</code> before being passed to the template. This allows for variables to be evaluated at render time. This is useful when you need access to a closure variable that changes often.</p>
 
 <h4 id="layout" class="spacer">layout</h4>
 
-<p>The <code>layout</code> is a constructor or instance of a special view that contains your site's header, footer, etc. The layout is like a .NET master page or Razor layout. This makes routing easy since you don't need an intermediate step to render the layout. Calling <code>render()</code> on the view will automatically call <code>render()</code> on the layout. The view is attached to the layout using the layout's <code>contentPlaceholder</code> selector. Once the views are done rendering <code>view.outerEl</code> will contain both the view and the layout. Here's an example view and layout view.</p>
+<p>The <code>layout</code> is a constructor or instance of a special component that contains your site's header, footer, etc. The layout is like a .NET master page or Razor layout. This makes routing easy since you don't need an intermediate step to render the layout. Calling <code>render()</code> on the component will automatically call <code>render()</code> on the layout. The component is attached to the layout using the layout's <code><component name="content-placeholder"></component></code> element. Once the components are done rendering <code>component.outerEl</code> will contain both the component and the layout. Here's an example component and layout component.</p>
 
-<pre class="prettyprint"><code>var LayoutView = Nex.View.extend({
-  template: Handlebars.compile('&lt;header&gt;Header&lt;/header&gt;&lt;main id="content"&gt;&lt;/main&gt;'),
-  contentPlaceholder: '#content'
+<pre class="prettyprint"><code>var Layout = Nex.defineComponent('layout', {
+  template: Handlebars.compile('&lt;header&gt;Header&lt;/header&gt;&lt;component name="content-placeholder"&gt;&lt;/component&gt;')
 });
 
-var MyView = Nex.View.extend({
-  template: Handlebars.compile('MyView HTML'),
-  layout: LayoutView
+var HomePage = Nex.defineComponent('home-page', {
+  template: Handlebars.compile('Home page HTML'),
+  layout: Layout
 });
 
-new MyView().attachTo('body');</code></pre>
+new HomePage().attachTo('body');</code></pre>
 
 The <code>body</code> HTML will be.
-<pre class="prettyprint"><code>&lt;div&gt; &lt;!-- layoutView.el, homeView.outerEl --&gt;
+<pre class="prettyprint"><code>&lt;component name="layout"&gt;
   &lt;header&gt;Header&lt;/header&gt;
-  &lt;main id="content"&gt;
-    &lt;div&gt;MyView HTML&lt;/div&gt; &lt;!-- homeView.el --&gt;
-  &lt;/main&gt;
-&lt;/div&gt;</code></pre>
+  &lt;component name="home-page"&gt;
+    Home page HTML
+  &lt;/component&gt;
+&lt;/component&gt;</code></pre>
 
-<h4 id="contentPlaceholder" class="spacer">contentPlaceholder</h4>
+<h4 id="outerEl" class="spacer">outerEl</h4>
 
-<p>If a view is going to be used as a <code>layout</code> it needs to have a content placeholder element in its HTML and set <code>view.contentPlaceholder</code>. This is the CSS selector of the content placeholder element in the HTML. When you call <code>render()</code> on the child view it will automatically call <code>render()</code> on the layout view and use the <code>layout.contentPlaceholder</code> to attach the child view to the layout.</p>
-
-<p>Note: If a view has a <code>contentPlaceholder</code> it is considered a layout and will not be rendered when a new instance is constructed. Instead it will wait to be rendered until the child view is rendered.</p>
+<p>The component's or <code>layout</code>'s outer most DOM element. If you specify a <code>layout</code> then <code>component.outerEl</code> will refer to the <code>layout</code> element. When you attach a component to the DOM you should use <code>outerEl</code>. Calling <code>component.attachTo('body')</code> will attach <code>component.outerEl</code> to the body.</p>
 
 <h4 id="components" class="spacer">components</h4>
 
-<p>These are views or widgets that are automatically created and attached to this view. When an instance of this view is created it creates instances of the components and attaches them to their selectors.</p>
+<p>These are components or widgets that are automatically created and attached to this component. When an instance of this component is created it creates instances of the components and attaches them to their component elements.</p>
 
-<pre class="prettyprint"><code>var MyComponent = Nex.View.extend({
+<pre class="prettyprint"><code>var MyComponent = Nex.defineComponent('my-component', {
   template: Handlebars.compile('I\'m a component!')
 });
 
-var MyView = Nex.View.extend({
-  template: Handlebars.compile('&lt;div&gt;Example component below.&lt;/div&gt;&lt;component id="my-component"&gt;&lt;/component&gt;'),
-  components: {
-    '#my-component': MyComponent
-  }
+var HomePage = Nex.defineComponent('home-page', {
+  template: Handlebars.compile('&lt;div&gt;Example component below.&lt;/div&gt;&lt;component name="my-component"&gt;&lt;/component&gt;'),
+  components: [MyComponent]
 });</code></pre>
 
-An instance of <code>MyView</code> will have this HTML.
-<pre class="prettyprint"><code>&lt;div&gt;Example component below.&lt;/div&gt;
-&lt;component id="my-component"&gt;
-  &lt;div&gt;I'm a component!&lt;/div&gt;
+An instance of <code>HomePage</code> will have this HTML.
+<pre class="prettyprint"><code>&lt;component id="home-page"&gt;
+  &lt;div&gt;Example component below.&lt;/div&gt;
+  &lt;component id="my-component"&gt;
+    I'm a component!
+  &lt;/component&gt;
 &lt;/component&gt;</code></pre>
 
-<p>The cool thing about components is if you re-render this view it doesn't have to re-render the components. This view already has references to the rendered components so it just attaches them again when the view finishes re-rendering. The same thing goes for re-rendering a layout view. Underneath it takes the <code>contentPlaceholder</code> and turns it into a component. When you re-render the layout it just attaches this view again using the <code>contentPlaceholder</code>.</p>
+<p>The cool thing about components is if you re-render this component it doesn't have to re-render it's sub-components. This component already has references to the rendered sub-components so it just attaches them again when this component finishes re-rendering. The same thing goes for re-rendering a layout. Underneath it takes the <code><component name="content-placeholder"></component></code> and attaches the content component to it.</p>
 
 <h4 id="render" class="spacer">render()</h4>
 
-<p>Render populates the contents of <code>view.el</code> with the template HTML. This is called when you create a new instance of a view. When your model changes you call <code>render()</code> to update the DOM. Every view has a default <code>render()</code> method that looks like this.</p>
+<p>Render populates the contents of <code>component</code> with the template HTML. This is called when you create a new instance of a component. When your model changes you call <code>render()</code> to update the DOM. Every component has a default <code>render()</code> method that looks like this.</p>
 
 <pre class="prettyprint"><code>function render() {
   this.html(this.template({model: this.model}));
   return this;
 }</code></pre>
 
-<p>You can override this to add your own functionality. <code>render()</code> will also handle rendering the <code>layout</code> if it has one. Overriding <code>view.render()</code> will still render the <code>layout</code> but will let you change how the current view is rendered.</p>
+<p>You can override this to add your own functionality. <code>render()</code> will also handle rendering the <code>layout</code> if it has one. Overriding <code>component.render()</code> will still render the <code>layout</code> but will let you change how the current component is rendered.</p>
 
 <h4 id="html" class="spacer">html(htmlString)</h4>
 
-<p>Converts the HTML string to DOM elements and replaces the contents of <code>view.el</code>. This is like setting <code>view.el.innerHTML</code> but works better in IE8. This is used by the default <code>render()</code> method.</p>
+<p>Converts the HTML string to DOM elements and replaces the contents of the component. This is like setting <code>component.innerHTML</code> but works better in IE8. This is used by the default <code>render()</code> method.</p>
 
 <h4 id="attachTo" class="spacer">attachTo(selector|element)</h4>
 
-<p>Attaches <code>view.outerEl</code> to the element. This clears the contents of the element then appends the view.</p>
+<p>Attaches <code>component.outerEl</code> to the element. This clears the contents of the element then appends the component.</p>
 
-<h4 id="initialize" class="spacer">initialize</h4>
+<h4 id="ready" class="spacer">ready</h4>
 
-<p>You can use the initialize method to add custom logic when creating a new instance of your view. In this example the <code>view.model.name</code> is passed in as an argument in the constructor.</p>
+<p>You can use the ready method to add custom logic when creating a new instance of your component. In this example the <code>component.model.name</code> is passed in as an argument in the constructor.</p>
 
-<pre class="prettyprint"><code>var MyView = Nex.View.extend({
-  template: Handlebars.compile('&lt;div&gt;Hello \{{model.name}}!&lt;/div&gt;'),
+<pre class="prettyprint"><code>var MyComponent = Nex.defineComponent('my-component', {
+  template: Handlebars.compile('Hello \{{model.name}}!'),
   model: {},
-  initialize: function(name) {
+  ready: function(name) {
     this.model.name = name;
   }
 });
 
-new MyView("Nex").attachTo('body'); // Will display "Hello Nex!"</code></pre>
+new MyComponent('Nex').attachTo('body'); // Will display "Hello Nex!"</code></pre>
 
-<p>The <code>initialize()</code> method is the last step before the instance is returned so everything else is set up at this point.</p>
+<p>The <code>ready()</code> method is the last step before the instance is returned so everything else is set up at this point.</p>
 
 <h4 id="remove" class="spacer">remove()</h4>
 
-<p>Removes <code>view.el</code> from the DOM.</p>
+<p>Removes the component from the DOM.</p>
 
 <h4 id="tagName" class="spacer">tagName</h4>
 
@@ -226,11 +223,11 @@ new MyView("Nex").attachTo('body'); // Will display "Hello Nex!"</code></pre>
 
 <h4 id="id" class="spacer">id</h4>
 
-<p>The ID of the view's DOM element.</p>
+<p>The ID of the component's DOM element.</p>
 
 <h4 id="className" class="spacer">className</h4>
 
-<p>The class name(s) of the view's DOM element.</p>
+<p>The class name(s) of the component's DOM element.</p>
 
 <h4 id="autoRender" class="spacer">autoRender</h4>
 
@@ -241,17 +238,17 @@ new MyView("Nex").attachTo('body'); // Will display "Hello Nex!"</code></pre>
 <p>Dispatches a delegate event to the correct event handler. You can also call this with a mock event for unit testing. Here's an example test.</p>
 
 <pre class="prettyprint"><code>// Arrange
-var myView = new MyView();
+var myComponent = new MyComponent();
 
 // Act
-var input = myView.el.querySelector('input');
+var input = myComponent.querySelector('input');
 input.value = 'my first item!';
-myView.dispatchEvent({
+myComponent.dispatchEvent({
   type: 'keypress',
   target: input,
   keyCode: 13
 });
 
 // Assert
-expect(myView.model.items.length).toEqual(1);
-expect(myView.model.items[0].title).toEqual('my first item!');</code></pre>
+expect(myComponent.model.items.length).toEqual(1);
+expect(myComponent.model.items[0].title).toEqual('my first item!');</code></pre>

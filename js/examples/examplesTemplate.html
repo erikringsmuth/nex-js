@@ -1,6 +1,6 @@
 <h2>Tutorial</h2>
 
-<p>This will walk you through setting up a working web app. It demonstrates the use of <a href="http://bower.io/">Bower</a>, <a href="http://requirejs.org/">RequireJS</a>, the <a href="https://github.com/erikringsmuth/requirejs-router">RequireJS router</a>, <a href="#/">Nex views</a>, and <a href="http://getbootstrap.com/">Bootstrap</a>.</p>
+<p>This will walk you through setting up a working web app. It demonstrates the use of <a href="http://bower.io/">Bower</a>, <a href="http://requirejs.org/">RequireJS</a>, the <a href="https://github.com/erikringsmuth/requirejs-router">RequireJS router</a>, <a href="#/">Nex components</a>, and <a href="http://getbootstrap.com/">Bootstrap</a>.</p>
 
 <p class="spacer">If you're running Windows you will need to download and install <a href="http://nodejs.org/">node.js</a>. This comes pre-installed on new Macs.</p>
 
@@ -13,12 +13,12 @@
 └── js/
     ├── main.js
     ├── layout/
-    │   ├── layoutView.js
+    │   ├── layout.js
     │   └── layoutTemplate.html
     ├── home/
-    │   ├── homeView.js
+    │   ├── homePage.js
     │   └── homeTemplate.js
-    └── // other widets and views</code></pre>
+    └── // other components and pages</code></pre>
 
 <p class="spacer">Create a <code>bower.json</code> file in the root directory of your project. This defines all of our dependencies. We will use <a href="http://bower.io/">Bower</a> to automatically install them.</p>
 
@@ -75,27 +75,24 @@
 
   // Load the router
   require(['router'], function(router) {
-    // Configure the router
-    router.config({
-      // Add all of your routes here
-      routes: {
-        home: {path: '/', moduleId: 'js/home/homeView'},
-        example: {path: '/examples', moduleId: 'js/examples/examplesView'},
-        notFound: {path: '*', moduleId: 'js/notFound/notFoundView'}
-      },
-
-      // When a route loads, render the view and attach it to the document
-      onRouteLoad: function(View, routeArguments) {
-        new View(routeArguments).attachTo('body');
-      }
+    // Register your routes
+    router.registerRoutes({
+      home: {path: '/', moduleId: 'js/home/homePage'},
+      example: {path: '/examples', moduleId: 'js/examples/examplesPage'},
+      notFound: {path: '*', moduleId: 'js/notFound/notFoundPage'}
     });
 
-    // Trigger the initial page load
-    router.loadCurrentRoute();
+    // When a route loads, render the component and attach it to the document
+    router.on('routeload', function(Component, routeArguments) {
+      new Component(routeArguments).attachTo('body');
+    });
+
+    // Set up event handlers and trigger the initial page load
+    router.init();
   });
 });</code></pre>
 
-<p class="spacer">Create <code class="pln">/js/layout/layoutTemplate.html</code> - This is your app's layout HTML. A layout contains common elements like the header, footer, etc. This will get rendered with every view.</p>
+<p class="spacer">Create <code class="pln">/js/layout/layoutTemplate.html</code> - This is your app's layout HTML. A layout contains common elements like the header, footer, etc. This will get rendered with every component that has this layout.</p>
 
 <pre class="prettyprint"><code>&lt;header class="navbar navbar-default"&gt;
   &lt;div class="container"&gt;
@@ -106,10 +103,11 @@
     &lt;/ul&gt;
   &lt;/div&gt;
 &lt;/header&gt;
-&lt;main id="content" class="container"&gt;
+&lt;main class="container"&gt;
+  &lt;component name="content-placeholder"&gt;&lt;/component&gt;
 &lt;/main&gt;</code></pre>
 
-<p class="spacer">Create <code class="pln">/js/layout/layoutView.js</code> - This is the nex-js layout view. You can see the <code>contentPlaceholder</code> points to the layout HTML <code>&lt;main id="content" class="container"&gt;</code>. This is how your view's are attached to the layout.</p>
+<p class="spacer">Create <code class="pln">/js/layout/layout.js</code> - This is the nex-js layout. You can see the <code>contentPlaceholder</code> points to the layout HTML <code>&lt;component name="content-placeholder"&gt;&lt;/component&gt;</code>. This is how your components's are attached to the layout.</p>
 
 <pre class="prettyprint"><code>define([
   'nex',
@@ -119,30 +117,29 @@
 ], function(Nex, Handlebars, layoutTemplate, router) {
   'use strict';
 
-  return Nex.View.extend({
+  return Nex.defineComponent('layout', {
     template: Handlebars.compile(layoutTemplate),
-    model: { routes: router.routes },
-    contentPlaceholder: '#content'
+    model: { routes: router.routes }
   });
 });</code></pre>
 
-<p class="spacer">Create <code class="pln">/js/home/homeView.js</code> - This is the nex-js view for the home route <code>/</code>.</p>
+<p class="spacer">Create <code class="pln">/js/home/homePage.js</code> - This is the nex-js component for the home route <code>/</code>.</p>
 
 <pre class="prettyprint"><code>define([
   'nex',
   'handlebars',
   'text!./homeTemplate.html',
-  'js/layout/layoutView'
-], function(Nex, Handlebars, homeTemplate, LayoutView) {
+  'js/layout/layout'
+], function(Nex, Handlebars, homeTemplate, Layout) {
   'use strict';
 
-  return Nex.View.extend({
+  return Nex.defineComponent('home-page', {
     template: Handlebars.compile(homeTemplate),
-    layout: LayoutView
+    layout: Layout
   });
 });</code></pre>
 
-<p class="spacer">Create <code class="pln">/js/home/homeTemplate.html</code> - This is the HTML template for the home view <code>/</code>.</p>
+<p class="spacer">Create <code class="pln">/js/home/homeTemplate.html</code> - This is the HTML template for the home page <code>/</code>.</p>
 
 <pre class="prettyprint"><code>&lt;h1&gt;Hello Nex!&lt;/h1&gt;</code></pre>
 
@@ -156,12 +153,12 @@
   <li><code>index.html</code> loads <code>require.js</code></li>
   <li><code>require.js</code> looks at the <code>data-main</code> attribute and loads <code>main.js</code></li>
   <li><code>main.js</code> configures <code>require.js</code> and the <code>requirejs-router</code></li>
-  <li>The <code>requirejs-router</code> loads the current route <code>/</code> which is <code>homeView.js</code></li>
-  <li><code>homeView.js</code> uses <code>layoutView.js</code> as it's layout</li>
-  <li>The home view and layout are rendered and attached to the document in the router's <code>onRouteLoad()</code></li>
+  <li>The <code>requirejs-router</code> loads the current route <code>/</code> which is <code>homePage.js</code></li>
+  <li><code>homePage.js</code> uses <code>layout.js</code> as it's layout</li>
+  <li>The home page and layout are rendered and attached to the document in the <code>router.on('routeload', eventHandler)</code></li>
 </ul>
 
-<p class="spacer">The resulting HTML has the home view rendered with the layout.</p>
+<p class="spacer">The resulting HTML has the home page rendered with the layout.</p>
 
 <pre class="prettyprint"><code>&lt;!doctype html&gt;
 &lt;html&gt;
@@ -171,7 +168,7 @@
     &lt;script data-main="js/main" src="bower_components/requirejs/require.js"&gt;&lt;/script&gt;
   &lt;/head&gt;
   &lt;body&gt;
-    &lt;div&gt; &lt;!-- layoutView.el, homeView.outerEl --&gt;
+    &lt;component name="layout"&gt; &lt;!-- layout, homePage.outerEl --&gt;
       &lt;header class="navbar navbar-default"&gt;
         &lt;div class="container"&gt;
           &lt;a href="#/" class="navbar-brand"&gt;{nex.js}&lt;/a&gt;
@@ -182,11 +179,11 @@
         &lt;/div&gt;
       &lt;/header&gt;
       &lt;main id="content" class="container"&gt;
-        &lt;div&gt; &lt;!-- homeView.el --&gt;
+        &lt;component name="home-page"&gt;
           &lt;h1&gt;Hello Nex!&lt;/h1&gt;
-        &lt;/div&gt;
+        &lt;/component&gt;
       &lt;/main&gt;
-    &lt;/div&gt;
+    &lt;/component&gt;
   &lt;/body&gt;
 &lt;/html&gt;</code></pre>
 

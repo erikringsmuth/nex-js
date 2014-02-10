@@ -22,9 +22,9 @@ define([
       notFound: {path: '*', moduleId: 'js/notFound/notFoundPage'}
     });
 
-    // When a route loads, render the view and attach it to the document
-    router.on('routeload', function onRouteLoad(View, routeArguments) {
-      new View(routeArguments).attachTo('body');
+    // When a route loads, render the component and attach it to the document
+    router.on('routeload', function onRouteLoad(Component, routeArguments) {
+      new Component(routeArguments).attachTo('body');
       
       // Scroll back to the top of the page since we aren't reloading the entire page
       scroll(0, 0);

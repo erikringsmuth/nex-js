@@ -7,12 +7,12 @@ define([
 ], function(describe, it, expect, TddPage) {
   'use strict';
 
-  describe('The TDD view', function() {
+  describe('The TDD page', function() {
     it('should load', function() {
       expect(TddPage).toBeDefined();
     });
 
-    it('should have a layout view', function() {
+    it('should have a layout page', function() {
       var tddPage = new TddPage();
       expect(tddPage.outerEl.querySelector('.navbar')).toBeTruthy();
     });

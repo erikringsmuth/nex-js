@@ -116,14 +116,15 @@
         // component.render(), actually component.innerRender() - call the template with the element's model and replace its
         // HTML. We wrap the original render method so that rendering this component will also render its layout and
         // attach its components.
+        var ModelConstructorFunction;
         var innerRender = function innerRender() {
           // Allow the model to be defined as a constructor function so that variables don't need to be evaluated
           // until render time
-          var model;
-          if (typeof(component.model) === 'function') {
-            model = new component.model();
-          } else {
-            model = component.model;
+          if (typeof(ModelConstructorFunction) === 'function' || typeof(component.model) === 'function') {
+            if (typeof(ModelConstructorFunction) !== 'function') {
+              ModelConstructorFunction = component.model;
+            }
+            component.model = new ModelConstructorFunction();
           }
 
           // Compile the template and set the elements's HTML

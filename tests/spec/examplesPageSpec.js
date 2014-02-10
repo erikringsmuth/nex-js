@@ -7,12 +7,12 @@ define([
 ], function(describe, it, expect, ExamplesPage) {
   'use strict';
 
-  describe('The examples view', function() {
+  describe('The examples page', function() {
     it('should load', function() {
       expect(ExamplesPage).toBeDefined();
     });
 
-    it('should have a layout view', function() {
+    it('should have a layout page', function() {
       var examplesPage = new ExamplesPage();
       expect(examplesPage.outerEl.querySelector('.navbar')).toBeTruthy();
     });

@@ -12,12 +12,12 @@ define([
   'use strict';
 
   describe('The Todo MVC', function() {
-    describe('view', function() {
+    describe('component', function() {
       it('should load', function() {
         expect(TodoApp).toBeDefined();
       });
 
-      it('should fetch the model when creating a new instance of the view', function(done) {
+      it('should fetch the model when creating a new instance of the component', function(done) {
         // Arrange
         var fetchSpy = jasmine.createSpy('fetch');
         new Squire()

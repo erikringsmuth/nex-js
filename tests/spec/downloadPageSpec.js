@@ -7,12 +7,12 @@ define([
 ], function(describe, it, expect, DownloadPage) {
   'use strict';
 
-  describe('The download view', function() {
+  describe('The download page', function() {
     it('should load', function() {
       expect(DownloadPage).toBeDefined();
     });
 
-    it('should have a layout view', function() {
+    it('should have a layout page', function() {
       var downloadPage = new DownloadPage();
       expect(downloadPage.outerEl.querySelector('.navbar')).toBeTruthy();
     });

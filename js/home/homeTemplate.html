@@ -8,7 +8,7 @@
 
     <p>Everything is an element! Nex components are like views but they're built on plain DOM elements. The component's API is on the DOM element!</p>
 
-    <p>Nex components and the <a href="https://github.com/erikringsmuth/requirejs-router">RequireJS Router</a> give you a powerful IoC pattern for routing and loading views. The router lazy loads components. Nex renders the component and injects the layout. The layout is now completely decoupled from the router. It's fully AMD compatible plus it's built on vanilla JS.</p>
+    <p>Nex components and the <a href="https://github.com/erikringsmuth/requirejs-router">RequireJS Router</a> give you a powerful IoC pattern for routing and loading views. The router lazy loads components. Nex renders the component, its layout, and any sub-components. The layout is now completely decoupled from the router. It's fully AMD compatible plus it's built on vanilla JS.</p>
 
     <h2>Why Nex</h2>
 
@@ -35,7 +35,9 @@
 <div class="row">
   <div class="col-md-4 col-md-push-8">
     <p><code>homePage.html</code> and <code>homePage.js</code></p>
-    <p>Route directly to your home page. The home page has a layout and components. Events are declared in the template and are scoped to this component.</p>
+    <p>Route directly to your home page.</p>
+    <p>The home page renders its layout and components.</p>
+    <p>Events are declared in the template and are scoped to this component.</p>
   </div>
   <div class="col-md-8 col-md-pull-4">
 <pre class="prettyprint"><code>&lt;h1&gt;Hello \{{model.name}}!&lt;/h1&gt;
@@ -51,7 +53,7 @@
       this.render();
     }
   },
-  components: [TodoApp]
+  components: [TodoApp] // Registers the todo-app component
 });</code></pre>
   </div>
 </div>
@@ -59,13 +61,15 @@
 <div class="row spacer">
   <div class="col-md-4 col-md-push-8">
     <p><code>layout.html</code> and <code>layout.js</code></p>
-    <p>The layout contains your site's header, footer, etc. The <code>HomePage</code> will be attached to the content-placeholder.</p>
+    <p>The layout contains your site's header, footer, etc.</p>
+    <p><code>HomePage</code> will attach to <code>content-placeholder</code>.</p>
   </div>
   <div class="col-md-8 col-md-pull-4">
 <pre class="prettyprint"><code>&lt;header&gt;
   &lt;a href="#/" \{{#if model.home}}class="active"\{{/if}}&gt;Home&lt;/a&gt;
   &lt;a href="#/examples" \{{#if model.examples}}class="active"\{{/if}}&gt;Examples&lt;/a&gt;
 &lt;/header&gt;
+&lt;!-- Every layout must contain a content-placeholder --&gt;
 &lt;component name="content-placeholder"&gt;&lt;/component&gt;</code></pre>
 <pre class="prettyprint"><code>var Layout = Nex.defineComponent('layout', {
   template: Handlebars.compile(layoutTemplate),
@@ -77,7 +81,7 @@
 <div class="row spacer">
   <div class="col-md-4 col-md-push-8">
     <p><code>todoApp.html</code> and <code>todoApp.js</code></p>
-    <p>The home page will inject this TodoMVC app.</p>
+    <p><code>TodoApp</code> defines the <code>todo-app</code> component. This is automatically rendered and attached to the <code>HomePage</code>.</p>
   </div>
   <div class="col-md-8 col-md-pull-4">
 <pre class="prettyprint"><code>&lt;h2&gt;Todo MVC&lt;/h2&gt;</code></pre>
@@ -89,7 +93,8 @@
 
 <div class="row spacer">
   <div class="col-md-4 col-md-push-8">
-    <p>Calling <code>var homePage = new HomePage()</code> will render the home page, its layout, and components. Attach it to the document using <code>homePage.attachTo('body')</code>. This will attach <code>homePage.outerEl</code> which includes the layout.</p>
+    <p>Calling <code>var homePage = new HomePage()</code> will render the home page, its layout, and components.</p>
+    <p>Attach it to the document using <code>homePage.attachTo('body')</code>. This will attach <code>homePage.outerEl</code> which includes the layout.</p>
   </div>
   <div class="col-md-8 col-md-pull-4">
 <pre class="prettyprint"><code>&lt;component name="layout"&gt; &lt;!-- layout, homePage.outerEl --&gt;
@@ -97,7 +102,7 @@
     &lt;a href="#/" class="active"&gt;Home&lt;/a&gt;
     &lt;a href="#/examples"&gt;Examples&lt;/a&gt;
   &lt;/header&gt;
-  &lt;component name="home-page"&gt; &lt;!-- the home-page replaced the content-placeholder --&gt;
+  &lt;component name="home-page"&gt; &lt;!-- home-page replaced the content-placeholder --&gt;
     &lt;h1&gt;Hello Nex!&lt;/h1&gt;
     &lt;input type="text" on-keypress="updateNameOnEnter"&gt;
     &lt;component name="todo-app"&gt;

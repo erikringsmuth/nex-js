@@ -8,15 +8,17 @@
 
     <p>Everything is an element! Nex components are like views but they're built on plain DOM elements. The component's API is on the DOM element!</p>
 
-    <p>Nex components and the <a href="https://github.com/erikringsmuth/requirejs-router">RequireJS Router</a> give you a powerful IoC pattern for routing and loading views. The router lazy loads components. Nex renders the component, its layout, and any sub-components. The layout is now completely decoupled from the router. It's fully AMD compatible plus it's built on vanilla JS.</p>
+    <p>Nex is declarative. Events are defined in the template. So are sub-components. You know exactly what the component is doing by looking at the template. Plus, you can use any template engine you want!</p>
+
+    <p>Components are encapsulated. Every component is rendered before being attached to the document or other components. Events only trigger event handlers in their own component.</p>
 
     <h2>Why Nex</h2>
 
-    <p><a href="http://requirejs.org/docs/whyamd.html">AMD</a> is the future of Javascript dependency injection. Modules clearly define their dependencies. <a href="http://requirejs.org/">require.js</a> is the only script tag you include. The rest of your scripts are loaded using AMD. No more globals!</p>
+    <p>First, get to know <a href="http://requirejs.org/docs/whyamd.html">AMD</a>. AMD is the future of modular JavaScript and dependency injection. Modules clearly define their dependencies. <a href="http://requirejs.org/">require.js</a> is the only script tag you include. The rest of your scripts are loaded using AMD. No more globals!</p>
 
-    <p>The <a href="https://github.com/erikringsmuth/requirejs-router">RequireJS Router</a> lazy loads modules as you navigate to each page. You're site could contain 10MB of Javascript and HTML templates and it would only load the 10KB for the current page. With Nex the router loads your component and your component injects the layout. You attach <code>component.outerEl</code> to the document with everything rendered.</p>
+    <p>Nex components and the <a href="https://github.com/erikringsmuth/requirejs-router">RequireJS Router</a> give you a powerful IoC pattern for routing and loading views. The router lazy loads components as you navigate to each page. Nex renders the component, its layout, and any sub-components. The layout is now completely decoupled from the router.</p>
 
-    <p>The combination of AMD, a lazy loading router, and layouts gives you an awesome toolset to build your application. This is the next step in web application design.</p>
+    <p>The combination of AMD, a lazy loading router, and Nex components gives you an awesome toolset to build your application. This is the next step in web application design.</p>
 
     <p>Check out the <a href="#/examples">examples</a> to see how it works. This site's source is a great example of a <a href="https://github.com/erikringsmuth/nex-js">nex-js</a> and <a href="https://github.com/erikringsmuth/requirejs-router">RequireJS Router</a> setup. It's available in the <a href="https://github.com/erikringsmuth/nex-js/tree/gh-pages">gh-pages branch</a> of nex-js. Licensed under <a href="https://github.com/erikringsmuth/nex-js/blob/master/license.md">MIT</a>.</p>
   </div>

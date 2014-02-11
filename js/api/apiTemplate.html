@@ -130,7 +130,7 @@
 
 <h4 id="layout" class="spacer">layout</h4>
 
-<p>The <code>layout</code> is a constructor or instance of a special component that contains your site's header, footer, etc. The layout is like a .NET master page or Razor layout. This makes routing easy since you don't need an intermediate step to render the layout. Calling <code>render()</code> on the component will automatically call <code>render()</code> on the layout. The component is attached to the layout using the layout's <code>&lt;component name="content-placeholder"&gt;&lt;/component&gt;</code> element. Once the components are done rendering <code>component.outerEl</code> will contain both the component and the layout. Here's an example component and layout component.</p>
+<p>The <code>layout</code> is a constructor or instance of a special component that contains your site's header, footer, etc. The layout is like a .NET master page or Razor layout. This makes routing easy since you don't need an intermediate step to render the layout. The component is attached to the layout using the layout's <code>&lt;component name="content-placeholder"&gt;&lt;/component&gt;</code> element. The component's <code>outerEl</code> property references the layout and is used to attach the component to the document.</p>
 
 <pre class="prettyprint"><code>var Layout = Nex.defineComponent('layout', {
   template: Handlebars.compile('&lt;header&gt;Header&lt;/header&gt;&lt;component name="content-placeholder"&gt;&lt;/component&gt;')
@@ -153,11 +153,11 @@ The <code>body</code> HTML will be.
 
 <h4 id="outerEl" class="spacer">outerEl</h4>
 
-<p>The component's or <code>layout</code>'s outer most DOM element. If you specify a <code>layout</code> then <code>component.outerEl</code> will refer to the <code>layout</code> element. When you attach a component to the DOM you should use <code>outerEl</code>. Calling <code>component.attachTo('body')</code> will attach <code>component.outerEl</code> to the body.</p>
+<p>The component's or layout's outer most DOM element. If you specify a layout then <code>component.outerEl</code> will refer to the layout element. When you attach a component to the DOM you should use <code>outerEl</code>. Calling <code>component.attachTo('body')</code> will attach <code>component.outerEl</code> to the body.</p>
 
 <h4 id="components" class="spacer">components</h4>
 
-<p>These are sub-components that are automatically created and attached to this component. When an instance of this component is created it creates instances of the components and attaches them to their component elements.</p>
+<p>These are sub-components that are automatically created and attached to this component.</p>
 
 <pre class="prettyprint"><code>var MyComponent = Nex.defineComponent('my-component', {
   template: Handlebars.compile('I\'m a component!')
@@ -165,7 +165,7 @@ The <code>body</code> HTML will be.
 
 var HomePage = Nex.defineComponent('home-page', {
   template: Handlebars.compile('&lt;div&gt;Example component below.&lt;/div&gt;&lt;component name="my-component"&gt;&lt;/component&gt;'),
-  components: [MyComponent] // Register the component types used by the template
+  components: [MyComponent] // Register the component types used in the template
 });</code></pre>
 
 An instance of <code>HomePage</code> will have this HTML.
@@ -176,7 +176,7 @@ An instance of <code>HomePage</code> will have this HTML.
   &lt;/component&gt;
 &lt;/component&gt;</code></pre>
 
-<p>The cool thing about components is if you re-render this component it doesn't have to re-render it's sub-components. This component already has references to the rendered sub-components so it just attaches them again when this component finishes re-rendering. The same thing goes for re-rendering a layout. Underneath it takes the <code>&lt;component name="content-placeholder"&gt;&lt;/component&gt;</code> and attaches the content component to it.</p>
+<p>The cool thing about components is if you re-render this component it doesn't have to re-render it's sub-components. This component already has references to the rendered sub-components so it just attaches them again when it's done rendering. The same thing goes for re-rendering a layout. The layout takes the <code>&lt;component name="content-placeholder"&gt;&lt;/component&gt;</code> and attaches the content component to it.</p>
 
 <h4 id="render" class="spacer">render()</h4>
 
@@ -187,11 +187,11 @@ An instance of <code>HomePage</code> will have this HTML.
   return this;
 }</code></pre>
 
-<p>You can override this to add your own functionality. <code>render()</code> will also handle rendering the <code>layout</code> if it has one. Overriding <code>component.render()</code> will still render the <code>layout</code> but will let you change how the current component is rendered.</p>
+<p>You can override <code>component.render()</code> to add your own functionality.</p>
 
 <h4 id="html" class="spacer">html(htmlString)</h4>
 
-<p>Converts the HTML string to DOM elements and replaces the contents of the component. This is like setting <code>component.innerHTML</code> but works better in IE8. This is used by the default <code>render()</code> method.</p>
+<p>Converts the HTML string to DOM elements and replaces the contents of the component. This is like setting <code>component.innerHTML</code> but works better in IE8. This is used by the <code>render()</code> method.</p>
 
 <h4 id="attachTo" class="spacer">attachTo(selector|element)</h4>
 

@@ -82,7 +82,7 @@
       notFound: {path: '*', moduleId: 'js/notFound/notFoundPage'}
     });
 
-    // When a route loads, render the component and attach it to the document
+    // When a route loads, create an instance of the component and attach it to the document
     router.on('routeload', function(Component, routeArguments) {
       new Component(routeArguments).attachTo('body');
     });

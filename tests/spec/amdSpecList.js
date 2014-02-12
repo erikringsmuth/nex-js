@@ -7,7 +7,6 @@ define([], function() {
     "tests/spec/todoAppSpec",
     "tests/spec/apiPageSpec",
     "tests/spec/examplesPageSpec",
-    "tests/spec/notesPageSpec",
     "tests/spec/tddPageSpec",
     "tests/spec/downloadPageSpec"
   ];

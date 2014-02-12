@@ -94,10 +94,3 @@ pre code {
     height: 95px;
   }
 }
-
-/* Make the header font smaller on a tablet in portrait mode to keep it from wrapping to 2 lines */
-@media (min-width: 768px) and (max-width: 991px) {
-  header.navbar {
-    font-size: .89em;
-  }
-}

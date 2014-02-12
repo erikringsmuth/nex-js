@@ -210,7 +210,7 @@
         // `on-eventtype="eventHandler"'` attribute
         component.dispatchEvent = function dispatchEvent(event) {
           // Check if the event was triggered in a nested nex element
-          if (!event._outOfOriginatingViewScope) {
+          if (!event._outOfOriginatingScope) {
             if (!event.target) event.target = event.srcElement; // IE8
             var attrs = event.target.attributes;
             // Not an array, it's a NamedNodeMap object {'length': 1, '0': {'name': 'on-click', value: 'eventHandlerName'}}
@@ -220,7 +220,7 @@
                 component[attrs[i].value].call(component, event);
               }
             }
-            event._outOfOriginatingViewScope = true;
+            event._outOfOriginatingScope = true;
           }
         };
 

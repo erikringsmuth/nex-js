@@ -22,7 +22,7 @@ define([
       })
       .on('routeload', function onRouteLoad(Component, routeArguments) {
         new Component(routeArguments).attachTo('body');
-        scroll(0, 0); // Scroll back to the top of the page since we aren't reloading the entire page
+        scroll(0, 0); // Scroll back to the top of the page
       })
       .init(); // Set up event handlers and trigger the initial page load
   });
